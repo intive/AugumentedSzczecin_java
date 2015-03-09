@@ -1,0 +1,18 @@
+
+
+mongo:
+  active: true
+  host: localhost
+  port: 9090
+  name: augmented
+
+server:
+  type: simple
+  applicationContextPath: /api
+  adminContextPath: /admin
+  connector:
+    type: http
+    port: 8090
+  
+    
+   
