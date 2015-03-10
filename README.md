@@ -4,6 +4,13 @@ Patronage2015
 ## Simple Dropwizard - guice - mongodb integration api
 requires java 8
 
+## Install dropwizard-guice-hubspot to local maven repository
+
+```
+> git clone https://github.com/mlotysz/dropwizard-guice-hubspot.git
+> cd dropwizard-guice-hubspot
+> mvn -T4 clean install
+```
 
 ### MongoDB = 2.6.8
 ```
