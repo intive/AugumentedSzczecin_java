@@ -24,6 +24,7 @@ public class PoiDaoMongo extends BasicDAO<PoiMongo, ObjectId> implements PoiDao 
     }
 
 
+    //TODO delete this method
     public void clearAll() {
         deleteByQuery(createQuery());
     }

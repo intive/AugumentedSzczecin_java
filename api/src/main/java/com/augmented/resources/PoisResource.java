@@ -34,7 +34,6 @@ public class PoisResource {
     public PoisResource(final PoiDao poiDao, final PoiFactory poiFactory) {
         this.poiDao = poiDao;
         this.poiFactory = poiFactory;
-        poiDao.clearAll();
     }
 
     @GET

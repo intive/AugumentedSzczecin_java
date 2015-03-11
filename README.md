@@ -12,6 +12,28 @@ requires java 8
 > mvn -T4 clean install
 ```
 
+if you run across any problems with gpg, replace configuration of maven-gpg-plugin with "skip":
+```
+   <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+```
+
+
 ### MongoDB = 2.6.8
 ```
 wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-2.6.8.tgz
