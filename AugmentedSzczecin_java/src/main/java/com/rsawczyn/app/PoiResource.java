@@ -52,7 +52,7 @@ public class PoiResource {
     }
 	
 	@PUT
-	@Path("/{id}/{name}/{cat}")
+	@Path("/{id}")
 	public String updatePoi(@PathParam("id") int id) {
 		for(Poi poi : pois) {
 			if(poi.getId() == id)
