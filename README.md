@@ -1,57 +1,42 @@
-Patronage2015
-=============
+# Augmented Szczecin Java back-end
 
-## Simple Dropwizard - guice - mongodb integration api
-requires java 8
+Prerequisites:
+- install: JDK 1.8 [Oracle jdk download link]
+- install: Maven 3.x [Maven download link]
+- install: GPG [GPG download link], configuration: [GPG on windows configuration help]
+- install and setup database: [mongo] TODO or any hibernate RDBMS
 
-## Install dropwizard-guice-hubspot to local maven repository
+## Install dropwizard-guice-hubspot to local maven repository (once)
 
 ```
-> git clone https://github.com/mlotysz/dropwizard-guice-hubspot.git
-> cd dropwizard-guice-hubspot
-> mvn -T4 clean install
-```
-
-if you run across any problems with gpg, replace configuration of maven-gpg-plugin with "skip":
-```
-   <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.4</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+git clone https://github.com/mlotysz/dropwizard-guice-hubspot.git
+cd dropwizard-guice-hubspot
+mvn -T4 clean install
 ```
 
-
-### MongoDB = 2.6.8
+## Building backend with maven
 ```
-wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-2.6.8.tgz
-```
-
-#### How to run mongo:
-- create some db folder for example - mkdir db
-- run mongod with dppath to folder You just created and port
-```
-*pathToMongo*/mongod --dbpath *pathToFolder*/db --port 9090
+mvn -T4 clean package
 ```
 
-### How to run api:
-- package (maven also with java8)
-```
-mvn clean package
-```
--- run (java8!)
+## Running backend
+
+- with mongo (version 2.6.8 works ok):
 ```
 java -jar target/augmented.jar server config.yml
 ```
+
+- TODO with hibernate on H2:
+```
+java -jar target/augmented.jar server config-rdbms-h2.yml
+```
+- TODO with hibernate on Postgresql:
+```
+java -jar target/augmented.jar server config-rdbms-pg.yml
+```
+
+[Oracle jdk download link]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
+[Maven download link]: http://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache
+[GPG download link]: https://www.gnupg.org/download/
+[GPG on windows configuration help]: https://virgo47.wordpress.com/2014/08/09/releasing-to-maven-central-with-git-on-windows/
+[mongo]: http://docs.mongodb.org/manual/installation/
