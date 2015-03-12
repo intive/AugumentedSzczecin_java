@@ -1,15 +1,15 @@
-package mongo;
+package com.bls.mongodb;
 
 import com.google.inject.Inject;
 import com.hubspot.dropwizard.guice.InjectableHealthCheck;
 import com.mongodb.MongoClient;
 
-public class DatabaseHealthCheck extends InjectableHealthCheck {
+public class MongodbHealthCheck extends InjectableHealthCheck {
 
     private MongoClient mongoClient;
 
     @Inject
-    public DatabaseHealthCheck(final MongoClient mongoClient) {
+    public MongodbHealthCheck(final MongoClient mongoClient) {
         this.mongoClient = mongoClient;
     }
 

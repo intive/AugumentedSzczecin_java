@@ -1,18 +1,13 @@
 
-
 mongo:
-  active: true
   host: localhost
   port: 9090
-  name: augmented
+  dbname: augmented
 
 server:
   type: simple
-  applicationContextPath: /api
+  applicationContextPath: /
   adminContextPath: /admin
   connector:
     type: http
-    port: 8090
-  
-    
-   
+    port: 8000

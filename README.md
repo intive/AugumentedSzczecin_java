@@ -21,18 +21,40 @@ mvn -T4 clean package
 
 ## Running backend
 
-- with mongo (version 2.6.8 works ok):
+- with mongo
 ```
-java -jar target/augmented.jar server config.yml
+(cd api && java -jar target/api-1.0.0-SNAPSHOT.jar server config-mongo.yml)
 ```
 
 - TODO with hibernate on H2:
 ```
-java -jar target/augmented.jar server config-rdbms-h2.yml
+(cd api && java -jar target/api-1.0.0-SNAPSHOT.jar server config-rdbms-h2.yml)
 ```
 - TODO with hibernate on Postgresql:
 ```
-java -jar target/augmented.jar server config-rdbms-pg.yml
+(cd api && java -jar target/api-1.0.0-SNAPSHOT.jar server config-rdbms-pg.yml)
+```
+
+## Testing (currently available with mongodb only)
+
+### Generate some example data
+```
+curl -v http://localhost:8000/poi/generate
+```
+
+### Fetch all data
+```
+curl -v http://localhost:8000/poi
+```
+
+### Add new POI
+```
+curl -v http://localhost:8000/poi/add -H "Content-Type: application/json" -d '{"name":"thug_621","tag":"GYM", "location":{"latitude":966021550188765432, "longitude":392425644375222609}}'
+
+```
+
+### TODO Remove POI
+```
 ```
 
 [Oracle jdk download link]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
