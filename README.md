@@ -50,11 +50,23 @@ curl -v http://localhost:8000/poi
 ### Add new POI
 ```
 curl -v http://localhost:8000/poi/add -H "Content-Type: application/json" -d '{"name":"thug_621","tag":"GYM", "location":{"latitude":966021550188765432, "longitude":392425644375222609}}'
-
 ```
 
 ### TODO Remove POI
 ```
+```
+
+### Create new user
+```
+curl -v http://localhost:8000/user/add -H "Content-Type: application/json" -d '{"email":"asd", "password":"zxc"}'
+```
+### Get protected resource
+```
+curl -v http://localhost:8000/auth -u asd:zxc
+```
+### Fetch all users
+```
+curl -v http://localhost:8000/user
 ```
 
 [Oracle jdk download link]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
