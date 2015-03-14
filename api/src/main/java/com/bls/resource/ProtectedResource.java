@@ -17,7 +17,7 @@ import io.dropwizard.auth.Auth;
  */
 
 @Singleton
-@Path("/authtest")
+@Path("/auth")
 @Produces(MediaType.TEXT_PLAIN)
 public class ProtectedResource {
 
