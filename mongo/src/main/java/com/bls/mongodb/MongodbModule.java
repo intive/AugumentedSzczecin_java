@@ -2,8 +2,11 @@ package com.bls.mongodb;
 
 import java.net.UnknownHostException;
 
+import javax.inject.Named;
+
 import com.bls.dao.CommonDao;
 import com.bls.mongodb.dao.PoiDaoMongodb;
+import com.bls.mongodb.dao.UserDaoMongodb;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -28,9 +31,19 @@ public class MongodbModule extends AbstractModule {
         return config.buildMongoClient();
     }
 
+    // TODO configure all DAOs at once -
     @Singleton
     @Provides
+    @Named("user")
+    public CommonDao provideUserDao(final DB mongodb) {
+        return new UserDaoMongodb(mongodb);
+    }
+
+    @Singleton
+    @Provides
+    @Named("poi")
     public CommonDao providePoiDao(final DB mongodb) {
         return new PoiDaoMongodb(mongodb);
     }
+
 }
