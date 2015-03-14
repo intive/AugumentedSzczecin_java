@@ -1,10 +1,14 @@
 package com.bls;
 
+import com.bls.auth.basic.BasicAuthenticator;
+import com.bls.core.user.User;
 import com.bls.mongodb.MongodbModule;
 import com.google.inject.Stage;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
 import io.dropwizard.Application;
+import io.dropwizard.auth.AuthFactory;
+import io.dropwizard.auth.basic.BasicAuthFactory;
 import io.dropwizard.java8.Java8Bundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -31,5 +35,6 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
 
     @Override
     public void run(final AugmentedConfiguration augmentedConfiguration, final Environment environment) throws Exception {
+        environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<User>(new BasicAuthenticator(), "Basic auth", User.class)));
     }
 }
