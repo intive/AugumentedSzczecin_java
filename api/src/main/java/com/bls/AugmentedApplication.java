@@ -53,7 +53,7 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
     }
 
     private Binder provideBasicAuthenticator() {
-        final UserDao<User<String>, String> userDao = checkNotNull(guiceInjector, "Guice injector empty").getInstance(UserDao.class);
+        final UserDao userDao = checkNotNull(guiceInjector, "Guice injector empty").getInstance(UserDao.class);
         return AuthFactory.binder(new BasicAuthFactory(new BasicAuthenticator(userDao), "Basic " + "auth", User.class));
     }
 }

@@ -18,19 +18,4 @@ public class PoiDaoMongodb extends CommonDaoMongodb<PoiMongodb, Poi<String>, Str
     protected Class<PoiMongodb> getMongodbModelType() {
         return PoiMongodb.class;
     }
-
-    @Override
-    protected Poi<String> convert2coreModel(final PoiMongodb mongodbEntity) {
-        // TODO find generic way to map mongo model to core
-        Poi<String> poi = mongodbEntity.getCoreEntity();
-        return new Poi<>(mongodbEntity.getId(), poi.getName(), poi.getTag(), poi.getLocation());
-    }
-
-    @Override
-    protected PoiMongodb convert2mongodbModel(final Poi<String> coreEntity) {
-        final PoiMongodb poiMongodb = new PoiMongodb();
-        poiMongodb.poi = coreEntity;
-        poiMongodb.id = coreEntity.getId();
-        return poiMongodb;
-    }
 }

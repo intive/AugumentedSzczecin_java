@@ -22,7 +22,7 @@ public interface CommonDao<E extends IdentifiableEntity, K> {
 
     void deleteAll();
 
-    E findbyId(final K id);
+    E findById(final K id);
 
     Collection<E> findAll();
 }

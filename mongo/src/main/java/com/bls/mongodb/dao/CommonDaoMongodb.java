@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.mongodb.DB;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Generic mongodb dao operations and mapping to/from core model
  *
@@ -21,8 +23,8 @@ import com.mongodb.DB;
  * @param <I> Entity type for core entity
  * @param <K> Key type for used inside core entity type
  */
-public abstract class CommonDaoMongodb<M extends MongodbMappableIdentifiableEntity, I extends IdentifiableEntity,
-        K> implements CommonDao<I, K> {
+public abstract class CommonDaoMongodb<M extends MongodbMappableIdentifiableEntity, I extends IdentifiableEntity<K>, K> implements
+        CommonDao<I, K> {
 
     private final static ObjectMapper MAPPER = MongoJackModule.configure(new ObjectMapper());
     protected final JacksonDBCollection<M, String> dbCollection;
@@ -46,9 +48,25 @@ public abstract class CommonDaoMongodb<M extends MongodbMappableIdentifiableEnti
         return getMongodbModelType().getClass().getCanonicalName();
     }
 
-    protected abstract I convert2coreModel(final M mongodbEntity);
+    protected I convert2coreModel(final M mongodbEntity) {
+        final I coreEntity = (I) mongodbEntity.getCoreEntity();
+        coreEntity.setId(checkNotNull((K) mongodbEntity.id, "Missing mongodb generated id"));
+        return coreEntity;
+    }
 
-    protected abstract M convert2mongodbModel(final I coreEntity);
+    protected M convert2mongodbModel(I coreEntity) {
+        final M mongodbEntity;
+        try {
+            mongodbEntity = getMongodbModelType().newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
+        mongodbEntity.coreEntity = coreEntity;
+        if (coreEntity.getId() != null) {
+            mongodbEntity.id = String.valueOf(coreEntity.getId());
+        }
+        return mongodbEntity;
+    }
 
     @Override
     public List<I> findAll() {
@@ -59,7 +77,7 @@ public abstract class CommonDaoMongodb<M extends MongodbMappableIdentifiableEnti
     }
 
     @Override
-    public I findbyId(final K coreEntityId) {
+    public I findById(final K coreEntityId) {
         return convert2coreModel(dbCollection.findOneById(String.valueOf(coreEntityId)));
     }
 
@@ -75,7 +93,7 @@ public abstract class CommonDaoMongodb<M extends MongodbMappableIdentifiableEnti
 
     @Override
     public void delete(final I coreEntity) {
-        dbCollection.removeById(String.valueOf(coreEntity.getId()));
+        dbCollection.removeById(String.valueOf(checkNotNull(coreEntity.getId(), "Missing entity id")));
     }
 
     @Override

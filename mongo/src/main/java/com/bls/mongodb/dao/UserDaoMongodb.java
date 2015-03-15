@@ -24,20 +24,6 @@ public class UserDaoMongodb extends CommonDaoMongodb<UserMongodb, User<String>, 
     }
 
     @Override
-    protected User<String> convert2coreModel(UserMongodb mongodbEntity) {
-        final User<String> user = mongodbEntity.getCoreEntity();
-        return new User<>(mongodbEntity.getId(), user.getEmail(), user.getPassword());
-    }
-
-    @Override
-    protected UserMongodb convert2mongodbModel(User<String> coreEntity) {
-        final UserMongodb userMongodb = new UserMongodb();
-        userMongodb.user = coreEntity;
-        userMongodb.id = coreEntity.getId();
-        return userMongodb;
-    }
-
-    @Override
     public Optional<User<String>> findByEmail(String email) {
         final UserMongodb user = dbCollection.findOne(DBQuery.is("email", email));
         if (user == null) {
@@ -58,7 +44,7 @@ public class UserDaoMongodb extends CommonDaoMongodb<UserMongodb, User<String>, 
 
     private User<String> checkDuplicate(final User<String> user) {
         Optional<User<String>> existingUser = findByEmail(user.getEmail());
-        checkState(existingUser.isPresent(), "User already in db: %s", user.getEmail());
+        checkState(!existingUser.isPresent(), "User already in db: %s", user.getEmail());
         return user;
     }
 }

@@ -4,19 +4,24 @@ import org.mongojack.Id;
 import org.mongojack.ObjectId;
 
 import com.bls.core.IdentifiableEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /** @param <E> Entity type to be mapped to mongodb */
-public abstract class MongodbMappableIdentifiableEntity<E extends IdentifiableEntity> implements MongodbMappableEntity<E> {
+public abstract class MongodbMappableIdentifiableEntity<E extends IdentifiableEntity<String>> implements MongodbMappableEntity<E> {
+
+    @JsonUnwrapped
+    @JsonIgnoreProperties("id")
+    public E coreEntity;
 
     @Id
     @ObjectId
     @JsonProperty("_id")
     public String id;
 
-    @JsonIgnore
-    public String getId() {
-        return id;
+    @Override
+    public E getCoreEntity() {
+        return coreEntity;
     }
 }

@@ -4,13 +4,17 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+import com.bls.auth.basic.BasicAuthenticator;
 import com.bls.core.user.User;
 import com.bls.dao.UserDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
+
+import io.dropwizard.auth.Auth;
 
 @Singleton
 @Path("/user")
@@ -28,7 +32,7 @@ public class UserResource {
     @GET
     @Timed
     @ExceptionMetered
-    public Collection<User<String>> get() {
+    public Collection<User<String>> get(@Auth String foo) {
         return userDao.findAll();
     }
 
@@ -36,15 +40,17 @@ public class UserResource {
     @Path("/add")
     @Timed
     @ExceptionMetered
-    public User<String> create(final User<String> user) {
-        return userDao.create(user);
+    public User<String> create(@Valid final User<String> userWithPailtextPassword) {
+        final String hashedPassword = BasicAuthenticator.generateSafeHash(userWithPailtextPassword.getPassword());
+        final User<String> userWithHashedPassword = userWithPailtextPassword.createUserWithHashedPassword(hashedPassword);
+        return userDao.create(userWithHashedPassword);
     }
 
     @POST
     @Path("/clear")
     @Timed
     @ExceptionMetered
-    public void removeAll() {
+    public void removeAll(@Auth String foo) {
         userDao.deleteAll();
     }
 }

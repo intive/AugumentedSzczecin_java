@@ -12,6 +12,7 @@ import com.bls.core.poi.Poi;
 import com.bls.dao.CommonDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
+import com.google.common.collect.Lists;
 
 @Singleton
 @Path("/poi")
@@ -49,8 +50,8 @@ public class PoiResource {
     @Timed
     @ExceptionMetered
     public Collection<Poi<String>> generate() {
-        final Collection<Poi<String>> poiCollection = poiGenerator.generate(POI_COUNT);
-        poiCollection.forEach(poiDao::create);
-        return poiCollection;
+        final Collection<Poi<String>> generated = Lists.newArrayListWithCapacity(POI_COUNT);
+        poiGenerator.generate(POI_COUNT).forEach(entity -> generated.add(poiDao.create(entity)));
+        return generated;
     }
 }

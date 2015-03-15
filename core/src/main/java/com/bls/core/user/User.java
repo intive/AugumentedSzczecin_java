@@ -30,7 +30,12 @@ public class User<K> extends IdentifiableEntity<K> {
         return email;
     }
 
+    // TODO shouldn't be public!
     public String getPassword() {
         return password;
+    }
+
+    public User<K> createUserWithHashedPassword(final String hashedPassword) {
+        return new User<>(getId(), email, hashedPassword);
     }
 }

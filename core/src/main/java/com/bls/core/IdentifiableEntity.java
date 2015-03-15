@@ -7,7 +7,7 @@ package com.bls.core;
  */
 public abstract class IdentifiableEntity<K> {
 
-    private final K id;
+    private K id; // TODO make it final
 
     public IdentifiableEntity(final K id) {
         this.id = id;
@@ -15,5 +15,10 @@ public abstract class IdentifiableEntity<K> {
 
     public K getId() {
         return id;
+    }
+
+    // TODo remove me (make id final)
+    public void setId(final K id) {
+        this.id = id;
     }
 }
