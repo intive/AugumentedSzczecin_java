@@ -5,7 +5,7 @@ import java.util.Collection;
 import com.bls.core.IdentifiableEntity;
 
 /**
- * Common Dao for all entities
+ * Common behaviour for all DAO
  *
  * @param <E> Entity type
  * @param <K> Entity key type

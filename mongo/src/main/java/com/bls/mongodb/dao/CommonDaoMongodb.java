@@ -1,6 +1,7 @@
 package com.bls.mongodb.dao;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
@@ -53,9 +54,7 @@ public abstract class CommonDaoMongodb<M extends MongodbMappableIdentifiableEnti
     public List<I> findAll() {
         final List<M> mongodbEntities = dbCollection.find().toArray();
         final List<I> coreEntities = Lists.newArrayListWithCapacity(mongodbEntities.size());
-        for (final M mongodbEntity : mongodbEntities) {
-            coreEntities.add(convert2coreModel(mongodbEntity));
-        }
+        coreEntities.addAll(mongodbEntities.stream().map(this::convert2coreModel).collect(Collectors.toList()));
         return coreEntities;
     }
 

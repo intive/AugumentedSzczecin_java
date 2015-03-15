@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** @param <E> Entity type to be mapped to mongodb */
-public abstract class MongodbMappableIdentifiableEntity implements MongodbMappableEntity<IdentifiableEntity> {
+public abstract class MongodbMappableIdentifiableEntity<E extends IdentifiableEntity> implements MongodbMappableEntity<E> {
 
     @Id
     @ObjectId

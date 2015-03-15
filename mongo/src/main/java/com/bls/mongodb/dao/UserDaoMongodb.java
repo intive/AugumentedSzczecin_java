@@ -1,54 +1,49 @@
 package com.bls.mongodb.dao;
 
-import com.bls.core.IdentifiableEntity;
-import com.bls.core.user.User;
-import com.bls.dao.UserDao;
-import com.bls.mongodb.core.MongodbMappableIdentifiableEntity;
-import com.bls.mongodb.core.UserMongodb;
-import com.google.inject.Inject;
-import com.mongodb.DB;
-import javassist.NotFoundException;
 import org.mongojack.DBQuery;
 
-/**
- * Created by Marcin Podlodowski on 3/14/15.
- */
-public class UserDaoMongodb extends CommonDaoMongodb implements UserDao {
-    
+import com.bls.core.user.User;
+import com.bls.dao.UserDao;
+import com.bls.mongodb.core.UserMongodb;
+import com.google.common.base.Optional;
+import com.google.inject.Inject;
+import com.mongodb.DB;
+
+import static jersey.repackaged.com.google.common.base.Preconditions.checkState;
+
+public class UserDaoMongodb extends CommonDaoMongodb<UserMongodb, User<String>, String> implements UserDao<User<String>, String> {
+
     @Inject
     public UserDaoMongodb(final DB db) {
         super(db);
     }
 
     @Override
-    protected Class getMongodbModelType() {
+    protected Class<UserMongodb> getMongodbModelType() {
         return UserMongodb.class;
     }
 
     @Override
-    protected IdentifiableEntity convert2coreModel(MongodbMappableIdentifiableEntity mongodbEntity) {
-        User<String> user = (User<String>) mongodbEntity.getCoreEntity();
+    protected User<String> convert2coreModel(UserMongodb mongodbEntity) {
+        final User<String> user = mongodbEntity.getCoreEntity();
         return new User<>(mongodbEntity.getId(), user.getEmail(), user.getPassword());
     }
 
     @Override
-    protected MongodbMappableIdentifiableEntity convert2mongodbModel(IdentifiableEntity coreEntity) {
+    protected UserMongodb convert2mongodbModel(User<String> coreEntity) {
         final UserMongodb userMongodb = new UserMongodb();
-        userMongodb.user = (User<String>) coreEntity;
-        userMongodb.id = (String) coreEntity.getId();
+        userMongodb.user = coreEntity;
+        userMongodb.id = coreEntity.getId();
         return userMongodb;
     }
-    
+
     @Override
-    public User findByEmail(String email) throws NotFoundException {
-/*
-        User user =  (User) convert2coreModel((MongodbMappableIdentifiableEntity) 
-                dbCollection.findOne(DBQuery.is("email", email)));
-*/
-        Object user = dbCollection.findOne(DBQuery.is("email", email));
-        if (user == null) return null;
-        
-        return (User) convert2coreModel((MongodbMappableIdentifiableEntity) user);
+    public Optional<User<String>> findByEmail(String email) {
+        final UserMongodb user = dbCollection.findOne(DBQuery.is("email", email));
+        if (user == null) {
+            return Optional.absent();
+        }
+        return Optional.of(convert2coreModel(user));
     }
 
     @Override
@@ -57,11 +52,13 @@ public class UserDaoMongodb extends CommonDaoMongodb implements UserDao {
     }
 
     @Override
-    public User add(User user) throws Exception {
-        User existingUser = findByEmail(user.getEmail());
-        if (existingUser != null) throw new Exception("Duplicate entry for [" + user.getEmail() + "]");
-        create(user);
-        return user;
+    public User<String> create(final User<String> user) {
+        return super.create(checkDuplicate(user));
     }
 
+    private User<String> checkDuplicate(final User<String> user) {
+        Optional<User<String>> existingUser = findByEmail(user.getEmail());
+        checkState(existingUser.isPresent(), "User already in db: %s", user.getEmail());
+        return user;
+    }
 }

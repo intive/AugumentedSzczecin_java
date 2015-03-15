@@ -50,9 +50,7 @@ public class PoiResource {
     @ExceptionMetered
     public Collection<Poi<String>> generate() {
         final Collection<Poi<String>> poiCollection = poiGenerator.generate(POI_COUNT);
-        for (Poi<String> randomPoi : poiCollection) {
-            poiDao.create(randomPoi);
-        }
+        poiCollection.forEach(poiDao::create);
         return poiCollection;
     }
 }

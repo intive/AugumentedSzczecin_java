@@ -1,17 +1,21 @@
 package com.bls.dao;
 
 import com.bls.core.IdentifiableEntity;
-import com.bls.core.user.User;
-import javassist.NotFoundException;
+import com.google.common.base.Optional;
 
 /**
- * Created by Marcin Podlodowski on 3/15/15.
+ * User specific DAO operation
+ *
+ * @param <E> Entity type
+ * @param <K> Key type for entity E
  */
 public interface UserDao<E extends IdentifiableEntity, K> extends CommonDao<E, K> {
 
-    User findByEmail(final String email) throws NotFoundException;
-    
-    void deleteByEmail(final String email);
+    /**
+     * @param email for searching user
+     * @return User found or Optional#empty() if not found
+     */
+    Optional<E> findByEmail(final String email);
 
-    User add(final User user) throws Exception;
+    void deleteByEmail(final String email);
 }

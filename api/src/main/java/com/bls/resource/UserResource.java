@@ -3,13 +3,11 @@ package com.bls.resource;
 import java.util.Collection;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import com.bls.core.user.User;
-import com.bls.dao.CommonDao;
 import com.bls.dao.UserDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
@@ -20,10 +18,10 @@ import com.codahale.metrics.annotation.Timed;
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
 
-    private final UserDao userDao;
+    private final UserDao<User<String>, String> userDao;
 
     @Inject
-    public UserResource(@Named("user") UserDao userDao) {
+    public UserResource(UserDao userDao) {
         this.userDao = userDao;
     }
 
@@ -38,15 +36,15 @@ public class UserResource {
     @Path("/add")
     @Timed
     @ExceptionMetered
-    public User<String> add(final User<String> user) throws Exception {
-        return userDao.add(user);
+    public User<String> create(final User<String> user) {
+        return userDao.create(user);
     }
-    
+
     @POST
     @Path("/clear")
     @Timed
     @ExceptionMetered
-    public void clear() {
+    public void removeAll() {
         userDao.deleteAll();
     }
 }

@@ -1,16 +1,13 @@
 package com.bls;
 
-import com.bls.dao.UserDao;
 import org.glassfish.hk2.utilities.Binder;
 
 import com.bls.auth.basic.BasicAuthenticator;
 import com.bls.core.user.User;
-import com.bls.dao.CommonDao;
+import com.bls.dao.UserDao;
 import com.bls.mongodb.MongodbModule;
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.Stage;
-import com.google.inject.name.Names;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
 import io.dropwizard.Application;
@@ -26,12 +23,17 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
 
     private Injector guiceInjector;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         new AugmentedApplication().run(args);
     }
 
     @Override
-    public void initialize(Bootstrap<AugmentedConfiguration> bootstrap) {
+    public String getName() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
+    public void initialize(final Bootstrap<AugmentedConfiguration> bootstrap) {
         bootstrap.addBundle(new Java8Bundle());
 
         final GuiceBundle<AugmentedConfiguration> guiceBundle = GuiceBundle.<AugmentedConfiguration>newBuilder().addModule(
@@ -51,8 +53,7 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
     }
 
     private Binder provideBasicAuthenticator() {
-        final UserDao userDao = checkNotNull(guiceInjector, "Guice injector empty").getInstance((Key.get(UserDao.class, Names.named
-                ("user"))));
-        return AuthFactory.binder(new BasicAuthFactory<>(new BasicAuthenticator(userDao), "Basic " + "auth", User.class));
+        final UserDao<User<String>, String> userDao = checkNotNull(guiceInjector, "Guice injector empty").getInstance(UserDao.class);
+        return AuthFactory.binder(new BasicAuthFactory(new BasicAuthenticator(userDao), "Basic " + "auth", User.class));
     }
 }

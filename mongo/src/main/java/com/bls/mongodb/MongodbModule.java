@@ -32,10 +32,8 @@ public class MongodbModule extends AbstractModule {
         return config.buildMongoClient();
     }
 
-    // TODO configure all DAOs at once -
     @Singleton
     @Provides
-    @Named("user")
     public UserDao provideUserDao(final DB mongodb) {
         return new UserDaoMongodb(mongodb);
     }
@@ -46,5 +44,4 @@ public class MongodbModule extends AbstractModule {
     public CommonDao providePoiDao(final DB mongodb) {
         return new PoiDaoMongodb(mongodb);
     }
-
 }

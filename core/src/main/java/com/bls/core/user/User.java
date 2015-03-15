@@ -1,28 +1,26 @@
 package com.bls.core.user;
 
-import com.bls.core.IdentifiableEntity;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/**
- * Created by Marcin Podlodowski on 3/10/15.
- */
+import org.hibernate.validator.constraints.NotEmpty;
+
+import com.bls.core.IdentifiableEntity;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class User<K> extends IdentifiableEntity<K> {
 
     @NotEmpty
-    private String email;
+    private final String email;
     @NotNull
     @Size(min = 2, max = 64)
-    private String password;
+    private final String password;
 
     @JsonCreator
-    public User(@JsonProperty(value = "id", required = false) final K id, 
-                @JsonProperty("email") final String email, 
-                @JsonProperty("password") final String password) {
+    public User(@JsonProperty(value = "id", required = false) final K id,
+            @JsonProperty("email") final String email,
+            @JsonProperty("password") final String password) {
         super(id);
         this.email = email;
         this.password = password;
@@ -32,12 +30,7 @@ public class User<K> extends IdentifiableEntity<K> {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
-
 }
