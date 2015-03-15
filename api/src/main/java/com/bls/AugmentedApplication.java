@@ -1,5 +1,6 @@
 package com.bls;
 
+import com.bls.dao.UserDao;
 import org.glassfish.hk2.utilities.Binder;
 
 import com.bls.auth.basic.BasicAuthenticator;
@@ -50,7 +51,7 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
     }
 
     private Binder provideBasicAuthenticator() {
-        final CommonDao userDao = checkNotNull(guiceInjector, "Guice injector empty").getInstance((Key.get(CommonDao.class, Names.named
+        final UserDao userDao = checkNotNull(guiceInjector, "Guice injector empty").getInstance((Key.get(UserDao.class, Names.named
                 ("user"))));
         return AuthFactory.binder(new BasicAuthFactory<>(new BasicAuthenticator(userDao), "Basic " + "auth", User.class));
     }
