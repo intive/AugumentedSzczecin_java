@@ -68,6 +68,10 @@ curl -v http://localhost:8000/auth -u asd:zxc
 ```
 curl -v http://localhost:8000/user
 ```
+### Clear user list
+```
+curl -v kttp://localhost:8000/user/clear
+```
 
 [Oracle jdk download link]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [Maven download link]: http://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache
