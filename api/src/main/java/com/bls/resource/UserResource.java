@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.bls.core.user.User;
 import com.bls.dao.CommonDao;
+import com.bls.dao.UserDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 
@@ -19,10 +20,10 @@ import com.codahale.metrics.annotation.Timed;
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
 
-    private final CommonDao<User<String>, String> userDao;
+    private final UserDao userDao;
 
     @Inject
-    public UserResource(@Named("user") CommonDao userDao) {
+    public UserResource(@Named("user") UserDao userDao) {
         this.userDao = userDao;
     }
 
@@ -37,7 +38,15 @@ public class UserResource {
     @Path("/add")
     @Timed
     @ExceptionMetered
-    public User<String> add(final User<String> user) {
-        return userDao.update(user);
+    public User<String> add(final User<String> user) throws Exception {
+        return userDao.add(user);
+    }
+    
+    @POST
+    @Path("/clear")
+    @Timed
+    @ExceptionMetered
+    public void clear() {
+        userDao.deleteAll();
     }
 }

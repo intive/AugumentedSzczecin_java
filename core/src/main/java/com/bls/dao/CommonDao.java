@@ -20,6 +20,8 @@ public interface CommonDao<E extends IdentifiableEntity, K> {
 
     void deleteById(final K id);
 
+    void deleteAll();
+
     E findbyId(final K id);
 
     Collection<E> findAll();

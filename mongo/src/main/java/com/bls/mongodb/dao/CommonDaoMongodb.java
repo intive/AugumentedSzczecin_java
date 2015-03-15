@@ -76,7 +76,7 @@ public abstract class CommonDaoMongodb<M extends MongodbMappableIdentifiableEnti
 
     @Override
     public void delete(final I coreEntity) {
-        // TODO
+        dbCollection.removeById(String.valueOf(coreEntity.getId()));
     }
 
     @Override
