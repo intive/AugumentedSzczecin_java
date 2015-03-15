@@ -2,6 +2,7 @@ package com.bls.mongodb.dao;
 
 import java.util.List;
 
+import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.internal.MongoJackModule;
 
@@ -23,7 +24,7 @@ public abstract class CommonDaoMongodb<M extends MongodbMappableIdentifiableEnti
         K> implements CommonDao<I, K> {
 
     private final static ObjectMapper MAPPER = MongoJackModule.configure(new ObjectMapper());
-    private final JacksonDBCollection<M, String> dbCollection;
+    protected final JacksonDBCollection<M, String> dbCollection;
 
     public CommonDaoMongodb(final DB db) {
         dbCollection = provideMongodbCollection(db, getMongodbCollectionName(), getMongodbModelType(), String.class);
@@ -81,5 +82,10 @@ public abstract class CommonDaoMongodb<M extends MongodbMappableIdentifiableEnti
     @Override
     public void deleteById(final K coreEntityId) {
         // TODO
+    }
+
+    @Override
+    public void deleteAll() {
+        dbCollection.remove(DBQuery.empty());
     }
 }

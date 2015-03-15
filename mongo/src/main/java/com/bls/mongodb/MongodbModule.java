@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import javax.inject.Named;
 
 import com.bls.dao.CommonDao;
+import com.bls.dao.UserDao;
 import com.bls.mongodb.dao.PoiDaoMongodb;
 import com.bls.mongodb.dao.UserDaoMongodb;
 import com.google.inject.AbstractModule;
@@ -35,7 +36,7 @@ public class MongodbModule extends AbstractModule {
     @Singleton
     @Provides
     @Named("user")
-    public CommonDao provideUserDao(final DB mongodb) {
+    public UserDao provideUserDao(final DB mongodb) {
         return new UserDaoMongodb(mongodb);
     }
 
