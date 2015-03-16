@@ -2,6 +2,7 @@ package com.bls.dao;
 
 import java.util.Collection;
 
+import com.bls.core.Identifiable;
 import com.bls.core.IdentifiableEntity;
 
 /**
@@ -10,7 +11,7 @@ import com.bls.core.IdentifiableEntity;
  * @param <E> Entity type
  * @param <K> Entity key type
  */
-public interface CommonDao<E extends IdentifiableEntity, K> {
+public interface CommonDao<E extends Identifiable<K>, K> {
 
     E create(final E entity);
 

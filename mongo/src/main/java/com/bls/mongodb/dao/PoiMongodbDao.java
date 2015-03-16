@@ -7,10 +7,10 @@ import com.bls.mongodb.core.PoiMongodb;
 import com.mongodb.DB;
 
 /** Poi mongodb data provider */
-public class PoiDaoMongodb extends CommonDaoMongodb<PoiMongodb, Poi<String>, String> {
+public class PoiMongodbDao extends CommonMongodbDao<PoiMongodb, Poi<String>, String> {
 
     @Inject
-    public PoiDaoMongodb(final DB db) {
+    public PoiMongodbDao(final DB db) {
         super(db);
     }
 

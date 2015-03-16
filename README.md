@@ -8,70 +8,67 @@ Prerequisites:
 
 ## Install dropwizard-guice-hubspot to local maven repository (once)
 
-```
-git clone https://github.com/mlotysz/dropwizard-guice-hubspot.git
-cd dropwizard-guice-hubspot
-mvn -T4 clean install
-```
+        git clone https://github.com/mlotysz/dropwizard-guice-hubspot.git
+        cd dropwizard-guice-hubspot
+        mvn -T4 clean install
 
 ## Building backend with maven
-```
-mvn -T4 clean package
-```
+
+        mvn -T4 clean package
 
 ## Running backend
 
-- with mongo
-```
-(cd api && java -jar target/api-1.0.0-SNAPSHOT.jar server config-mongo.yml)
-```
+* mongodb as backend db
 
-- TODO with hibernate on H2:
-```
-(cd api && java -jar target/api-1.0.0-SNAPSHOT.jar server config-rdbms-h2.yml)
-```
-- TODO with hibernate on Postgresql:
-```
-(cd api && java -jar target/api-1.0.0-SNAPSHOT.jar server config-rdbms-pg.yml)
-```
+        (cd api && java -jar target/api-1.0.0-SNAPSHOT.jar server config-mongodb.yml)
+
+* To setup H2 (and hibernate JPA implementation)
+
+        (cd api && java -jar target/api-1.0.0-SNAPSHOT.jar db migrate config-rdbms-h2.yml)
+        
+* Run application with H2 in memory db - but note, needs some work
+        
+        (cd api && java -jar target/api-1.0.0-SNAPSHOT.jar server config-rdbms-h2.yml)
+
+* TODO with hibernate on Postgresql:
+
+        (cd api && java -jar target/api-1.0.0-SNAPSHOT.jar server config-rdbms-pg.yml)
 
 ## Testing (currently available with mongodb only)
 
-### Generate some example data
-```
-curl -v http://localhost:8000/poi/generate
-```
+* Generate some example data
 
-### Fetch all data
-```
-curl -v http://localhost:8000/poi
-```
+        curl -v http://localhost:8000/poi/generate
 
-### Add new POI
-```
-curl -v http://localhost:8000/poi/add -H "Content-Type: application/json" -d '{"name":"thug_621","tag":"GYM", "location":{"latitude":966021550188765432, "longitude":392425644375222609}}'
-```
+* Fetch all data
 
-### TODO Remove POI
-```
-```
+        curl -v http://localhost:8000/poi
 
-### Create new user
-```
-curl -v http://localhost:8000/user/add -H "Content-Type: application/json" -d '{"email":"asd", "password":"zxc"}'
-```
-### Get protected resource
-```
-curl -v http://localhost:8000/auth -u asd:zxc
-```
-### Fetch all users
-```
-curl -v http://localhost:8000/user
-```
-### Clear user list
-```
-curl -v kttp://localhost:8000/user/clear
-```
+* Add new POI
+
+        curl -v http://localhost:8000/poi/add \
+            -H "Content-Type: application/json" \
+            -d '{"name":"thug_621",\
+                "tag":"GYM",\
+                "location":{"latitude":966021550188765432,\
+                          "longitude":392425644375222609}\
+                }'
+
+* Create new user
+
+        curl -v http://localhost:8000/user/add -H "Content-Type: application/json" -d '{"email":"asd", "password":"zxc"}'
+
+* Get protected resource
+
+        curl -v http://localhost:8000/auth -u asd:zxc
+
+* Fetch all users
+
+        curl -v http://localhost:8000/user
+
+* Clear user list
+
+        curl -v http://localhost:8000/user/clear
 
 [Oracle jdk download link]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [Maven download link]: http://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache

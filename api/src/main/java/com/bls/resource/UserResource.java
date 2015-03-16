@@ -15,6 +15,7 @@ import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 
 import io.dropwizard.auth.Auth;
+import io.dropwizard.hibernate.UnitOfWork;
 
 @Singleton
 @Path("/user")
@@ -32,6 +33,7 @@ public class UserResource {
     @GET
     @Timed
     @ExceptionMetered
+    @UnitOfWork
     public Collection<User<String>> get(@Auth String foo) {
         return userDao.findAll();
     }
@@ -40,6 +42,7 @@ public class UserResource {
     @Path("/add")
     @Timed
     @ExceptionMetered
+    @UnitOfWork
     public User<String> create(@Valid final User<String> userWithPailtextPassword) {
         final String hashedPassword = BasicAuthenticator.generateSafeHash(userWithPailtextPassword.getPassword());
         final User<String> userWithHashedPassword = userWithPailtextPassword.createUserWithHashedPassword(hashedPassword);
@@ -50,6 +53,7 @@ public class UserResource {
     @Path("/clear")
     @Timed
     @ExceptionMetered
+    @UnitOfWork
     public void removeAll(@Auth String foo) {
         userDao.deleteAll();
     }

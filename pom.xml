@@ -15,6 +15,7 @@
     <modules>
         <module>core</module>
         <module>mongo</module>
+        <module>rdbms</module>
         <module>api</module>
     </modules>
 

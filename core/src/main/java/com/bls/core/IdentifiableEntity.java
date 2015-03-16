@@ -5,7 +5,7 @@ package com.bls.core;
  *
  * @param <K> some key type
  */
-public abstract class IdentifiableEntity<K> {
+public abstract class IdentifiableEntity<K> implements Identifiable<K> {
 
     private K id; // TODO make it final
 
@@ -13,11 +13,13 @@ public abstract class IdentifiableEntity<K> {
         this.id = id;
     }
 
+    @Override
     public K getId() {
         return id;
     }
 
-    // TODo remove me (make id final)
+    // TODO remove me (make id final)
+    @Override
     public void setId(final K id) {
         this.id = id;
     }

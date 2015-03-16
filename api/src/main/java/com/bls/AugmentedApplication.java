@@ -6,9 +6,11 @@ import com.bls.auth.basic.BasicAuthenticator;
 import com.bls.core.user.User;
 import com.bls.dao.UserDao;
 import com.bls.mongodb.MongodbModule;
+import com.bls.rdbms.RdbmsModule;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.hubspot.dropwizard.guice.GuiceBundle;
+import com.hubspot.dropwizard.guice.GuiceBundle.Builder;
 
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthFactory;
@@ -34,15 +36,29 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<AugmentedConfiguration> bootstrap) {
+        // setup java 8 support for dropwizard
         bootstrap.addBundle(new Java8Bundle());
 
-        final GuiceBundle<AugmentedConfiguration> guiceBundle = GuiceBundle.<AugmentedConfiguration>newBuilder().addModule(
+        // setup guice builder
+        final Builder<AugmentedConfiguration> configurationBuilder = GuiceBundle.<AugmentedConfiguration>newBuilder().addModule(
                 new AugmentedModule()) //
-                .addModule(new MongodbModule()) //
                 .enableAutoConfig(getClass().getPackage().getName()) //
-                .setConfigClass(AugmentedConfiguration.class) //
-                .build(Stage.DEVELOPMENT);
+                .setConfigClass(AugmentedConfiguration.class);
+
+        // decide which db backend should we running
+        final boolean isMongoEnabled = true;
+        if (isMongoEnabled) {
+            configurationBuilder.addModule(new MongodbModule());
+        } else {
+            configurationBuilder.addModule(new HibernateModule(bootstrap));
+            configurationBuilder.addModule(new RdbmsModule());
+        }
+
+        // eagerly inject all dependencies: note Stage.DEVELOPMENT it's a hack
+        final GuiceBundle<AugmentedConfiguration> guiceBundle = configurationBuilder.build(Stage.DEVELOPMENT);
         bootstrap.addBundle(guiceBundle);
+
+        // save for later authentication setup
         guiceInjector = guiceBundle.getInjector();
     }
 
@@ -54,6 +70,6 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
 
     private Binder provideBasicAuthenticator() {
         final UserDao userDao = checkNotNull(guiceInjector, "Guice injector empty").getInstance(UserDao.class);
-        return AuthFactory.binder(new BasicAuthFactory(new BasicAuthenticator(userDao), "Basic " + "auth", User.class));
+        return AuthFactory.binder(new BasicAuthFactory(new BasicAuthenticator(userDao), "Basic auth", User.class));
     }
 }

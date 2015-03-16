@@ -1,5 +1,4 @@
-
-mongo:
+mongodb:
   host: localhost
   port: 9090
   dbname: augmented

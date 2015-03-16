@@ -11,10 +11,10 @@ import com.mongodb.DB;
 
 import static jersey.repackaged.com.google.common.base.Preconditions.checkState;
 
-public class UserDaoMongodb extends CommonDaoMongodb<UserMongodb, User<String>, String> implements UserDao<User<String>, String> {
+public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, String> implements UserDao<User<String>, String> {
 
     @Inject
-    public UserDaoMongodb(final DB db) {
+    public UserMongodbDao(final DB db) {
         super(db);
     }
 

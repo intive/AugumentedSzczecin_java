@@ -6,8 +6,8 @@ import javax.inject.Named;
 
 import com.bls.dao.CommonDao;
 import com.bls.dao.UserDao;
-import com.bls.mongodb.dao.PoiDaoMongodb;
-import com.bls.mongodb.dao.UserDaoMongodb;
+import com.bls.mongodb.dao.PoiMongodbDao;
+import com.bls.mongodb.dao.UserMongodbDao;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -35,13 +35,13 @@ public class MongodbModule extends AbstractModule {
     @Singleton
     @Provides
     public UserDao provideUserDao(final DB mongodb) {
-        return new UserDaoMongodb(mongodb);
+        return new UserMongodbDao(mongodb);
     }
 
     @Singleton
     @Provides
     @Named("poi")
     public CommonDao providePoiDao(final DB mongodb) {
-        return new PoiDaoMongodb(mongodb);
+        return new PoiMongodbDao(mongodb);
     }
 }

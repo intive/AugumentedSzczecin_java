@@ -14,6 +14,8 @@ import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 
+import io.dropwizard.hibernate.UnitOfWork;
+
 @Singleton
 @Path("/poi")
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,6 +35,7 @@ public class PoiResource {
     @GET
     @Timed
     @ExceptionMetered
+    @UnitOfWork
     public Collection<Poi<String>> getAll() {
         return poiDao.findAll();
     }
@@ -41,6 +44,7 @@ public class PoiResource {
     @Path("/add")
     @Timed
     @ExceptionMetered
+    @UnitOfWork
     public Poi<String> add(final Poi<String> poi) {
         return poiDao.update(poi);
     }

@@ -7,7 +7,7 @@ import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.internal.MongoJackModule;
 
-import com.bls.core.IdentifiableEntity;
+import com.bls.core.Identifiable;
 import com.bls.dao.CommonDao;
 import com.bls.mongodb.core.MongodbMappableIdentifiableEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,13 +23,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @param <I> Entity type for core entity
  * @param <K> Key type for used inside core entity type
  */
-public abstract class CommonDaoMongodb<M extends MongodbMappableIdentifiableEntity, I extends IdentifiableEntity<K>, K> implements
-        CommonDao<I, K> {
+public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEntity, I extends Identifiable<K>, K> implements CommonDao<I,
+        K> {
 
     private final static ObjectMapper MAPPER = MongoJackModule.configure(new ObjectMapper());
     protected final JacksonDBCollection<M, String> dbCollection;
 
-    public CommonDaoMongodb(final DB db) {
+    public CommonMongodbDao(final DB db) {
         dbCollection = provideMongodbCollection(db, getMongodbCollectionName(), getMongodbModelType(), String.class);
     }
 
