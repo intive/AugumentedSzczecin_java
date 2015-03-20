@@ -23,8 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @param <I> Entity type for core entity
  * @param <K> Key type for used inside core entity type
  */
-public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEntity, I extends Identifiable<K>, K> implements CommonDao<I,
-        K> {
+public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEntity, I extends Identifiable<K>, K> implements CommonDao<I> {
 
     private final static ObjectMapper MAPPER = MongoJackModule.configure(new ObjectMapper());
     protected final JacksonDBCollection<M, String> dbCollection;
@@ -77,8 +76,8 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
     }
 
     @Override
-    public I findById(final K coreEntityId) {
-        return convert2coreModel(dbCollection.findOneById(String.valueOf(coreEntityId)));
+    public I findById(final String coreEntityId) {
+        return convert2coreModel(dbCollection.findOneById(coreEntityId));
     }
 
     @Override
@@ -97,8 +96,8 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
     }
 
     @Override
-    public void deleteById(final K coreEntityId) {
-        // TODO
+    public void deleteById(final String coreEntityId) {
+        dbCollection.removeById(String.valueOf(checkNotNull(coreEntityId, "Missing id")));
     }
 
     @Override

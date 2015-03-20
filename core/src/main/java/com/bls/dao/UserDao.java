@@ -9,7 +9,7 @@ import com.google.common.base.Optional;
  * @param <E> Entity type
  * @param <K> Key type for entity E
  */
-public interface UserDao<E extends Identifiable<K>, K> extends CommonDao<E, K> {
+public interface UserDao<E extends Identifiable> extends CommonDao<E> {
 
     /**
      * @param email for searching user

@@ -1,6 +1,5 @@
 package com.bls.core.user;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -13,7 +12,7 @@ public class User<K> extends IdentifiableEntity<K> {
 
     @NotEmpty
     private final String email;
-    @NotNull
+    @NotEmpty
     @Size(min = 2, max = 64)
     private final String password;
 

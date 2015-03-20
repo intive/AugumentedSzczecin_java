@@ -3,15 +3,13 @@ package com.bls.dao;
 import java.util.Collection;
 
 import com.bls.core.Identifiable;
-import com.bls.core.IdentifiableEntity;
 
 /**
- * Common behaviour for all DAO
+ * Common behaviour for all DAO. Entity key was set to String.
  *
  * @param <E> Entity type
- * @param <K> Entity key type
  */
-public interface CommonDao<E extends Identifiable<K>, K> {
+public interface CommonDao<E extends Identifiable> {
 
     E create(final E entity);
 
@@ -19,11 +17,11 @@ public interface CommonDao<E extends Identifiable<K>, K> {
 
     void delete(final E entity);
 
-    void deleteById(final K id);
+    void deleteById(final String id);
 
     void deleteAll();
 
-    E findById(final K id);
+    E findById(final String id);
 
     Collection<E> findAll();
 }

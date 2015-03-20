@@ -5,7 +5,13 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.bls.core.poi.Poi;
@@ -23,7 +29,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 public class PoiResource {
 
     private static final int POI_COUNT = 5;
-    private final CommonDao<Poi<String>, String> poiDao;
+    private final CommonDao<Poi> poiDao;
     private final RandomPoiGenerator poiGenerator;
 
     @Inject
@@ -33,28 +39,47 @@ public class PoiResource {
     }
 
     @GET
+    @UnitOfWork
     @Timed
     @ExceptionMetered
-    @UnitOfWork
-    public Collection<Poi<String>> getAll() {
+    public Collection<Poi> getAll() {
         return poiDao.findAll();
     }
 
-    @POST
-    @Path("/add")
+    @Path("/{id}")
+    @GET
+    @UnitOfWork
     @Timed
     @ExceptionMetered
+    public Poi getById(@PathParam(value = "id") String id) {
+        return poiDao.findById(String.valueOf(id));
+    }
+
+    @Path("/{id}")
+    @DELETE
     @UnitOfWork
-    public Poi<String> add(final Poi<String> poi) {
+    @Timed
+    @ExceptionMetered
+    public void delete(@PathParam(value = "id") String id) {
+        poiDao.deleteById(id);
+    }
+
+    @Path("/add")
+    @POST
+    @UnitOfWork
+    @Timed
+    @ExceptionMetered
+    public Poi add(final Poi poi) {
         return poiDao.update(poi);
     }
 
-    @GET
     @Path("/generate")
+    @GET
+    @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Collection<Poi<String>> generate() {
-        final Collection<Poi<String>> generated = Lists.newArrayListWithCapacity(POI_COUNT);
+    public Collection<Poi> generate() {
+        final Collection<Poi> generated = Lists.newArrayListWithCapacity(POI_COUNT);
         poiGenerator.generate(POI_COUNT).forEach(entity -> generated.add(poiDao.create(entity)));
         return generated;
     }

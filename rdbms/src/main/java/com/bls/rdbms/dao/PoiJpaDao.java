@@ -8,7 +8,7 @@ import com.bls.core.poi.Poi;
 import com.bls.rdbms.core.PoiJpa;
 
 /** Poi jpa data provider */
-public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>, Long> {
+public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
 
     @Inject
     public PoiJpaDao(final SessionFactory sessionFactory) {

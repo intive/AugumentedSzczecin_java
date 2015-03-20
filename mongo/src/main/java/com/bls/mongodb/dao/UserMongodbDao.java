@@ -11,7 +11,7 @@ import com.mongodb.DB;
 
 import static jersey.repackaged.com.google.common.base.Preconditions.checkState;
 
-public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, String> implements UserDao<User<String>, String> {
+public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, String> implements UserDao<User<String>> {
 
     @Inject
     public UserMongodbDao(final DB db) {

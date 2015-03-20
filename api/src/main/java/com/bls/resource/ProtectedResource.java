@@ -11,6 +11,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Singleton;
 
 import io.dropwizard.auth.Auth;
+import io.dropwizard.hibernate.UnitOfWork;
 
 @Singleton
 @Path("/auth")
@@ -18,6 +19,7 @@ import io.dropwizard.auth.Auth;
 public class ProtectedResource {
 
     @GET
+    @UnitOfWork
     @Timed
     @ExceptionMetered
     public String showProtected(@Auth User user) {

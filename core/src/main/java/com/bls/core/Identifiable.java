@@ -1,5 +1,10 @@
 package com.bls.core;
 
+/**
+ * Identifiable contract
+ *
+ * @param <K> Type of id
+ */
 public interface Identifiable<K> {
 
     K getId();

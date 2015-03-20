@@ -20,19 +20,19 @@ Prerequisites:
 
 * mongodb as backend db
 
-        (cd api && java -jar target/api-1.0.0-SNAPSHOT.jar server config-mongodb.yml)
+        (cd api && java -DDBTYPE=mongodb -jar target/api-1.0.0-SNAPSHOT.jar server augmented.yml)
 
 * To setup H2 (and hibernate JPA implementation)
 
-        (cd api && java -jar target/api-1.0.0-SNAPSHOT.jar db migrate config-rdbms-h2.yml)
+        (cd api && java -DDBTYPE=rdbms -jar target/api-1.0.0-SNAPSHOT.jar db migrate augmented.yml)
         
 * Run application with H2 in memory db - but note, needs some work
         
-        (cd api && java -jar target/api-1.0.0-SNAPSHOT.jar server config-rdbms-h2.yml)
+        (cd api && java -DDBTYPE=rdbms -jar target/api-1.0.0-SNAPSHOT.jar server augmented.yml)
 
 * TODO with hibernate on Postgresql:
 
-        (cd api && java -jar target/api-1.0.0-SNAPSHOT.jar server config-rdbms-pg.yml)
+        (cd api && java -DDBTYPE=rdbms -jar target/api-1.0.0-SNAPSHOT.jar server augmented-pg.yml)
 
 ## Testing (currently available with mongodb only)
 
@@ -43,6 +43,10 @@ Prerequisites:
 * Fetch all data
 
         curl -v http://localhost:8000/poi
+
+* Fetch entity by id
+
+        curl -v http://localhost:8000/poi/{id}
 
 * Add new POI
 
