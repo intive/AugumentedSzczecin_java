@@ -66,11 +66,11 @@ Prerequisites:
 
         curl -v http://localhost:8000/auth -u asd:zxc
 
-* Fetch all users
+* Fetch all users [Auth required]
 
         curl -v http://localhost:8000/user/list
 
-* Clear user list
+* Clear user list [Auth required]
 
         curl -v http://localhost:8000/user/clear
 
