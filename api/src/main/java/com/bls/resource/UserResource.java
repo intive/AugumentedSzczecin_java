@@ -36,11 +36,12 @@ public class UserResource {
         this.userDao = userDao;
     }
 
+    @Path("/list")
     @GET
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Collection<User<String>> get(@Auth String foo) {
+    public Collection<User<String>> getAll(@Auth String foo) {
         return userDao.findAll();
     }
 

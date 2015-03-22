@@ -68,7 +68,7 @@ Prerequisites:
 
 * Fetch all users
 
-        curl -v http://localhost:8000/user
+        curl -v http://localhost:8000/user/list
 
 * Clear user list
 
