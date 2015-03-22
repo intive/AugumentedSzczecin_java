@@ -37,3 +37,20 @@ dependency-reduced-pom.xml
 mongo/mongodb-linux-x86_64-3.0.0
 mongo/mongodb-linux-x86_64-3.0.0.tgz
 mongo/dbfiles
+
+# Eclipse ##
+.project
+.settings/
+api/.classpath
+api/.project
+api/.settings/
+api/target/
+core/.classpath
+core/.project
+core/.settings/
+core/target/
+mongo/.classpath
+mongo/.project
+mongo/.settings/
+mongo/c/
+mongo/target/
