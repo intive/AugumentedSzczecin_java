@@ -34,7 +34,7 @@ Prerequisites:
 
         (cd api && java -DDBTYPE=rdbms -jar target/api-1.0.0-SNAPSHOT.jar server augmented-pg.yml)
 
-## Testing (currently available with mongodb only)
+## Testing (currently available with mongodb or h2)
 
 * Generate some example data
 
@@ -73,6 +73,10 @@ Prerequisites:
 * Clear user list [Auth required]
 
         curl -v http://localhost:8000/user/clear
+
+* There is some proof of concept for http://open-data.org.pl backend client:
+
+        curl -v http://localhost:8000/poi/open
 
 [Oracle jdk download link]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [Maven download link]: http://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache

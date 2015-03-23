@@ -25,6 +25,11 @@
             <artifactId>rdbms</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.bls.patronage</groupId>
+            <artifactId>opendata-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.mindrot</groupId>

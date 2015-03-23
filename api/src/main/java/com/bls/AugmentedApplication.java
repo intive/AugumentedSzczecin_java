@@ -4,7 +4,9 @@ import org.apache.commons.lang3.text.StrLookup;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.glassfish.hk2.utilities.Binder;
 
+import com.bls.AugmentedConfiguration.DbType;
 import com.bls.auth.basic.BasicAuthenticator;
+import com.bls.client.opendata.OpenDataClientModule;
 import com.bls.core.user.User;
 import com.bls.dao.UserDao;
 import com.bls.mongodb.MongodbModule;
@@ -25,7 +27,6 @@ import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-import static com.bls.AugmentedConfiguration.DBTYPE_MONGODB;
 import static com.bls.AugmentedConfiguration.DBTYPE_PROPERTY_NAME;
 import static com.bls.AugmentedConfiguration.RDBMS_ENTITIES_PACKAGE;
 
@@ -38,7 +39,7 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
     }
 
     private static boolean isDbTypeSetToMongodb(final String dbTypePropertyValue) {
-        return dbTypePropertyValue == null || dbTypePropertyValue.equals(DBTYPE_MONGODB);
+        return dbTypePropertyValue == null || DbType.MONGODB.name().equalsIgnoreCase(dbTypePropertyValue);
     }
 
     @Override
@@ -57,8 +58,9 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
                 new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(), systemPropertyStrSubstitutor));
 
         // setup guice builder
-        final Builder<AugmentedConfiguration> guiceConfiguration = GuiceBundle.<AugmentedConfiguration>newBuilder().addModule(
-                new AugmentedModule()) //
+        final Builder<AugmentedConfiguration> guiceConfiguration = GuiceBundle.<AugmentedConfiguration>newBuilder() //
+                .addModule(new AugmentedModule()) //
+                .addModule(new OpenDataClientModule()) //
                 .enableAutoConfig(getClass().getPackage().getName()) //
                 .setConfigClass(AugmentedConfiguration.class);
 

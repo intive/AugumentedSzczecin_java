@@ -16,6 +16,7 @@
         <module>core</module>
         <module>mongo</module>
         <module>rdbms</module>
+        <module>opendata-client</module>
         <module>api</module>
     </modules>
 
@@ -24,7 +25,9 @@
         <dropwizard.version>0.8.0</dropwizard.version>
     </properties>
 
-    <!-- Force overlapping dependencies to their latest versions -->
+    <!--
+        Force overlapping dependencies to their latest versions
+        -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -89,7 +92,12 @@
         <dependency>
             <groupId>io.dropwizard.modules</groupId>
             <artifactId>dropwizard-java8</artifactId>
-            <version>0.8.0-1</version>
+            <version>0.8.0-2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-auth</artifactId>
+            <version>${dropwizard.version}</version>
         </dependency>
 
         <!-- Tests -->
@@ -97,12 +105,7 @@
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-testing</artifactId>
             <version>${dropwizard.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-auth</artifactId>
-            <version>${dropwizard.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -182,5 +185,32 @@
             </build>
         </profile>
     </profiles>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>manual</distribution>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>BLStream Sp. z o.o.</name>
+        <url>http://blstream.com</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>mlo</id>
+            <name>Maciej Łotysz</name>
+            <email>maciej.lotysz@blstream.com</email>
+            <organization>BLStream Sp. o.o.</organization>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Warsaw</timezone>
+        </developer>
+    </developers>
 
 </project>
