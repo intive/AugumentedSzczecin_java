@@ -1,6 +1,7 @@
 package com.bls.mongodb.core;
 
 import com.bls.core.user.User;
+<<<<<<< HEAD
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
@@ -15,3 +16,7 @@ public class UserMongodb extends MongodbMappableIdentifiableEntity<User<String>>
         return user;
     }
 }
+=======
+
+public class UserMongodb extends MongodbMappableIdentifiableEntity<User<String>> {}
+>>>>>>> master

@@ -37,6 +37,7 @@ dependency-reduced-pom.xml
 mongo/mongodb-linux-x86_64-3.0.0
 mongo/mongodb-linux-x86_64-3.0.0.tgz
 mongo/dbfiles
+<<<<<<< HEAD
 
 # Eclipse ##
 .project
@@ -54,3 +55,5 @@ mongo/.project
 mongo/.settings/
 mongo/c/
 mongo/target/
+=======
+>>>>>>> master

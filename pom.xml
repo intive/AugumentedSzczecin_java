@@ -15,6 +15,10 @@
     <modules>
         <module>core</module>
         <module>mongo</module>
+<<<<<<< HEAD
+=======
+        <module>rdbms</module>
+>>>>>>> master
         <module>api</module>
     </modules>
 

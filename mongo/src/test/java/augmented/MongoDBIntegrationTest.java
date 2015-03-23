@@ -52,7 +52,11 @@ public class MongoDBIntegrationTest {
         final PoiMongo toCreatePoi = (PoiMongo) createPoi(TestInfo.NAME, Tag.BAR, new Location(1321l, 51433l));
         final String savedPoiId = datastore.<PoiMongo>save(toCreatePoi).getId().toString();
         final PoiMongo savedPoi = datastore.get(PoiMongo.class, new ObjectId(savedPoiId));
+<<<<<<< HEAD
         final Poi getSavedPoi = poiDao.findbyId(savedPoiId);
+=======
+        final Poi getSavedPoi = poiDao.findById(savedPoiId);
+>>>>>>> master
         checkEqualityOfPois(getSavedPoi, savedPoi);
     }
 

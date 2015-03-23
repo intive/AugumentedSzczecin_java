@@ -1,6 +1,9 @@
 package com.bls.core.user;
 
+<<<<<<< HEAD
 import javax.validation.constraints.NotNull;
+=======
+>>>>>>> master
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -13,7 +16,11 @@ public class User<K> extends IdentifiableEntity<K> {
 
     @NotEmpty
     private final String email;
+<<<<<<< HEAD
     @NotNull
+=======
+    @NotEmpty
+>>>>>>> master
     @Size(min = 2, max = 64)
     private final String password;
 
@@ -30,7 +37,18 @@ public class User<K> extends IdentifiableEntity<K> {
         return email;
     }
 
+<<<<<<< HEAD
     public String getPassword() {
         return password;
     }
+=======
+    // TODO shouldn't be public!
+    public String getPassword() {
+        return password;
+    }
+
+    public User<K> createUserWithHashedPassword(final String hashedPassword) {
+        return new User<>(getId(), email, hashedPassword);
+    }
+>>>>>>> master
 }

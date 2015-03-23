@@ -4,15 +4,19 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+<<<<<<< HEAD
     <artifactId>core</artifactId>
     <packaging>jar</packaging>
 
+=======
+>>>>>>> master
     <parent>
         <groupId>com.bls.patronage</groupId>
         <artifactId>augmented-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+<<<<<<< HEAD
     <dependencies>
         <dependency>
             <groupId>javax.persistence</groupId>
@@ -20,5 +24,9 @@
             <version>1.0.2</version>
         </dependency>
     </dependencies>
+=======
+    <artifactId>core</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+>>>>>>> master
 
 </project>

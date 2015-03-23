@@ -12,15 +12,24 @@ import com.google.inject.Singleton;
 @Singleton
 public class RandomPoiGenerator {
 
+<<<<<<< HEAD
     public Collection<Poi<String>> generate(final int howMany) {
         final Collection<Poi<String>> pois = Lists.newArrayListWithCapacity(howMany);
+=======
+    public Collection<Poi> generate(final int howMany) {
+        final Collection<Poi> pois = Lists.newArrayListWithCapacity(howMany);
+>>>>>>> master
         for (int i = 0; i < howMany; i++) {
             pois.add(generateRandomPoi());
         }
         return pois;
     }
 
+<<<<<<< HEAD
     private Poi<String> generateRandomPoi() {
+=======
+    private Poi generateRandomPoi() {
+>>>>>>> master
         final String name = generateRandomName();
         final Tag tag = generateRandomTag();
         final Location location = generateRandomLocation();
