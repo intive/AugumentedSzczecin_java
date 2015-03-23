@@ -5,9 +5,6 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-<<<<<<< HEAD
-import javax.ws.rs.*;
-=======
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,19 +12,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
->>>>>>> master
 import javax.ws.rs.core.MediaType;
 
 import com.bls.core.poi.Poi;
 import com.bls.dao.CommonDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
-<<<<<<< HEAD
-=======
 import com.google.common.collect.Lists;
 
 import io.dropwizard.hibernate.UnitOfWork;
->>>>>>> master
 
 @Singleton
 @Path("/poi")
@@ -36,11 +29,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 public class PoiResource {
 
     private static final int POI_COUNT = 5;
-<<<<<<< HEAD
-    private final CommonDao<Poi<String>, String> poiDao;
-=======
     private final CommonDao<Poi> poiDao;
->>>>>>> master
     private final RandomPoiGenerator poiGenerator;
 
     @Inject
@@ -50,30 +39,6 @@ public class PoiResource {
     }
 
     @GET
-<<<<<<< HEAD
-    @Timed
-    @ExceptionMetered
-    public Collection<Poi<String>> getAll() {
-        return poiDao.findAll();
-    }
-
-    @POST
-    @Path("/add")
-    @Timed
-    @ExceptionMetered
-    public Poi<String> add(final Poi<String> poi) {
-        return poiDao.update(poi);
-    }
-
-    @GET
-    @Path("/generate")
-    @Timed
-    @ExceptionMetered
-    public Collection<Poi<String>> generate() {
-        final Collection<Poi<String>> poiCollection = poiGenerator.generate(POI_COUNT);
-        poiCollection.forEach(poiDao::create);
-        return poiCollection;
-=======
     @UnitOfWork
     @Timed
     @ExceptionMetered
@@ -117,6 +82,5 @@ public class PoiResource {
         final Collection<Poi> generated = Lists.newArrayListWithCapacity(POI_COUNT);
         poiGenerator.generate(POI_COUNT).forEach(entity -> generated.add(poiDao.create(entity)));
         return generated;
->>>>>>> master
     }
 }

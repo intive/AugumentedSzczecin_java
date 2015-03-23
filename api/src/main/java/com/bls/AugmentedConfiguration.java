@@ -1,16 +1,5 @@
 package com.bls;
 
-<<<<<<< HEAD
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import io.dropwizard.Configuration;
-import com.bls.mongodb.MongodbConfiguration;
-
-public class AugmentedConfiguration extends Configuration {
-
-    @JsonProperty("mongo")
-    private MongodbConfiguration mongoConfig;
-=======
 import com.bls.mongodb.MongodbConfiguration;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -41,13 +30,10 @@ public class AugmentedConfiguration extends Configuration {
         this.rdbmsConfig = rdbmsConfig;
         this.authCacheSpec = CacheBuilder.from(authCacheSpec != null ? authCacheSpec : DEFAULT_AUTH_CACHE_SPEC);
     }
->>>>>>> master
 
     public MongodbConfiguration getMongoConfig() {
         return mongoConfig;
     }
-<<<<<<< HEAD
-=======
 
     public DataSourceFactory getRdbmsConfig() {
         return rdbmsConfig;
@@ -60,5 +46,4 @@ public class AugmentedConfiguration extends Configuration {
     public CacheBuilder<Object, Object> getAuthCacheBuilder() {
         return authCacheSpec;
     }
->>>>>>> master
 }

@@ -1,34 +1,13 @@
 package com.bls;
 
-<<<<<<< HEAD
-=======
 import org.apache.commons.lang3.text.StrLookup;
 import org.apache.commons.lang3.text.StrSubstitutor;
->>>>>>> master
 import org.glassfish.hk2.utilities.Binder;
 
 import com.bls.auth.basic.BasicAuthenticator;
 import com.bls.core.user.User;
 import com.bls.dao.UserDao;
 import com.bls.mongodb.MongodbModule;
-<<<<<<< HEAD
-import com.google.inject.Injector;
-import com.google.inject.Stage;
-import com.hubspot.dropwizard.guice.GuiceBundle;
-
-import io.dropwizard.Application;
-import io.dropwizard.auth.AuthFactory;
-import io.dropwizard.auth.basic.BasicAuthFactory;
-import io.dropwizard.java8.Java8Bundle;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
-public class AugmentedApplication extends Application<AugmentedConfiguration> {
-
-    private Injector guiceInjector;
-=======
 import com.bls.rdbms.RdbmsModule;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
@@ -53,19 +32,15 @@ import static com.bls.AugmentedConfiguration.RDBMS_ENTITIES_PACKAGE;
 public class AugmentedApplication extends Application<AugmentedConfiguration> {
 
     private Injector injector;
->>>>>>> master
 
     public static void main(final String[] args) throws Exception {
         new AugmentedApplication().run(args);
     }
 
-<<<<<<< HEAD
-=======
     private static boolean isDbTypeSetToMongodb(final String dbTypePropertyValue) {
         return dbTypePropertyValue == null || dbTypePropertyValue.equals(DBTYPE_MONGODB);
     }
 
->>>>>>> master
     @Override
     public String getName() {
         return this.getClass().getSimpleName();
@@ -73,18 +48,6 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<AugmentedConfiguration> bootstrap) {
-<<<<<<< HEAD
-        bootstrap.addBundle(new Java8Bundle());
-
-        final GuiceBundle<AugmentedConfiguration> guiceBundle = GuiceBundle.<AugmentedConfiguration>newBuilder().addModule(
-                new AugmentedModule()) //
-                .addModule(new MongodbModule()) //
-                .enableAutoConfig(getClass().getPackage().getName()) //
-                .setConfigClass(AugmentedConfiguration.class) //
-                .build(Stage.DEVELOPMENT);
-        bootstrap.addBundle(guiceBundle);
-        guiceInjector = guiceBundle.getInjector();
-=======
         // setup java 8 support for dropwizard
         bootstrap.addBundle(new Java8Bundle());
 
@@ -131,20 +94,10 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
                 return configuration.getRdbmsConfig();
             }
         };
->>>>>>> master
     }
 
     @Override
     public void run(final AugmentedConfiguration augmentedConfiguration, final Environment environment) throws Exception {
-<<<<<<< HEAD
-        // TODO think about implementing Injectable...AuthProvider and remove all tricks
-        environment.jersey().register(provideBasicAuthenticator());
-    }
-
-    private Binder provideBasicAuthenticator() {
-        final UserDao<User<String>, String> userDao = checkNotNull(guiceInjector, "Guice injector empty").getInstance(UserDao.class);
-        return AuthFactory.binder(new BasicAuthFactory(new BasicAuthenticator(userDao), "Basic " + "auth", User.class));
-=======
         registerAuthorizationProviders(augmentedConfiguration, environment);
     }
 
@@ -155,6 +108,5 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
                 augmentedConfiguration.getAuthCacheBuilder());
         final Binder authBinder = AuthFactory.binder(new BasicAuthFactory(cachingAuthenticator, "Basic auth", User.class));
         environment.jersey().register(authBinder);
->>>>>>> master
     }
 }
