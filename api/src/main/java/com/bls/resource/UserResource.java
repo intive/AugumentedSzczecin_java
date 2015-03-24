@@ -36,7 +36,6 @@ public class UserResource {
         this.userDao = userDao;
     }
 
-    @Path("/list")
     @GET
     @UnitOfWork
     @Timed
@@ -45,7 +44,6 @@ public class UserResource {
         return userDao.findAll();
     }
 
-    @Path("/add")
     @POST
     @UnitOfWork
     @Timed

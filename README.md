@@ -60,7 +60,7 @@ Prerequisites:
 
 * Create new user
 
-        curl -v http://localhost:8000/user/add -H "Content-Type: application/json" -d '{"email":"asd", "password":"zxc"}'
+        curl -v http://localhost:8000/user -H "Content-Type: application/json" -d '{"email":"asd", "password":"zxc"}'
 
 * Get protected resource
 
@@ -68,7 +68,7 @@ Prerequisites:
 
 * Fetch all users [Auth required]
 
-        curl -v http://localhost:8000/user/list
+        curl -v http://localhost:8000/user
 
 * Clear user list [Auth required]
 
