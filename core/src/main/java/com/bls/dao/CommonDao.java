@@ -1,6 +1,7 @@
 package com.bls.dao;
 
 import java.util.Collection;
+
 import com.bls.core.Identifiable;
 
 /**

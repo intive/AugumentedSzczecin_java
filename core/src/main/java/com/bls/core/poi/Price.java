@@ -6,16 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 
-public class Price<K> extends IdentifiableEntity<K> {
+public class Price {
 
     private final String thing;
     private final BigDecimal price;
 
     @JsonCreator
-    public Price (@JsonProperty(value = "id", required = false) final K id,
-                  @JsonProperty("thing") final String thing,
+    public Price (@JsonProperty("thing") final String thing,
                   @JsonProperty("price") final BigDecimal price) {
-        super(id);
         this.thing = thing;
         this.price = price;
     }

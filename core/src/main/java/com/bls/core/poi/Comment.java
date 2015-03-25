@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Comment<K> extends IdentifiableEntity<K> {
+public class Comment {
 
     private final String username;
     private final String content;
@@ -15,12 +15,10 @@ public class Comment<K> extends IdentifiableEntity<K> {
     private final String dateOfcomment;
 
     @JsonCreator
-    public Comment(@JsonProperty(value = "id", required = false) final K id,
-                   @JsonProperty("username") final String username,
+    public Comment(@JsonProperty("username") final String username,
                    @JsonProperty("content") final String content,
                    @JsonProperty("rating") final int rating,
                    @JsonProperty("rating") final String dateOfcomment) {
-        super(id);
         this.username = username;
         this.content = content;
         this.rating = rating;

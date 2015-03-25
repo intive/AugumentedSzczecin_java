@@ -5,11 +5,9 @@ package com.bls.core;
  *
  * @param <K> some key type
  */
-
 public abstract class IdentifiableEntity<K> implements Identifiable<K> {
 
     private K id; // TODO make it final
-
 
     public IdentifiableEntity(final K id) {
         this.id = id;

@@ -6,18 +6,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class OpeningHoursForADay<K> extends IdentifiableEntity<K> {
+public class OpeningHoursForADay {
 
     private final String startHour;
     private final String stopHour;
     private final Day day;
 
     @JsonCreator
-    public OpeningHoursForADay(@JsonProperty(value = "id", required = false) final K id,
-                                @JsonProperty("day") final Day day,
+    public OpeningHoursForADay(@JsonProperty("day") final Day day,
                                 @JsonProperty("startHour") final String startHour,
                                 @JsonProperty("stopHour") final String stopHour) {
-        super(id);
         this.day = day;
         this.startHour = startHour;
         this.stopHour = stopHour;

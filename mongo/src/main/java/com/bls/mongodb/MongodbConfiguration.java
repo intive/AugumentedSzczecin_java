@@ -10,11 +10,13 @@ import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 
+import io.dropwizard.validation.PortRange;
+
 public class MongodbConfiguration {
 
     @NotEmpty
     private final String host;
-    @NotEmpty
+    @PortRange
     private final Integer port;
     @NotEmpty
     private final String dbname;

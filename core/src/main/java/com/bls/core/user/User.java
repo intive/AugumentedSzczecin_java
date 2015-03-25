@@ -35,6 +35,6 @@ public class User<K> extends IdentifiableEntity<K> {
     }
 
     public User<K> createUserWithHashedPassword(final String hashedPassword) {
-        return new User<K>(getId(), email, hashedPassword);
+        return new User<>(getId(), email, hashedPassword);
     }
 }

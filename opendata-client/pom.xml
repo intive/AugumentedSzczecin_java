@@ -10,7 +10,15 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>core</artifactId>
+    <artifactId>opendata-client</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <description>Open-data jersey client</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-client</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
+    </dependencies>
 </project>

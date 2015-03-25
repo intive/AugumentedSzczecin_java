@@ -2,23 +2,22 @@ package com.bls.core.poi;
 
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collection;
 import com.bls.core.IdentifiableEntity;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.math.BigDecimal;
 
 public class Poi<K> extends IdentifiableEntity<K> {
 
-    private final List<Comment> comments;
-    private final List<Link> links;
-    private final List<Media> media;
-    private final List<OpeningHoursForADay> openingDaysAndHours;
-    private final List<Price> pricelist;
+    private final Collection<Comment> comments;
+    private final Collection<Link> links;
+    private final Collection<Media> media;
+    private final Collection<OpeningHoursForADay> openingDaysAndHours;
+    private final Collection<Price> pricelist;
 
-    @NotEmpty
     private final Address address;
     private final Category category;
     private final Owner owner;
@@ -27,12 +26,11 @@ public class Poi<K> extends IdentifiableEntity<K> {
     @NotNull
     private final Location location;
     private final Tag tag;
-
     @JsonCreator
     public Poi(@JsonProperty(value = "id", required = false) final K id,
-            @JsonProperty("name") final String name,
-            @JsonProperty("tag") final Tag tag,
-            @JsonProperty("location") final Location location) {
+               @JsonProperty("name") final String name,
+               @JsonProperty("tag") final Tag tag,
+               @JsonProperty("location") final Location location) {
         super(id);
         this.name = name;
         this.tag = tag;
@@ -47,7 +45,6 @@ public class Poi<K> extends IdentifiableEntity<K> {
         this.category = Category.valueOf("MONDAY");
         this.owner = new Owner("Tomasz Kowalski", "tkowalski@gmail.com", "555666777");
     }
-
     @JsonCreator
     public Poi(@JsonProperty(value = "id", required = false) final K id,
                @JsonProperty("name") final String name,
@@ -76,53 +73,40 @@ public class Poi<K> extends IdentifiableEntity<K> {
         this.category = category;
         this.owner = owner;
     }
-
     public String getName() {
         return name;
     }
-
-    public Tag getTag() {
+   public Tag getTag() {
         return tag;
     }
-
     public Location getLocation() {
         return location;
     }
-
     public Address getAddress() {
         return address;
     }
-
     public Category getCategory() {
         return category;
     }
-
     public Owner getOwner() {
         return owner;
     }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
-
-    public List<Comment> getComments() {
+    public Collection<Comment> getComments() {
         return comments;
     }
-
-    public List<Link> getLinks() {
+    public Collection<Link> getLinks() {
         return links;
     }
-
-    public List<Media> getMedia() {
+    public Collection<Media> getMedia() {
         return media;
     }
-
-    public List<OpeningHoursForADay> getOpeningDaysAndHours() {
+    public Collection<OpeningHoursForADay> getOpeningDaysAndHours() {
         return openingDaysAndHours;
     }
-
-    public List<Price> getPriceList() {
+    public Collection<Price> getPriceList() {
         return pricelist;
     }
-
 }

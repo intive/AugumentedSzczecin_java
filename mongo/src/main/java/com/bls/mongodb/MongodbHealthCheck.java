@@ -13,6 +13,10 @@ public class MongodbHealthCheck extends InjectableHealthCheck {
         this.mongoClient = mongoClient;
     }
 
+  /*  public MongodbHealthCheck() {
+        this.mongoClient = mongoClient;
+    } */
+
     @Override
     public String getName() {
         return "MongoDB healthCheck";
