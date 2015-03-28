@@ -1,0 +1,13 @@
+
+mongo:
+  host: localhost
+  port: 9090
+  dbname: augmented
+
+server:
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /admin
+  connector:
+    type: http
+    port: 8000
