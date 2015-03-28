@@ -22,14 +22,10 @@ import java.util.Collection;
 public class EventResource {
 
     private final CommonDao<Event> eventDao;
-    private final String description;
-    private final Location location;
 
     @Inject
-    public EventResource(@Named("event") CommonDao<Event> eventDao, String description, Location location) {
+    public EventResource(@Named("event") final CommonDao eventDao) {
         this.eventDao = eventDao;
-        this.description = description;
-        this.location = location;
     }
 
     @Path("/events")
