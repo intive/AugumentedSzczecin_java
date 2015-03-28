@@ -2,7 +2,6 @@ package com.bls.resource;
 
 
 import com.bls.core.poi.Event;
-import com.bls.core.poi.Location;
 import com.bls.dao.CommonDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
