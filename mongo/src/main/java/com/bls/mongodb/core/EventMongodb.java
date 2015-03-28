@@ -1,5 +1,5 @@
 package com.bls.mongodb.core;
 
-import com.bls.core.poi.Poi;
+import com.bls.core.poi.Event;
 
-public class EventMongodb extends MongodbMappableIdentifiableEntity<Poi<String>> {}
+public class EventMongodb extends MongodbMappableIdentifiableEntity<Event<String>> {}
