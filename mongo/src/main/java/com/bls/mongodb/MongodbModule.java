@@ -7,6 +7,7 @@ import javax.inject.Named;
 import com.bls.dao.CommonDao;
 import com.bls.dao.UserDao;
 import com.bls.mongodb.dao.EventMongodbDao;
+import com.bls.mongodb.dao.PersonMongodbDao;
 import com.bls.mongodb.dao.PoiMongodbDao;
 import com.bls.mongodb.dao.UserMongodbDao;
 import com.google.inject.AbstractModule;
@@ -51,5 +52,12 @@ public class MongodbModule extends AbstractModule {
     @Named("event")
     public CommonDao provideEventDao(final DB mongodb) {
         return new EventMongodbDao(mongodb);
+    }
+
+    @Singleton
+    @Provides
+    @Named("person")
+    public CommonDao providePersonDao(final DB mongodb) {
+        return new PersonMongodbDao(mongodb);
     }
 }
