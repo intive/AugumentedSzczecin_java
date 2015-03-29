@@ -18,7 +18,7 @@ public class Comment {
     public Comment(@JsonProperty("username") final String username,
                    @JsonProperty("content") final String content,
                    @JsonProperty("rating") final int rating,
-                   @JsonProperty("rating") final String dateOfcomment) {
+                   @JsonProperty("date") final String dateOfcomment) {
         this.username = username;
         this.content = content;
         this.rating = rating;
