@@ -36,13 +36,13 @@ Prerequisites:
 
 ## Testing (currently available with mongodb or h2)
 
-* Generate some example data
+* Generate some example data [TEMPORARILY DISABLED]
 
         curl -v http://localhost:8000/poi/generate
 
 * Fetch all data
 
-        curl -v http://localhost:8000/poi
+        curl -v http://localhost:8000/pois
 
 * Fetch entity by id
 
@@ -50,7 +50,7 @@ Prerequisites:
 
 * Add new POI
 
-        curl -v http://localhost:8000/poi/add \
+        curl -v http://localhost:8000/poi \
             -H "Content-Type: application/json" \
             -d '{"name":"thug_621",\
                 "tag":"GYM",\
@@ -68,15 +68,11 @@ Prerequisites:
 
 * Fetch all users [Auth required]
 
-        curl -v http://localhost:8000/user
-
-* Clear user list [Auth required]
-
-        curl -v http://localhost:8000/user/clear
+        curl -v http://localhost:8000/users
 
 * There is some proof of concept for http://open-data.org.pl backend client:
 
-        curl -v http://localhost:8000/poi/open
+        curl -v http://localhost:8000/open
 
 [Oracle jdk download link]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [Maven download link]: http://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache
