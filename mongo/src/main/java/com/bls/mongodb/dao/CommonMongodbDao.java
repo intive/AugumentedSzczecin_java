@@ -16,6 +16,7 @@ import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.internal.MongoJackModule;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,7 +84,7 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         return coreEntities;
     }
 
-    public List<I> findInRadius(final Location location, final Long radius){
+    public List<I> find(final Location location, final Long radius, Collection<String> tags){
         BasicDBList coordinates = new BasicDBList();
         coordinates.add(location.getLongitude());
         coordinates.add(location.getLatitude());
@@ -93,6 +94,9 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         geoParams.add(metersToDegrees(radius));
 
         BasicDBObject query = new BasicDBObject("location",new BasicDBObject("$geoWithin",new BasicDBObject("$center", geoParams)));
+        if(!tags.isEmpty()) {
+            query.append("tags", new BasicDBObject("$in", tags));
+        }
 
         final List<M> mongodbEntities = dbCollection.find(query).toArray();
 

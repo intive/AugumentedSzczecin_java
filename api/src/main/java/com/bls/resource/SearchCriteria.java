@@ -2,30 +2,39 @@ package com.bls.resource;
 
 import com.bls.core.geo.Location;
 import com.bls.core.poi.Category;
-import org.hibernate.stat.internal.CategorizedStatistics;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.google.common.collect.Lists;
 
+import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.BadRequestException;
+import java.util.Collection;
 import java.util.List;
+import javax.validation.constraints.Min;
+import javax.ws.rs.QueryParam;
 
-/**
- * Created by Marcin Podlodowski on 4/19/15.
- */
 public class SearchCriteria {
 
+    @NotNull
     private final Location location;
+    @Min(0)
+    @Max(360)
+    @NotNull
     private final Long radius;
     private final List<Category> categories;
+    private final List<String> tags;
 
-    public SearchCriteria(final Location location, 
-                          final Long radius, 
-                          final List<Category> categories) {
-        this.location = location;
+    public SearchCriteria(@QueryParam("lg") final Float longitude,
+                          @QueryParam("lt") final Float latitude,
+                          @QueryParam("radius") final Long radius,
+                          @QueryParam("cat") final List<Category> categories,
+                          @QueryParam("tags") final List<String> tags) {
+        this.location = new Location(longitude, latitude);
         this.radius = radius;
         this.categories = categories;
-    }
-
-    public boolean validate() {
-        // TODO
-        return true;
+        this.tags = tags;
     }
 
     public Location getLocation() {
@@ -35,5 +44,12 @@ public class SearchCriteria {
     public Long getRadius() {
         return radius;
     }
-    
+
+    public Collection<Category> getCategories() {
+        return categories;
+    }
+
+    public Collection<String> getTags() {
+        return tags;
+    }
 }

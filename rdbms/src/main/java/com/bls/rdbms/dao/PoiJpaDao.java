@@ -37,7 +37,7 @@ public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
     }
 
     @Override
-    public Collection<Poi<Long>> findInRadius(Location location, Long radius){
+    public Collection<Poi<Long>> find(Location location, Long radius, Collection<String> tags){
         return null;
     }
 }

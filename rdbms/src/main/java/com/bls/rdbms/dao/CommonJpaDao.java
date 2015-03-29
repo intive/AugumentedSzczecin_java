@@ -67,7 +67,7 @@ public abstract class CommonJpaDao<J, E extends IdentifiableEntity> extends Abst
         return result;
     }
 
-    public Collection<E> findInRadius(Location location, Long radius){
+    public Collection<E> find(Location location, Long radius, Collection<String> tags){
         return null;
     }
 
