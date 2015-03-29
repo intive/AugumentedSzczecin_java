@@ -24,7 +24,9 @@ public class RandomPoiGenerator {
         final String name = generateRandomName();
         final Tag tag = generateRandomTag();
         final Location location = generateRandomLocation();
-        return new Poi<>(null, name, tag, location);
+//        return new Poi<>(null, name, tag, location);
+        // TODO
+        return null;
     }
 
     private Location generateRandomLocation() {
