@@ -29,7 +29,8 @@ public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
     @Override
     protected Poi<Long> convert2core(final PoiJpa jpaEntity) {
         // TODO
-        return new Poi<>(jpaEntity.getId(), jpaEntity.getName(), jpaEntity.getTag(), new Location(jpaEntity.getLongitude(),jpaEntity.getLatitude()));
+//        return new Poi<>(jpaEntity.getId(), jpaEntity.getName(), jpaEntity.getTag(), new Location(jpaEntity.getLongitude(),jpaEntity.getLatitude()));
+        return null;
     }
 }
 
