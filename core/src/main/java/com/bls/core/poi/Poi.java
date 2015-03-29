@@ -26,25 +26,7 @@ public class Poi<K> extends IdentifiableEntity<K> {
     @NotNull
     private final Location location;
     private final Tag tag;
-    @JsonCreator
-    public Poi(@JsonProperty(value = "id", required = false) final K id,
-               @JsonProperty("name") final String name,
-               @JsonProperty("tag") final Tag tag,
-               @JsonProperty("location") final Location location) {
-        super(id);
-        this.name = name;
-        this.tag = tag;
-        this.location = location;
-        this.comments = new ArrayList<Comment>();
-        this.links = new ArrayList<Link>();
-        this.media = new ArrayList<Media>();
-        this.openingDaysAndHours = new ArrayList<OpeningHoursForADay>();
-        this.pricelist = new ArrayList<Price>();
-        this.phoneNumber = "456789123";
-        this.address = new Address("Poland", "Szczecin", "Krzywoustego 20", "(032)44-55-500");
-        this.category = Category.valueOf("MONDAY");
-        this.owner = new Owner("Tomasz Kowalski", "tkowalski@gmail.com", "555666777");
-    }
+
     @JsonCreator
     public Poi(@JsonProperty(value = "id", required = false) final K id,
                @JsonProperty("name") final String name,
