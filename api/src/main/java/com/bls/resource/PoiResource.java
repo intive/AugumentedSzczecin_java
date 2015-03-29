@@ -27,7 +27,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.caching.CacheControl;
 
 @Singleton
-@Path("/poi")
+@Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PoiResource {
@@ -49,6 +49,7 @@ public class PoiResource {
         this.openDataUrl = openDataUrl;
     }
 
+    @Path("/pois")
     @GET
     @UnitOfWork
     @Timed
@@ -57,7 +58,16 @@ public class PoiResource {
         return poiDao.findAll();
     }
 
-    @Path("/{id}")
+    @Path("/poi")
+    @POST
+    @UnitOfWork
+    @Timed
+    @ExceptionMetered
+    public Poi add(final Poi poi) {
+        return poiDao.create(poi);
+    }
+
+    @Path("/poi/{id}")
     @GET
     @UnitOfWork
     @Timed
@@ -66,7 +76,7 @@ public class PoiResource {
         return poiDao.findById(String.valueOf(id));
     }
 
-    @Path("/{id}")
+    @Path("/poi/{id}")
     @DELETE
     @UnitOfWork
     @Timed
@@ -75,16 +85,11 @@ public class PoiResource {
         poiDao.deleteById(id);
     }
 
-    @Path("/add")
-    @POST
-    @UnitOfWork
-    @Timed
-    @ExceptionMetered
-    public Poi add(final Poi poi) {
-        return poiDao.update(poi);
-    }
-
-    @Path("/generate")
+    
+    /*
+        Method temporarily unavailable due to changes in Poi
+     */
+    /*@Path("/poi/generate")
     @GET
     @UnitOfWork
     @Timed
@@ -93,7 +98,7 @@ public class PoiResource {
         final Collection<Poi> generated = Lists.newArrayListWithCapacity(POI_COUNT);
         poiGenerator.generate(POI_COUNT).forEach(entity -> generated.add(poiDao.create(entity)));
         return generated;
-    }
+    }*/
 
     @Path("/open")
     @GET
