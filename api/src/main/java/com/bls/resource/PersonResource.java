@@ -52,8 +52,8 @@ public class PersonResource {
         return personDao.findById(id);
     }
     
-    @Path("/update/{id}")
-    @POST
+    @Path("/person/{id}")
+    @PUT
     @UnitOfWork
     @Timed
     @ExceptionMetered
