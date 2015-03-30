@@ -1,94 +1,112 @@
 package com.bls.core.poi;
 
-import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.NotEmpty;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Collection;
+
+import javax.validation.constraints.NotNull;
+
 import com.bls.core.IdentifiableEntity;
+import com.bls.core.comment.Comment;
+import com.bls.core.geo.Location;
+import com.bls.core.person.Person;
+import com.bls.core.price.PriceList;
+import com.bls.core.user.User;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.math.BigDecimal;
+import com.google.common.collect.ImmutableList;
 
+/**
+ * Point Of Interest
+ *
+ * @param <K> key type
+ */
 public class Poi<K> extends IdentifiableEntity<K> {
 
-    private final Collection<Comment> comments;
-    private final Collection<Link> links;
-    private final Collection<Media> media;
-    private final Collection<OpeningHoursForADay> openingDaysAndHours;
-    private final Collection<Price> pricelist;
-
-    private final Address address;
-    private final Category category;
-    private final Owner owner;
-    private final String phoneNumber;
-    private final String name;
+    @NotNull
+    private final Boolean isPublic;
+    // TODO add validation: !public = NotNull
+    private final User owner;
     @NotNull
     private final Location location;
-    private final Tag tag;
+    @NotNull
+    private final Category category;
+    @NotNull
+    private final String name;
+    private final Address address;
+    private final Collection<String> tags = ImmutableList.of();
+    private final Collection<Media> media = ImmutableList.of();
+    private final Collection<Comment> comments = ImmutableList.of();
+    private final Collection<OpeningHours> openingDaysAndHours = ImmutableList.of();
+    private final PriceList priceList;
 
     @JsonCreator
     public Poi(@JsonProperty(value = "id", required = false) final K id,
-               @JsonProperty("name") final String name,
-               @JsonProperty("tag") final Tag tag,
-               @JsonProperty("location") final Location location,
-               @JsonProperty("address") final Address address,
-               @JsonProperty("category") final Category category,
-               @JsonProperty("owner") final Owner owner,
-               @JsonProperty("phoneNumber") final String phoneNumber,
-               @JsonProperty("comments") final List<Comment> comments,
-               @JsonProperty("links") final List<Link> links,
-               @JsonProperty("media") final List<Media> media,
-               @JsonProperty("openingDaysAndHours")final List<OpeningHoursForADay> openingDaysAndHours,
-               @JsonProperty("pricelist") final List<Price> pricelist) {
+            @JsonProperty("isPublic") final Boolean isPublic,
+            @JsonProperty("name") final String name,
+            @JsonProperty("location") final Location location,
+            @JsonProperty("address") final Address address,
+            @JsonProperty("category") final Category category,
+            @JsonProperty("owner") final User owner,
+            @JsonProperty("tags") final Collection<String> tags,
+            @JsonProperty("comments") final Collection<Comment> comments,
+            @JsonProperty("media") final Collection<Media> media,
+            @JsonProperty("openingDaysAndHours") final Collection<OpeningHours> openingDaysAndHours,
+            @JsonProperty("priceList") final PriceList priceList) {
         super(id);
+        this.isPublic = isPublic;
         this.name = name;
-        this.tag = tag;
         this.location = location;
-        this.comments = comments;
-        this.links = links;
-        this.media = media;
-        this.openingDaysAndHours = openingDaysAndHours;
-        this.pricelist = pricelist;
-        this.phoneNumber = phoneNumber;
         this.address = address;
         this.category = category;
         this.owner = owner;
+        this.priceList = priceList;
+
+        this.tags.addAll(tags);
+        this.comments.addAll(comments);
+        this.media.addAll(media);
+        this.openingDaysAndHours.addAll(openingDaysAndHours);
     }
-    public String getName() {
-        return name;
+
+    public Boolean isPublic() {
+        return isPublic;
     }
-   public Tag getTag() {
-        return tag;
+
+    public User getOwner() {
+        return owner;
     }
+
     public Location getLocation() {
         return location;
     }
-    public Address getAddress() {
-        return address;
-    }
+
     public Category getCategory() {
         return category;
     }
-    public Owner getOwner() {
-        return owner;
+
+    public String getName() {
+        return name;
     }
-    public String getPhoneNumber() {
-        return phoneNumber;
+
+    public Address getAddress() {
+        return address;
     }
-    public Collection<Comment> getComments() {
-        return comments;
+
+    public Collection<String> getTags() {
+        return tags;
     }
-    public Collection<Link> getLinks() {
-        return links;
-    }
+
     public Collection<Media> getMedia() {
         return media;
     }
-    public Collection<OpeningHoursForADay> getOpeningDaysAndHours() {
+
+    public Collection<Comment> getComments() {
+        return comments;
+    }
+
+    public Collection<OpeningHours> getOpeningDaysAndHours() {
         return openingDaysAndHours;
     }
-    public Collection<Price> getPriceList() {
-        return pricelist;
+
+    public PriceList getPriceList() {
+        return priceList;
     }
 }

@@ -6,12 +6,22 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.bls.core.IdentifiableEntity;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * User of the backend. Can be authenticated by password.
+ * <p>
+ * Note password is never stored by plaintext.
+ * </p>
+ *
+ * @param <K> Key type for this entity
+ */
 public class User<K> extends IdentifiableEntity<K> {
 
     @NotEmpty
     private final String email;
+    @JsonIgnore // hide
     @NotEmpty
     @Size(min = 2, max = 64)
     private final String password;
@@ -29,7 +39,6 @@ public class User<K> extends IdentifiableEntity<K> {
         return email;
     }
 
-    // TODO shouldn't be public!
     public String getPassword() {
         return password;
     }

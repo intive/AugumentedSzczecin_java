@@ -1,21 +1,29 @@
 package com.bls.resource;
 
-import com.bls.core.poi.Person;
-import com.bls.dao.CommonDao;
-import com.codahale.metrics.annotation.ExceptionMetered;
-import com.codahale.metrics.annotation.Timed;
-import io.dropwizard.hibernate.UnitOfWork;
+import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Collection;
 
+import com.bls.core.person.Person;
+import com.bls.dao.CommonDao;
+import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Timed;
+
+import io.dropwizard.hibernate.UnitOfWork;
 
 @Singleton
-@Path("/")
+@Path("/people")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PersonResource {
@@ -27,7 +35,6 @@ public class PersonResource {
         this.personDao = personDao;
     }
 
-    @Path("/people")
     @GET
     @UnitOfWork
     @Timed
@@ -35,15 +42,14 @@ public class PersonResource {
     public Collection<Person> getAll() {
         return personDao.findAll();
     }
-    
-    @Path("/person")
+
     @POST
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Person add(final Person person){ return personDao.create(person); }
+    public Person add(final Person person) { return personDao.create(person); }
 
-    @Path("/person/{id}")
+    @Path("/{id}")
     @GET
     @UnitOfWork
     @Timed
@@ -51,8 +57,8 @@ public class PersonResource {
     public Person get(@PathParam("id") final String id) {
         return personDao.findById(id);
     }
-    
-    @Path("/person/{id}")
+
+    @Path("/{id}")
     @PUT
     @UnitOfWork
     @Timed
@@ -62,7 +68,7 @@ public class PersonResource {
         return personDao.update(person);
     }
 
-    @Path("/person/{id}")
+    @Path("/{id}")
     @DELETE
     @UnitOfWork
     @Timed

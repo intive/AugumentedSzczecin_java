@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 @Singleton
-@Path("/")
+@Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
@@ -28,7 +28,6 @@ public class UserResource {
         this.userDao = userDao;
     }
 
-    @Path("/users")
     @GET
     @UnitOfWork
     @Timed
@@ -37,7 +36,7 @@ public class UserResource {
         return userDao.findAll();
     }
 
-    @Path("/user/{id}")
+    @Path("/{id}")
     @GET
     @UnitOfWork
     @Timed
@@ -46,7 +45,6 @@ public class UserResource {
         return userDao.findById(id);
     }
 
-    @Path("/user")
     @POST
     @UnitOfWork
     @Timed
@@ -57,7 +55,7 @@ public class UserResource {
         return userDao.create(userWithHashedPassword);
     }
 
-    @Path("/user/{id}")
+    @Path("/{id}")
     @DELETE
     @UnitOfWork
     @Timed

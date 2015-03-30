@@ -1,4 +1,4 @@
-package com.bls.core.poi;
+package com.bls.core.comment;
 
 import com.bls.core.IdentifiableEntity;
 import com.fasterxml.jackson.annotation.JsonCreator;

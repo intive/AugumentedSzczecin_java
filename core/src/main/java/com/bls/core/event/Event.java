@@ -1,13 +1,11 @@
-package com.bls.core.poi;
+package com.bls.core.event;
 
 import com.bls.core.IdentifiableEntity;
+import com.bls.core.geo.Location;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
-/**
- * Created by Paweł on 2015-03-25.
- */
 public class Event<K> extends IdentifiableEntity<K> {
 
     @NotEmpty

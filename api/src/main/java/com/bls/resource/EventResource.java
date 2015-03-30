@@ -1,7 +1,7 @@
 package com.bls.resource;
 
 
-import com.bls.core.poi.Event;
+import com.bls.core.event.Event;
 import com.bls.dao.CommonDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 @Singleton
-@Path("/")
+@Path("/events")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class EventResource {
@@ -27,7 +27,6 @@ public class EventResource {
         this.eventDao = eventDao;
     }
 
-    @Path("/events")
     @GET
     @UnitOfWork
     @Timed
@@ -35,15 +34,14 @@ public class EventResource {
     public Collection<Event> getAll() {
         return eventDao.findAll();
     }
-    
-    @Path("/event")
+
     @POST
     @UnitOfWork
     @Timed
     @ExceptionMetered
     public Event add(final Event event){ return eventDao.create(event); }
-    
-    @Path("/event/{id}")
+
+    @Path("/{id}")
     @GET
     @UnitOfWork
     @Timed
@@ -52,8 +50,8 @@ public class EventResource {
         return eventDao.findById(id);
     }
 
-    @Path("/event/{id}")
-    @POST
+    @Path("/{id}")
+    @PUT
     @UnitOfWork
     @Timed
     @ExceptionMetered
@@ -62,7 +60,7 @@ public class EventResource {
         return eventDao.update(event);
     }
 
-    @Path("/event/{id}")
+    @Path("/{id}")
     @DELETE
     @UnitOfWork
     @Timed

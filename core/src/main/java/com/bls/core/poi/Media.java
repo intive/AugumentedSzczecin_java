@@ -1,38 +1,46 @@
 package com.bls.core.poi;
 
-import com.bls.core.IdentifiableEntity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Named multimedia content of some type and URL
+ */
 public class Media {
 
-    private final String type;
     private final String name;
     private final String description;
-    private final String filename;
+    private final String url;
+    private final MediaType mediaType;
 
     @JsonCreator
-    Media(@JsonProperty("type") final String type,
-          @JsonProperty("name") final String name,
-          @JsonProperty("description") final String description,
-          @JsonProperty("filename") final String filename) {
-        this.type = type;
+    Media(@JsonProperty("name") final String name,
+            @JsonProperty("description") final String description,
+            @JsonProperty("url") final String url,
+            @JsonProperty("mediaType") final MediaType mediaType) {
         this.name = name;
         this.description = description;
-        this.filename = filename;
+        this.url = url;
+        this.mediaType = mediaType;
     }
 
-    public String getType() {
-        return this.type;
-    }
     public String getName() {
         return this.name;
     }
+
     public String getDescription() {
         return this.description;
     }
-    public String getFilename() {
-        return this.filename;
+
+    public String getUrl() {
+        return this.url;
     }
 
+    public MediaType getMediaType() {
+        return mediaType;
+    }
+
+    public enum MediaType {
+        PICTURE
+    }
 }

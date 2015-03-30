@@ -1,12 +1,10 @@
 package com.bls.mongodb.dao;
 
-import com.bls.core.poi.Event;
-import com.bls.core.poi.Person;
-import com.bls.mongodb.core.EventMongodb;
+import javax.inject.Inject;
+
+import com.bls.core.person.Person;
 import com.bls.mongodb.core.PersonMongodb;
 import com.mongodb.DB;
-
-import javax.inject.Inject;
 
 /** Poi mongodb data provider */
 public class PersonMongodbDao extends CommonMongodbDao<PersonMongodb, Person<String>, String> {

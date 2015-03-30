@@ -1,11 +1,11 @@
 package com.bls.rdbms.dao;
 
-import com.bls.core.poi.Location;
-import com.bls.core.poi.Poi;
-import com.bls.rdbms.core.PoiJpa;
+import javax.inject.Inject;
+
 import org.hibernate.SessionFactory;
 
-import javax.inject.Inject;
+import com.bls.core.poi.Poi;
+import com.bls.rdbms.core.PoiJpa;
 
 /** Poi jpa data provider */
 public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
@@ -20,7 +20,7 @@ public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
         final PoiJpa result = new PoiJpa();
         result.setId(coreEntity.getId());
         result.setName(coreEntity.getName());
-        result.setTag(coreEntity.getTag());
+        result.setCategory(coreEntity.getCategory());
         result.setLongitude(coreEntity.getLocation().getLongitude());
         result.setLatitude(coreEntity.getLocation().getLatitude());
         return result;
@@ -29,7 +29,8 @@ public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
     @Override
     protected Poi<Long> convert2core(final PoiJpa jpaEntity) {
         // TODO
-//        return new Poi<>(jpaEntity.getId(), jpaEntity.getName(), jpaEntity.getTag(), new Location(jpaEntity.getLongitude(),jpaEntity.getLatitude()));
+        //        return new Poi<>(jpaEntity.getId(), jpaEntity.getName(), jpaEntity.getTag(), new Location(jpaEntity.getLongitude(),
+        // jpaEntity.getLatitude()));
         return null;
     }
 }

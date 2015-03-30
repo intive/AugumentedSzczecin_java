@@ -1,9 +1,18 @@
 package com.bls.rdbms.core;
 
-import com.bls.core.Identifiable;
-import com.bls.core.poi.Tag;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
-import javax.persistence.*;
+import com.bls.core.Identifiable;
+import com.bls.core.poi.Category;
 
 @Entity
 @Table(name = "poi")
@@ -17,12 +26,13 @@ public class PoiJpa implements Identifiable<Long> {
     private Long id;
     @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "tag", nullable = false)
-    private Tag tag;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
+    private Category category;
     @Column(name = "longitude", nullable = false)
-    private Long longitude;
+    private Float longitude;
     @Column(name = "latitude", nullable = false)
-    private Long latitude;
+    private Float latitude;
 
     @Override
     public Long getId() {
@@ -42,27 +52,27 @@ public class PoiJpa implements Identifiable<Long> {
         this.name = name;
     }
 
-    public Tag getTag() {
-        return tag;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setTag(final Tag tag) {
-        this.tag = tag;
+    public void setCategory(final Category category) {
+        this.category = category;
     }
 
-    public Long getLongitude() {
+    public Float getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(final Long longitude) {
+    public void setLongitude(final Float longitude) {
         this.longitude = longitude;
     }
 
-    public Long getLatitude() {
+    public Float getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(final Long latitude) {
+    public void setLatitude(final Float latitude) {
         this.latitude = latitude;
     }
 }

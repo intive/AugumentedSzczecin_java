@@ -25,13 +25,13 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="tag" type="varchar(255)">
+            <column name="category" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="longitude" type="double">
+            <column name="longitude" type="float">
                 <constraints nullable="false" />
             </column>
-            <column name="latitude" type="double">
+            <column name="latitude" type="float">
                 <constraints nullable="false" />
             </column>
         </createTable>
