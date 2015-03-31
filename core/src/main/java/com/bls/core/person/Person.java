@@ -22,16 +22,20 @@ public class Person<K> extends IdentifiableEntity<K> {
     private final String surname;
     @NotNull
     private final Location location;
+    @NotNull
+    private String ownerid;
 
     @JsonCreator
     public Person(@JsonProperty(value = "id", required = false) final K id,
-            @JsonProperty("name") final String name,
-            @JsonProperty("surname") final String surname,
-            @JsonProperty("location") final Location location) {
+                  @JsonProperty("name") final String name,
+                  @JsonProperty("surname") final String surname,
+                  @JsonProperty("location") final Location location,
+                  @JsonProperty("ownerid") final String ownerid) {
         super(id);
         this.name = name;
         this.surname = surname;
         this.location = location;
+        this.ownerid = ownerid;
     }
 
     public String getName() {
@@ -44,5 +48,13 @@ public class Person<K> extends IdentifiableEntity<K> {
 
     public Location getLocation() {
         return location;
+    }
+
+    public String getOwnerid() {
+        return ownerid;
+    }
+
+    public void setOwnerid(String ownerid) {
+        this.ownerid = ownerid;
     }
 }
