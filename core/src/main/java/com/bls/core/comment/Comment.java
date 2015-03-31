@@ -1,11 +1,7 @@
 package com.bls.core.comment;
 
-import com.bls.core.IdentifiableEntity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Comment {
 
@@ -16,15 +12,13 @@ public class Comment {
 
     @JsonCreator
     public Comment(@JsonProperty("username") final String username,
-                   @JsonProperty("content") final String content,
-                   @JsonProperty("rating") final int rating,
-                   @JsonProperty("date") final String dateOfcomment) {
+            @JsonProperty("content") final String content,
+            @JsonProperty("rating") final int rating,
+            @JsonProperty("date") final String dateOfcomment) {
         this.username = username;
         this.content = content;
         this.rating = rating;
         this.dateOfcomment = dateOfcomment;
-/*        final SimpleDateFormat dateOfcomment = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        this.dateOfcomment = dateOfcomment.format(new Date()); */
     }
 
     public String getUsername() {

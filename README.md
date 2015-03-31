@@ -28,29 +28,24 @@ Prerequisites:
         
 * Run application with H2 in memory db - but note, needs some work
         
-        (cd api && java -DDBTYPE=rdbms -jar target/api-1.0.0-SNAPSHOT.jar server augmented.yml)
-
-* TODO with hibernate on Postgresql:
-
-        (cd api && java -DDBTYPE=rdbms -jar target/api-1.0.0-SNAPSHOT.jar server augmented-pg.yml)
-
 ## Testing (currently available with mongodb or h2)
 
-* Generate some example data [TEMPORARILY DISABLED]
+* Create new user
 
-        curl -v http://localhost:8000/poi/generate
+        curl -v http://localhost:8000/users -H "Content-Type: application/json" -d '{"email":"asd", "password":"zxc"}'
 
 * Fetch all data
 
-        curl -v http://localhost:8000/pois
+        curl -v http://localhost:8000/pois -u asd:zxc
 
-* Fetch entity by id
+* Fetch point of interest by id
 
-        curl -v http://localhost:8000/poi/{id}
+        curl -v http://localhost:8000/pois/{id} -u asd:zxc
 
 * Add new POI
 
-        curl -v http://localhost:8000/poi \
+        curl -v http://localhost:8000/pois \
+            -u asd:zxc \
             -H "Content-Type: application/json" \
             -d '{"name":"thug_621",\
                 "tag":"GYM",\
@@ -58,21 +53,9 @@ Prerequisites:
                           "longitude":392425644375222609}\
                 }'
 
-* Create new user
+* Fetch all users
 
-        curl -v http://localhost:8000/user -H "Content-Type: application/json" -d '{"email":"asd", "password":"zxc"}'
-
-* Get protected resource
-
-        curl -v http://localhost:8000/auth -u asd:zxc
-
-* Fetch all users [Auth required]
-
-        curl -v http://localhost:8000/users
-
-* There is some proof of concept for http://open-data.org.pl backend client:
-
-        curl -v http://localhost:8000/open
+        curl -v http://localhost:8000/users -u asd:zxc
 
 [Oracle jdk download link]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [Maven download link]: http://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache
