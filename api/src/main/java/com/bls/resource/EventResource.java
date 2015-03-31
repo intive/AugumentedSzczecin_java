@@ -1,21 +1,30 @@
 package com.bls.resource;
 
-
-import com.bls.core.event.Event;
-import com.bls.dao.CommonDao;
-import com.codahale.metrics.annotation.ExceptionMetered;
-import com.codahale.metrics.annotation.Timed;
-import io.dropwizard.hibernate.UnitOfWork;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Collection;
+
+import com.bls.core.event.Event;
+import com.bls.core.user.User;
+import com.bls.dao.CommonDao;
+import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Timed;
+import com.google.common.base.Optional;
+
+import io.dropwizard.auth.Auth;
+import io.dropwizard.hibernate.UnitOfWork;
 
 @Singleton
-@Path("/user/{id}/events")
+@Path("/events/{id}")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class EventResource {
@@ -31,39 +40,29 @@ public class EventResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Collection<Event> getAll() {
-        return eventDao.findAll();
+    public Event get(@Auth User user, @PathParam("id") final String id) {
+        return getEventSafe(id);
     }
 
-    @POST
-    @UnitOfWork
-    @Timed
-    @ExceptionMetered
-    public Event add(final Event event){ return eventDao.create(event); }
-
-    @Path("/{id}")
-    @GET
-    @UnitOfWork
-    @Timed
-    @ExceptionMetered
-    public Event get(@PathParam("id") final String id) {
-        return eventDao.findById(id);
-    }
-
-    @Path("/{id}")
     @PUT
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Event update(@PathParam("id") final String id) {
-        Event event = eventDao.findById(id);
-        return eventDao.update(event);
+    public Event update(@Auth User user, @PathParam("id") final String id) {
+        return eventDao.update(getEventSafe(id));
     }
 
-    @Path("/{id}")
     @DELETE
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void deleteById(@PathParam("id") final String id){ eventDao.deleteById(id); }
+    public void deleteById(@Auth User user, @PathParam("id") final String id) { eventDao.deleteById(id); }
+
+    private Event getEventSafe(final String id) {
+        final Optional<Event> event = eventDao.findById(id);
+        if (!event.isPresent()) {
+            throw new NotFoundException(String.format("Event with id: %s not found", id));
+        }
+        return event.get();
+    }
 }

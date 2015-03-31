@@ -3,6 +3,7 @@ package com.bls.dao;
 import java.util.Collection;
 
 import com.bls.core.Identifiable;
+import com.google.common.base.Optional;
 
 /**
  * Common behaviour for all DAO. Entity key was set to String.
@@ -21,7 +22,7 @@ public interface CommonDao<E extends Identifiable> {
 
     void deleteAll();
 
-    E findById(final String id);
+    Optional<E> findById(final String id);
 
     Collection<E> findAll();
 }

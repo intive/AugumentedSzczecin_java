@@ -1,6 +1,6 @@
 package com.bls.resource;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -8,7 +8,8 @@ import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -17,23 +18,21 @@ import javax.ws.rs.core.MediaType;
 
 import com.bls.core.person.Person;
 import com.bls.core.user.User;
-import com.bls.dao.CommonDao;
 import com.bls.dao.PersonDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
+import com.google.common.base.Optional;
 
 import io.dropwizard.auth.Auth;
-import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.hibernate.UnitOfWork;
-import io.dropwizard.servlets.assets.ResourceNotFoundException;
 
 @Singleton
-@Path("/user/{userid}/people")
+@Path("/people/{id}")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PersonResource {
 
-    private final PersonDao personDao;
+    private final PersonDao<Person> personDao;
 
     @Inject
     public PersonResource(@Named("person") PersonDao personDao) {
@@ -44,69 +43,32 @@ public class PersonResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Collection<Person> getByUserId(@Auth final User user, 
-                                          @PathParam("userid") final String pathid) throws AuthenticationException {
-        if (user.getId().equals(pathid)) 
-            return personDao.findByUserId((String) user.getId());
-        
-        throw new AuthenticationException("Access denied.");
+    public List<Person<String>> get(@Auth final User user, @PathParam("id") final String id) {
+        return personDao.findByUserId((String) user.getId());
     }
 
-    @POST
-    @UnitOfWork
-    @Timed
-    @ExceptionMetered
-    public Person add(@Auth final User user, @PathParam("userid") final String pathid, final Person person) {
-        person.setOwnerid((String) user.getId());
-        return (Person) personDao.create(person);
-    }
-
-    @Path("/{id}")
-    @GET
-    @UnitOfWork
-    @Timed
-    @ExceptionMetered
-    public Person get(@Auth final User user, @PathParam("userid") final String pathid, @PathParam("id") final String id) 
-            throws AuthenticationException {
-        if (user.getId().equals(pathid))
-            return (Person) personDao.findById(id);
-        
-        throw new AuthenticationException("Access denied.");
-    }
-
-    @Path("/{id}")
     @PUT
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Person update(@Auth final User user, @PathParam("userid") final String pathid, 
-                         @PathParam("id") final String id) throws AuthenticationException {
-        Person person = null;
-        if (user.getId().equals(pathid))
-            person = (Person) personDao.findById(id);
-        else 
-            throw new AuthenticationException("Access denied.");
-        
-        if (person == null) throw new ResourceNotFoundException(new Throwable("Resource not found."));
-        return (Person) personDao.update(person);
+    public Person update(@Auth final User user, @PathParam("id") final String id) {
+        return personDao.update(getPersonSafe(id, user));
     }
 
-    @Path("/{id}")
     @DELETE
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void deleteById(@Auth final User user, @PathParam("userid") final String pathid,
-                           @PathParam("id") final String id) throws AuthenticationException {
-        Person person = null;
-        if (user.getId().equals(pathid))
-            person = (Person) personDao.findById(id);
-        else
-            throw new AuthenticationException("Access denied.");
+    public void deleteById(@PathParam("id") final String id) { personDao.deleteById(id); }
 
-        if (person == null) throw new ResourceNotFoundException(new Throwable("Resource not found."));
-
-        personDao.deleteById(id);
+    private Person getPersonSafe(final @PathParam("id") String id, final User<String> user) {
+        final Optional<Person> person = personDao.findById(id);
+        if (!person.isPresent()) {
+            throw new NotFoundException(String.format("Person with id: %s not found", id));
+        }
+        if (!person.get().getOwnerid().equals(user.getId())) {
+            throw new NotAuthorizedException("Access denied.");
+        }
+        return person.get();
     }
-    
 }

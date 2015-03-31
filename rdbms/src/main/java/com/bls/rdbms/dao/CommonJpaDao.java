@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 
 import com.bls.core.IdentifiableEntity;
 import com.bls.dao.CommonDao;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import io.dropwizard.hibernate.AbstractDAO;
@@ -53,8 +54,8 @@ public abstract class CommonJpaDao<J, E extends IdentifiableEntity> extends Abst
     }
 
     @Override
-    public E findById(final String id) {
-        return convert2core((J) currentSession().load(entityClass, Long.valueOf(id)));
+    public Optional<E> findById(final String id) {
+        return Optional.fromNullable(convert2core((J) currentSession().get(entityClass, Long.valueOf(id))));
     }
 
     @Override

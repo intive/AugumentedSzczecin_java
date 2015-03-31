@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import com.bls.core.IdentifiableEntity;
 import com.bls.core.comment.Comment;
 import com.bls.core.geo.Location;
-import com.bls.core.person.Person;
 import com.bls.core.price.PriceList;
 import com.bls.core.user.User;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -23,7 +22,7 @@ public class Poi<K> extends IdentifiableEntity<K> {
 
     @NotNull
     private final Boolean isPublic;
-    //  TODO add validation: !public = NotNull
+    // TODO add validation: !public = NotNull
     private final User owner;
     @NotNull
     private final Location location;
@@ -32,10 +31,10 @@ public class Poi<K> extends IdentifiableEntity<K> {
     @NotNull
     private final String name;
     private final Address address;
-    private Collection<String> tags;
-    private Collection<Media> media;
-    private Collection<Comment> comments;
-    private Collection<OpeningHours> openingDaysAndHours;
+    private final Collection<String> tags;
+    private final Collection<Media> media;
+    private final Collection<Comment> comments;
+    private final Collection<OpeningHours> openingDaysAndHours;
     private final PriceList priceList;
 
     @JsonCreator
@@ -60,13 +59,13 @@ public class Poi<K> extends IdentifiableEntity<K> {
         this.owner = owner;
         this.priceList = priceList;
 
-        if (tags != null) this.tags.addAll(tags);
-        if (comments != null) this.comments.addAll(comments);
-        if (media != null) this.media.addAll(media);
-        if (openingDaysAndHours != null) this.openingDaysAndHours.addAll(openingDaysAndHours);
+        this.tags = ImmutableList.copyOf(tags);
+        this.comments = ImmutableList.copyOf(comments);
+        this.media = ImmutableList.copyOf(media);
+        this.openingDaysAndHours = ImmutableList.copyOf(openingDaysAndHours);
     }
 
-    public Boolean getIsPublic() {  // Must have the "get" prefix for BeanUtils
+    public Boolean isPublic() {
         return isPublic;
     }
 

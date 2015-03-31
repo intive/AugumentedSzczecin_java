@@ -1,15 +1,14 @@
 package com.bls.resource;
 
+import java.util.Collection;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -18,21 +17,20 @@ import com.bls.core.user.User;
 import com.bls.dao.UserDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
-import com.google.common.base.Optional;
 
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
 @Singleton
-@Path("/users/{id}")
+@Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class UserResource {
+public class UsersResource {
 
     private final UserDao<User<String>> userDao;
 
     @Inject
-    public UserResource(UserDao userDao) {
+    public UsersResource(UserDao userDao) {
         this.userDao = userDao;
     }
 
@@ -40,12 +38,8 @@ public class UserResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public User getById(@PathParam("id") String id) {
-        final Optional<User<String>> user = userDao.findById(id);
-        if (!user.isPresent()) {
-            throw new NotFoundException(String.format("User with id: %s not found", id));
-        }
-        return user.get();
+    public Collection<User<String>> getAll(@Auth String foo) {
+        return userDao.findAll();
     }
 
     @POST
@@ -56,13 +50,5 @@ public class UserResource {
         final String hashedPassword = BasicAuthenticator.generateSafeHash(userWithPlaintextPassword.getPassword());
         final User<String> userWithHashedPassword = userWithPlaintextPassword.createUserWithHashedPassword(hashedPassword);
         return userDao.create(userWithHashedPassword);
-    }
-
-    @DELETE
-    @UnitOfWork
-    @Timed
-    @ExceptionMetered
-    public void removeById(@Auth String foo, @PathParam("id") String id) {
-        userDao.deleteById(id);
     }
 }

@@ -11,6 +11,7 @@ import com.bls.core.Identifiable;
 import com.bls.dao.CommonDao;
 import com.bls.mongodb.core.MongodbMappableIdentifiableEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.mongodb.DB;
 
@@ -76,8 +77,9 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
     }
 
     @Override
-    public I findById(final String coreEntityId) {
-        return convert2coreModel(dbCollection.findOneById(coreEntityId));
+    public Optional<I> findById(final String coreEntityId) {
+        final M mongodbEntity = dbCollection.findOneById(coreEntityId);
+        return mongodbEntity != null ? Optional.of(convert2coreModel(mongodbEntity)) : Optional.absent();
     }
 
     @Override
