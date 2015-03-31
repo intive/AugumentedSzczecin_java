@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 @Singleton
-@Path("/events")
+@Path("/user/{id}/events")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class EventResource {

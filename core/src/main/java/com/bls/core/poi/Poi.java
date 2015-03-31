@@ -23,7 +23,7 @@ public class Poi<K> extends IdentifiableEntity<K> {
 
     @NotNull
     private final Boolean isPublic;
-    // TODO add validation: !public = NotNull
+    //  TODO add validation: !public = NotNull
     private final User owner;
     @NotNull
     private final Location location;
@@ -32,10 +32,10 @@ public class Poi<K> extends IdentifiableEntity<K> {
     @NotNull
     private final String name;
     private final Address address;
-    private final Collection<String> tags = ImmutableList.of();
-    private final Collection<Media> media = ImmutableList.of();
-    private final Collection<Comment> comments = ImmutableList.of();
-    private final Collection<OpeningHours> openingDaysAndHours = ImmutableList.of();
+    private Collection<String> tags;
+    private Collection<Media> media;
+    private Collection<Comment> comments;
+    private Collection<OpeningHours> openingDaysAndHours;
     private final PriceList priceList;
 
     @JsonCreator
@@ -60,13 +60,13 @@ public class Poi<K> extends IdentifiableEntity<K> {
         this.owner = owner;
         this.priceList = priceList;
 
-        this.tags.addAll(tags);
-        this.comments.addAll(comments);
-        this.media.addAll(media);
-        this.openingDaysAndHours.addAll(openingDaysAndHours);
+        if (tags != null) this.tags.addAll(tags);
+        if (comments != null) this.comments.addAll(comments);
+        if (media != null) this.media.addAll(media);
+        if (openingDaysAndHours != null) this.openingDaysAndHours.addAll(openingDaysAndHours);
     }
 
-    public Boolean isPublic() {
+    public Boolean getIsPublic() {  // Must have the "get" prefix for BeanUtils
         return isPublic;
     }
 

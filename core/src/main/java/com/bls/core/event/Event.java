@@ -15,8 +15,9 @@ public class Event<K> extends IdentifiableEntity<K> {
 
     @JsonCreator
     public Event(@JsonProperty(value = "id", required = false) final K id,
-                @JsonProperty("description")String description,
-                @JsonProperty("location")Location location) {
+                @JsonProperty("description") final String description,
+                @JsonProperty("location") final Location location,
+                @JsonProperty("ownerid") final String ownerid) {
         super(id);
         this.description = description;
         this.location = location;

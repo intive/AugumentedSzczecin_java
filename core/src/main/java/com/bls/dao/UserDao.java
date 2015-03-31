@@ -7,7 +7,6 @@ import com.google.common.base.Optional;
  * User specific DAO operation
  *
  * @param <E> Entity type
- * @param <K> Key type for entity E
  */
 public interface UserDao<E extends Identifiable> extends CommonDao<E> {
 
