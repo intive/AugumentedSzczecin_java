@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.bls.core.IdentifiableEntity;
 import com.bls.core.geo.Location;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -14,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @param <K> Key type for person entity
  */
+@JsonInclude(Include.NON_EMPTY)
 public class Person<K> extends IdentifiableEntity<K> {
 
     @NotEmpty

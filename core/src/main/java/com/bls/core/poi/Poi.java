@@ -10,6 +10,8 @@ import com.bls.core.geo.Location;
 import com.bls.core.price.PriceList;
 import com.bls.core.user.User;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableList;
 
@@ -18,6 +20,7 @@ import com.google.common.collect.ImmutableList;
  *
  * @param <K> key type
  */
+@JsonInclude(Include.NON_EMPTY)
 public class Poi<K> extends IdentifiableEntity<K> {
 
     @NotNull
@@ -59,10 +62,10 @@ public class Poi<K> extends IdentifiableEntity<K> {
         this.owner = owner;
         this.priceList = priceList;
 
-        this.tags = ImmutableList.copyOf(tags);
-        this.comments = ImmutableList.copyOf(comments);
-        this.media = ImmutableList.copyOf(media);
-        this.openingDaysAndHours = ImmutableList.copyOf(openingDaysAndHours);
+        this.tags = tags != null ? ImmutableList.copyOf(tags) : ImmutableList.of();
+        this.comments = comments != null ? ImmutableList.copyOf(comments) : ImmutableList.of();
+        this.media = media != null ? ImmutableList.copyOf(media) : ImmutableList.of();
+        this.openingDaysAndHours = openingDaysAndHours != null ? ImmutableList.copyOf(openingDaysAndHours) : ImmutableList.of();
     }
 
     public Boolean isPublic() {

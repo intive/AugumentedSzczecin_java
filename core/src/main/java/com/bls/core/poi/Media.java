@@ -1,11 +1,14 @@
 package com.bls.core.poi;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Named multimedia content of some type and URL
  */
+@JsonInclude(Include.NON_EMPTY)
 public class Media {
 
     private final String name;

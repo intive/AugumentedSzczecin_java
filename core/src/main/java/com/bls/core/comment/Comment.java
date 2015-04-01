@@ -1,28 +1,27 @@
 package com.bls.core.comment;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+// TODO add javadoc
+@JsonInclude(Include.NON_EMPTY)
 public class Comment {
 
-    private final String username;
     private final String content;
     private final int rating;
-    private final String dateOfcomment;
+    private final Date created;
 
     @JsonCreator
-    public Comment(@JsonProperty("username") final String username,
-            @JsonProperty("content") final String content,
+    public Comment(@JsonProperty("content") final String content,
             @JsonProperty("rating") final int rating,
-            @JsonProperty("date") final String dateOfcomment) {
-        this.username = username;
+            @JsonProperty(value = "date", required = false) final Date created) {
         this.content = content;
         this.rating = rating;
-        this.dateOfcomment = dateOfcomment;
-    }
-
-    public String getUsername() {
-        return this.username;
+        this.created = created != null ? created : new Date();
     }
 
     public String getContent() {
@@ -33,7 +32,7 @@ public class Comment {
         return this.rating;
     }
 
-    public String getDateofComment() {
-        return this.dateOfcomment;
+    public Date getDateofComment() {
+        return this.created;
     }
 }

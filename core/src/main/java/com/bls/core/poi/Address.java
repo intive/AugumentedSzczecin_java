@@ -1,9 +1,13 @@
 package com.bls.core.poi;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-// TODO description is missing
+// TODO add javadoc
+// TODO add adressType, urls, twitter, facebook...
+@JsonInclude(Include.NON_EMPTY)
 public class Address {
 
     private final String country;

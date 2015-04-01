@@ -3,6 +3,8 @@ package com.bls.core.geo;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.dropwizard.jersey.params.LongParam;
@@ -10,6 +12,7 @@ import io.dropwizard.jersey.params.LongParam;
 /**
  * Location on some map
  */
+@JsonInclude(Include.NON_EMPTY)
 public class Location {
 
     @NotNull

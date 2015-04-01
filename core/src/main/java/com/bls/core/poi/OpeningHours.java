@@ -7,11 +7,14 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * MONDAY 10:00 - 18:00
  */
+@JsonInclude(Include.NON_EMPTY)
 public class OpeningHours {
 
     @Range(min = DateTimeConstants.MONDAY, max = DateTimeConstants.SUNDAY)
