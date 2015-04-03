@@ -29,7 +29,7 @@ public class PointOfInterestResource {
     private final CommonDao<Poi> poiDao;
 
     @Inject
-    public PointOfInterestResource(@Named("poi") final CommonDao poiDao) {
+    public PointOfInterestResource(final CommonDao poiDao) {
         this.poiDao = poiDao;
     }
 

@@ -35,7 +35,7 @@ public class PersonResource {
     private final PersonDao<Person> personDao;
 
     @Inject
-    public PersonResource(@Named("person") PersonDao personDao) {
+    public PersonResource(PersonDao personDao) {
         this.personDao = personDao;
     }
 

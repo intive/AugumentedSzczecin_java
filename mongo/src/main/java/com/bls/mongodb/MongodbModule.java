@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import javax.inject.Named;
 
 import com.bls.dao.CommonDao;
+import com.bls.dao.EventDao;
 import com.bls.dao.PersonDao;
 import com.bls.dao.UserDao;
 import com.bls.mongodb.dao.EventMongodbDao;
@@ -43,21 +44,18 @@ public class MongodbModule extends AbstractModule {
 
     @Singleton
     @Provides
-    @Named("poi")
     public CommonDao providePoiDao(final DB mongodb) {
         return new PoiMongodbDao(mongodb);
     }
 
     @Singleton
     @Provides
-    @Named("event")
-    public CommonDao provideEventDao(final DB mongodb) {
+    public EventDao provideEventDao(final DB mongodb) {
         return new EventMongodbDao(mongodb);
     }
 
     @Singleton
     @Provides
-    @Named("person")
     public PersonDao providePersonDao(final DB mongodb) {
         return new PersonMongodbDao(mongodb);
     }

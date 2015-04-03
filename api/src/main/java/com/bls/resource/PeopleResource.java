@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.bls.core.person.Person;
 import com.bls.dao.CommonDao;
+import com.bls.dao.PersonDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 
@@ -25,10 +26,10 @@ import io.dropwizard.hibernate.UnitOfWork;
 @Consumes(MediaType.APPLICATION_JSON)
 public class PeopleResource {
 
-    private final CommonDao<Person> personDao;
+    private final PersonDao<Person> personDao;
 
     @Inject
-    public PeopleResource(@Named("person") CommonDao personDao) {
+    public PeopleResource(PersonDao personDao) {
         this.personDao = personDao;
     }
 

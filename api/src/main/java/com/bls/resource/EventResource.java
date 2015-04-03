@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import com.bls.core.event.Event;
 import com.bls.core.user.User;
 import com.bls.dao.CommonDao;
+import com.bls.dao.EventDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
@@ -29,10 +30,10 @@ import io.dropwizard.hibernate.UnitOfWork;
 @Consumes(MediaType.APPLICATION_JSON)
 public class EventResource {
 
-    private final CommonDao<Event> eventDao;
+    private final EventDao<Event> eventDao;
 
     @Inject
-    public EventResource(@Named("event") final CommonDao eventDao) {
+    public EventResource(final EventDao eventDao) {
         this.eventDao = eventDao;
     }
 

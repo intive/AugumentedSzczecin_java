@@ -33,7 +33,7 @@ public class PointsOfInterestResource {
     private final CommonDao<Poi> poiDao;
 
     @Inject
-    public PointsOfInterestResource(@Named("poi") final CommonDao poiDao) {
+    public PointsOfInterestResource(final CommonDao poiDao) {
         this.poiDao = poiDao;
     }
 
