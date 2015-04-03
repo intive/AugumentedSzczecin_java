@@ -45,7 +45,7 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
 
     /** @return mongodb collection name - default to mongo model class tyoe name */
     protected String getMongodbCollectionName() {
-        return getMongodbModelType().getClass().getCanonicalName();
+        return getMongodbModelType().getCanonicalName();
     }
 
     protected I convert2coreModel(final M mongodbEntity) {
