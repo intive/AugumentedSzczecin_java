@@ -26,9 +26,8 @@ public class PoiJpa implements Identifiable<Long> {
     private Long id;
     @Column(name = "name", nullable = false)
     private String name;
-    @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
-    private Category category;
+    private String category;
     @Column(name = "longitude", nullable = false)
     private Float longitude;
     @Column(name = "latitude", nullable = false)
@@ -52,11 +51,11 @@ public class PoiJpa implements Identifiable<Long> {
         this.name = name;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(final Category category) {
+    public void setCategory(final String category) {
         this.category = category;
     }
 
