@@ -15,6 +15,14 @@
     <description>Augmented main application and REST API</description>
 
     <dependencies>
+
+        <dependency>
+                        <groupId>io.dropwizard.modules</groupId>
+                        <artifactId>dropwizard-java8</artifactId>
+                        <version>0.8.0-2</version>
+        </dependency>
+
+
         <dependency>
             <groupId>com.bls.patronage</groupId>
             <artifactId>mongo</artifactId>
