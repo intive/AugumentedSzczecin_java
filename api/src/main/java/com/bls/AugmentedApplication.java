@@ -17,6 +17,7 @@ import io.dropwizard.auth.CachingAuthenticator;
 import io.dropwizard.auth.basic.BasicAuthFactory;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.jersey.jackson.JsonProcessingExceptionMapper;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -96,6 +97,7 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
     @Override
     public void run(final AugmentedConfiguration augmentedConfiguration, final Environment environment) throws Exception {
         registerAuthorizationProviders(augmentedConfiguration, environment);
+        environment.jersey().register(new JsonProcessingExceptionMapper(true)); // Enabled exception details output
     }
 
     private void registerAuthorizationProviders(final AugmentedConfiguration augmentedConfiguration, final Environment environment) {
