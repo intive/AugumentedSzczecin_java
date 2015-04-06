@@ -24,7 +24,8 @@ import com.google.common.collect.ImmutableList;
  */
 @JsonInclude(Include.NON_EMPTY)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "category", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, 
+              property = "category", visible = true)
 @JsonSubTypes({@JsonSubTypes.Type(value = Person.class, name = "person"),
               @JsonSubTypes.Type(value = Event.class, name = "event")})
 public abstract class Poi<K> extends IdentifiableEntity<K> {

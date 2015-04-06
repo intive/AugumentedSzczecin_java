@@ -23,22 +23,14 @@ import java.util.Collection;
 @JsonInclude(Include.NON_EMPTY)
 @JsonTypeName("person")
 public class Person<K> extends Poi<K> {
-    
-    // FIXME: Response 400 with "Unable to process JSON message"
-    // Sth wrong with ObjectMapper?
-    // When using "include As.WRAPPER_OBJECT:
-    // "details":"Could not resolve type id 'name' into a subtype of [simple type, class com.bls.core.event.Event]: 
-    // known type ids = [event, person]"
-    //
-    // When using "include As.PROPERTY:
-    // "Unexpected token (END_OBJECT), expected FIELD_NAME: missing property 'type' that is to contain type id  
-    // (for class com.bls.core.event.Event)"
-    
-    // TODO: add subclass-specific fields
+    private static final String category = String.valueOf(Category.PERSON);
+
+    private final String firstname;
+    private final String lastname;
     
     @JsonCreator
     public Person(@JsonProperty(value = "id", required = false) final K id,
-               @JsonProperty("category") final String category,
+//               @JsonProperty("category") final String category,
                @JsonProperty("isPublic") final Boolean isPublic,
                @JsonProperty("name") final String name,
                @JsonProperty("location") final Location location,
@@ -48,7 +40,19 @@ public class Person<K> extends Poi<K> {
                @JsonProperty("comments") final Collection<Comment> comments,
                @JsonProperty("media") final Collection<Media> media,
                @JsonProperty("openingDaysAndHours") final Collection<OpeningHours> openingDaysAndHours,
-               @JsonProperty("priceList") final PriceList priceList) {
+               @JsonProperty("priceList") final PriceList priceList,
+               @JsonProperty("firstname") final String firstname,
+               @JsonProperty("lastname") final String lastname) {
         super(id, category, isPublic, name, location, address, owner, tags, comments, media, openingDaysAndHours, priceList);
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
     }
 }
