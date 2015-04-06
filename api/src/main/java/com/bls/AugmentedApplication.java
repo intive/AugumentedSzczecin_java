@@ -48,6 +48,7 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
     @Override
     public void initialize(final Bootstrap<AugmentedConfiguration> bootstrap) {
 
+        // Java8 is set
         bootstrap.addBundle(new Java8Bundle());
 
         // Enable configuration variable substitution with system property values
