@@ -30,7 +30,6 @@ public class Person<K> extends Poi<K> {
     
     @JsonCreator
     public Person(@JsonProperty(value = "id", required = false) final K id,
-//               @JsonProperty("category") final String category,
                @JsonProperty("isPublic") final Boolean isPublic,
                @JsonProperty("name") final String name,
                @JsonProperty("location") final Location location,
