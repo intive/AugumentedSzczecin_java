@@ -13,6 +13,8 @@ import com.bls.core.price.PriceList;
 import com.bls.core.user.User;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -22,7 +24,7 @@ import com.google.common.collect.ImmutableList;
  */
 @JsonInclude(Include.NON_EMPTY)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT, property = "type", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "category", visible = true)
 @JsonSubTypes({@JsonSubTypes.Type(value = Person.class, name = "person"),
               @JsonSubTypes.Type(value = Event.class, name = "event")})
 public abstract class Poi<K> extends IdentifiableEntity<K> {
@@ -34,16 +36,20 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
 //    @NotNull
     protected final Location location;
 //    @NotNull
+    protected final String category;
+
     protected final String name;
+
     protected final Address address;
     protected final Collection<String> tags;
     protected final Collection<Media> media;
     protected final Collection<Comment> comments;
     protected final Collection<OpeningHours> openingDaysAndHours;
     protected final PriceList priceList;
-
-    @JsonCreator
+    
+//    @JsonCreator
     public Poi(@JsonProperty(value = "id", required = false) final K id,
+            @JsonProperty("category") final String category,
             @JsonProperty("isPublic") final Boolean isPublic,
             @JsonProperty("name") final String name,
             @JsonProperty("location") final Location location,
@@ -66,6 +72,11 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
         this.comments = comments != null ? ImmutableList.copyOf(comments) : ImmutableList.of();
         this.media = media != null ? ImmutableList.copyOf(media) : ImmutableList.of();
         this.openingDaysAndHours = openingDaysAndHours != null ? ImmutableList.copyOf(openingDaysAndHours) : ImmutableList.of();
+        this.category = category;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public Boolean getIsPublic() {

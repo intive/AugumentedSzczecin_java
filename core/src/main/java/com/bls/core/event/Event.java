@@ -30,6 +30,7 @@ public class Event<K> extends Poi<K> {
 
     @JsonCreator
     public Event(@JsonProperty(value = "id", required = false) final K id,
+               @JsonProperty("category") final String category,
                @JsonProperty("isPublic") final Boolean isPublic,
                @JsonProperty("name") final String name,
                @JsonProperty("location") final Location location,
@@ -40,7 +41,7 @@ public class Event<K> extends Poi<K> {
                @JsonProperty("media") final Collection<Media> media,
                @JsonProperty("openingDaysAndHours") final Collection<OpeningHours> openingDaysAndHours,
                @JsonProperty("priceList") final PriceList priceList) {
-        super(id, isPublic, name, location, address, owner, tags, comments, media, openingDaysAndHours, priceList);
+        super(id, category, isPublic, name, location, address, owner, tags, comments, media, openingDaysAndHours, priceList);
     }
 
 }

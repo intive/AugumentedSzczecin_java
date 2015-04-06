@@ -3,6 +3,7 @@ package com.bls.mongodb.dao;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.internal.MongoJackModule;
@@ -26,7 +27,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEntity, I extends Identifiable<K>, K> implements CommonDao<I> {
 
-    private final static ObjectMapper MAPPER = MongoJackModule.configure(new ObjectMapper());
+    private final static ObjectMapper MAPPER = MongoJackModule.configure(new ObjectMapper())
+            .configure(SerializationFeature.FAIL_ON_UNWRAPPED_TYPE_IDENTIFIERS, false);
     protected final JacksonDBCollection<M, String> dbCollection;
 
     public CommonMongodbDao(final DB db) {
