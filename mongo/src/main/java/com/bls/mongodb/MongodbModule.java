@@ -44,12 +44,6 @@ public class MongodbModule extends AbstractModule {
 
     @Singleton
     @Provides
-    public CommonDao providePoiDao(final DB mongodb) {
-        return new PoiMongodbDao(mongodb);
-    }
-
-    @Singleton
-    @Provides
     public EventDao provideEventDao(final DB mongodb) {
         return new EventMongodbDao(mongodb);
     }
