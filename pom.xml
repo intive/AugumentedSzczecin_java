@@ -22,7 +22,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <dropwizard.version>0.8.0</dropwizard.version>
+        <dropwizard-java8.version>0.8.0-2</dropwizard-java8.version>
     </properties>
 
     <!--
@@ -93,6 +95,11 @@
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-auth</artifactId>
             <version>${dropwizard.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard.modules</groupId>
+            <artifactId>dropwizard-java8</artifactId>
+            <version>${dropwizard-java8.version}</version>
         </dependency>
 
         <!-- Tests -->
