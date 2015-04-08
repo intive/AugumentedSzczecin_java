@@ -1,20 +1,22 @@
 package com.bls.mongodb.dao;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.bls.core.Identifiable;
+import com.bls.core.geo.Location;
+import com.bls.dao.CommonDao;
+import com.bls.mongodb.core.MongodbMappableIdentifiableEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.internal.MongoJackModule;
 
-import com.bls.core.Identifiable;
-import com.bls.dao.CommonDao;
-import com.bls.mongodb.core.MongodbMappableIdentifiableEntity;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
-import com.mongodb.DB;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -76,6 +78,28 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         final List<I> coreEntities = Lists.newArrayListWithCapacity(mongodbEntities.size());
         coreEntities.addAll(mongodbEntities.stream().map(this::convert2coreModel).collect(Collectors.toList()));
         return coreEntities;
+    }
+
+    public List<I> findInRadius(final Location location, final Long radius){
+        BasicDBList coordinates = new BasicDBList();
+        coordinates.add(location.getLongitude());
+        coordinates.add(location.getLatitude());
+
+        BasicDBList geoParams = new BasicDBList();
+        geoParams.add(coordinates);
+        geoParams.add(metersToDegrees(radius));
+
+        BasicDBObject query = new BasicDBObject("location",new BasicDBObject("$geoWithin",new BasicDBObject("$center", geoParams)));
+
+        final List<M> mongodbEntities = dbCollection.find(query).toArray();
+
+        final List<I> coreEntities = Lists.newArrayListWithCapacity(mongodbEntities.size());
+        coreEntities.addAll(mongodbEntities.stream().map(this::convert2coreModel).collect(Collectors.toList()));
+        return coreEntities;
+    }
+
+    public Float metersToDegrees(Long radiusInMeters){
+        return radiusInMeters.floatValue() / 111119.99965975954f;
     }
 
     @Override

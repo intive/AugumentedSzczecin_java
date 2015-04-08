@@ -1,11 +1,12 @@
 package com.bls.rdbms.dao;
 
-import javax.inject.Inject;
-
-import org.hibernate.SessionFactory;
-
+import com.bls.core.geo.Location;
 import com.bls.core.poi.Poi;
 import com.bls.rdbms.core.PoiJpa;
+import org.hibernate.SessionFactory;
+
+import javax.inject.Inject;
+import java.util.Collection;
 
 /** Poi jpa data provider */
 public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
@@ -32,6 +33,11 @@ public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
         // TODO
         //        return new Poi<>(jpaEntity.getId(), jpaEntity.getName(), jpaEntity.getTag(), new Location(jpaEntity.getLongitude(),
         // jpaEntity.getLatitude()));
+        return null;
+    }
+
+    @Override
+    public Collection<Poi<Long>> findInRadius(Location location, Long radius){
         return null;
     }
 }

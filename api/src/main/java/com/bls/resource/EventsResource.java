@@ -1,24 +1,17 @@
 package com.bls.resource;
 
-import java.util.Collection;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import com.bls.core.event.Event;
-import com.bls.dao.CommonDao;
+import com.bls.core.geo.Location;
 import com.bls.dao.EventDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
-
 import io.dropwizard.hibernate.UnitOfWork;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.Collection;
 
 @Singleton
 @Path("/events")
@@ -46,4 +39,16 @@ public class EventsResource {
     @Timed
     @ExceptionMetered
     public Event add(final Event event) { return eventDao.create(event); }
+
+    @Path("/q/q")
+    @GET
+    @UnitOfWork
+    @Timed
+    @ExceptionMetered
+    public Collection<Event> getByRegion(@QueryParam("lg") Float longitude,
+                                       @QueryParam("lt") Float latitude,
+                                       @QueryParam("radius") Long radius) {
+        final Location point = Location.of(longitude, latitude);
+        return eventDao.findInRadius(point, radius);
+    }
 }

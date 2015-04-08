@@ -1,13 +1,12 @@
 package com.bls.core.geo;
 
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.dropwizard.jersey.params.LongParam;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Location on some map
@@ -16,18 +15,19 @@ import io.dropwizard.jersey.params.LongParam;
 public class Location {
 
     @NotNull
-    private final Float latitude;
-    @NotNull
     private final Float longitude;
+    @NotNull
+    private final Float latitude;
+
 
     @JsonCreator
-    public Location(@JsonProperty("latitude") Float latitude, @JsonProperty("longitude") Float longitude) {
-        this.latitude = latitude;
+    public Location(@JsonProperty("longitude") Float longitude, @JsonProperty("latitude") Float latitude) {
         this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public static Location of(final Float longitude, final Float latitude) {
-        return new Location(latitude, longitude);
+        return new Location(longitude, latitude);
     }
 
     public Float getLongitude() {

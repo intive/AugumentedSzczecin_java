@@ -1,28 +1,17 @@
 package com.bls.resource;
 
-import java.util.Collection;
-import java.util.stream.Stream;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
 import com.bls.core.geo.Location;
 import com.bls.core.poi.Poi;
 import com.bls.dao.CommonDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
-
 import io.dropwizard.hibernate.UnitOfWork;
-import io.dropwizard.jersey.params.LongParam;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.Collection;
 
 @Singleton
 @Path("/pois")
@@ -37,16 +26,16 @@ public class PointsOfInterestResource {
         this.poiDao = poiDao;
     }
 
-    @Path("/q")
+    @Path("/q/q")
     @GET
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Stream<Poi> getByRegion(@QueryParam("lg") Float longitude,
-            @QueryParam("lt") Float latitude,
-            @QueryParam("radius") LongParam radius) {
+    public Collection<Poi> getByRegion(@QueryParam("lg") Float longitude,
+                                       @QueryParam("lt") Float latitude,
+                                       @QueryParam("radius") Long radius) {
         final Location point = Location.of(longitude, latitude);
-        return poiDao.findAll().stream().filter(poi -> poi.getLocation().isInRadius(point, radius));
+        return poiDao.findInRadius(point, radius);
     }
 
     @GET
