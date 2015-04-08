@@ -21,7 +21,6 @@ import java.util.Collection;
  * @param <K> key type
  */
 @JsonInclude(Include.NON_EMPTY)
-//@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Poi<K> extends IdentifiableEntity<K> {
 
     @NotNull

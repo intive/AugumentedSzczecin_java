@@ -22,7 +22,6 @@ import java.util.Collection;
  * @param <K> Key type for Event entity
  */
 @JsonInclude(Include.NON_EMPTY)
-@JsonTypeName("event")
 public class Event<K> extends Poi<K> {
     private static final Category category = Category.EVENT;
 
