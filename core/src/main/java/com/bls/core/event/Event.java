@@ -16,11 +16,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
 
-// TODO add javadoc
+/**
+ * An event with some specific location
+ *
+ * @param <K> Key type for Event entity
+ */
 @JsonInclude(Include.NON_EMPTY)
 @JsonTypeName("event")
 public class Event<K> extends Poi<K> {
-    private static final String category = String.valueOf(Category.EVENT);
+    private static final Category category = Category.EVENT;
 
     @JsonCreator
     public Event(@JsonProperty(value = "id", required = false) final K id,
@@ -34,8 +38,13 @@ public class Event<K> extends Poi<K> {
                  @JsonProperty("media") final Collection<Media> media,
                  @JsonProperty("openingDaysAndHours") final Collection<OpeningHours> openingDaysAndHours,
                  @JsonProperty("priceList") final PriceList priceList) {
-        super(id, category, isPublic, name, location, address, owner, tags, comments, media, openingDaysAndHours, priceList);
+        super(id, isPublic, name, location, address, owner, tags, comments, media, openingDaysAndHours, priceList);
 
+    }
+
+    @Override
+    public Category getCategory() {
+        return category;
     }
 
 }

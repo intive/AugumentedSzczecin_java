@@ -1,17 +1,14 @@
 package com.bls.core.person;
 
-import javax.validation.constraints.NotNull;
-
 import com.bls.core.comment.Comment;
+import com.bls.core.geo.Location;
 import com.bls.core.poi.*;
 import com.bls.core.price.PriceList;
 import com.bls.core.user.User;
-import com.fasterxml.jackson.annotation.*;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import com.bls.core.IdentifiableEntity;
-import com.bls.core.geo.Location;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
 
@@ -21,9 +18,8 @@ import java.util.Collection;
  * @param <K> Key type for person entity
  */
 @JsonInclude(Include.NON_EMPTY)
-@JsonTypeName("person")
 public class Person<K> extends Poi<K> {
-    private static final String category = String.valueOf(Category.PERSON);
+    private static final Category category = Category.PERSON;
 
     private final String firstname;
     private final String lastname;
@@ -42,7 +38,7 @@ public class Person<K> extends Poi<K> {
                @JsonProperty("priceList") final PriceList priceList,
                @JsonProperty("firstname") final String firstname,
                @JsonProperty("lastname") final String lastname) {
-        super(id, category, isPublic, name, location, address, owner, tags, comments, media, openingDaysAndHours, priceList);
+        super(id, isPublic, name, location, address, owner, tags, comments, media, openingDaysAndHours, priceList);
         this.firstname = firstname;
         this.lastname = lastname;
     }
@@ -53,5 +49,10 @@ public class Person<K> extends Poi<K> {
 
     public String getLastname() {
         return lastname;
+    }
+
+    @Override
+    public Category getCategory() {
+        return category;
     }
 }
