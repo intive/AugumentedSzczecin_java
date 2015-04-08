@@ -66,7 +66,7 @@ public class PersonResource {
         if (!person.isPresent()) {
             throw new NotFoundException(String.format("Person with id: %s not found", id));
         }
-        if (!person.get().getOwnerid().equals(user.getId())) {
+        if (!person.get().getOwner().getId().equals(user.getId())) {
             throw new NotAuthorizedException("Access denied.");
         }
         return person.get();

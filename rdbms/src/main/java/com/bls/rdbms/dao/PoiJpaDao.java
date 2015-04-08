@@ -20,7 +20,8 @@ public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
         final PoiJpa result = new PoiJpa();
         result.setId(coreEntity.getId());
         result.setName(coreEntity.getName());
-        result.setCategory(coreEntity.getCategory());
+        // TODO
+//        result.setCategory(coreEntity.getCategory());
         result.setLongitude(coreEntity.getLocation().getLongitude());
         result.setLatitude(coreEntity.getLocation().getLatitude());
         return result;

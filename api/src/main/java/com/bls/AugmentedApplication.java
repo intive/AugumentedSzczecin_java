@@ -17,7 +17,6 @@ import io.dropwizard.auth.CachingAuthenticator;
 import io.dropwizard.auth.basic.BasicAuthFactory;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.java8.Java8Bundle;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -47,9 +46,6 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<AugmentedConfiguration> bootstrap) {
-
-        // Java8 is set
-        bootstrap.addBundle(new Java8Bundle());
 
         // Enable configuration variable substitution with system property values
         final StrSubstitutor systemPropertyStrSubstitutor = new StrSubstitutor(StrLookup.systemPropertiesLookup());

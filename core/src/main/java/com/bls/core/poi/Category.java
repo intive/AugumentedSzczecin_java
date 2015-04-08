@@ -3,9 +3,25 @@ package com.bls.core.poi;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-// TODO add javadoc
 // TODO add subcategory
+
+/**
+ *  Categories of Points of Interest
+ */
 @JsonInclude(Include.NON_EMPTY)
 public enum Category {
-    MUSEUM, UNIVERSITY, TRAIN_STATION
+    
+    PERSON("person"),
+    EVENT("event");
+    
+    private final String name;
+
+    Category(final String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
