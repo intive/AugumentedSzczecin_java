@@ -12,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public enum Category {
     
     PERSON("person"),
-    EVENT("event");
+    EVENT("event"),
+    PLACE("place");
     
     private final String name;
 
