@@ -56,6 +56,30 @@ Prerequisites:
 * Fetch all users
 
         curl -v http://localhost:8000/users -u asd:zxc
+		
+* Add new place
+
+		curl -v http://localhost:8000/places -H "Content-Type: application/json" -d '{"name":"thug_765", "location":{"longitude":56.56, "latitude":67.89}}' -u asd:zxc
+		
+* Fetch all places 
+
+		curl -v http://localhost:8000/places
+	
+* Fetch one place 	
+		
+		curl -v http://localhost:8000/places/{id} -u asd:zxc
+		
+* Update place
+
+		curl -XPUT http://localhost:8000/places/{id} -u asd:zxc
+		
+* Delete place
+
+		curl -XDELETE http://localhost:8000/places/{id} -u asd:zxc
+		
+* Find other places by specified radius and location of interested place 
+
+		curl -v http://localhost:8000/places/q/q?"lg=57.45&lt=87.9887&radius=8900000"
 
 [Oracle jdk download link]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [Maven download link]: http://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache
