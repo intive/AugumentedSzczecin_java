@@ -1,24 +1,19 @@
 package com.bls.resource;
 
 import com.bls.core.geo.Location;
+import com.bls.core.place.Place;
 import com.bls.core.user.User;
 import com.bls.dao.PlaceDao;
-import com.bls.core.place.Place;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
-import io.dropwizard.jersey.params.LongParam;
-
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.Collection;
 
 @Singleton
 @Path("/places")
@@ -33,12 +28,12 @@ public class PlacesResource {
         this.placeDao = placeDao;
     }
 
-    @Path("/q/q")
+    @Path("/q")
     @GET
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Collection<Place> getByRegion(@QueryParam("lg") Float longitude,
+    public Collection<Place> getByRegion(@Auth User user, @QueryParam("lg") Float longitude,
                                    @QueryParam("lt") Float latitude,
                                    @QueryParam("radius") Long radius) {
         final Location point = Location.of(longitude, latitude);

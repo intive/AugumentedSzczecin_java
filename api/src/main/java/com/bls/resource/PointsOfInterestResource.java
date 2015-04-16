@@ -2,9 +2,11 @@ package com.bls.resource;
 
 import com.bls.core.geo.Location;
 import com.bls.core.poi.Poi;
+import com.bls.core.user.User;
 import com.bls.dao.CommonDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.inject.Inject;
@@ -26,12 +28,12 @@ public class PointsOfInterestResource {
         this.poiDao = poiDao;
     }
 
-    @Path("/q/q")
+    @Path("/q")
     @GET
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Collection<Poi> getByRegion(@QueryParam("lg") Float longitude,
+    public Collection<Poi> getByRegion(@Auth User user, @QueryParam("lg") Float longitude,
                                        @QueryParam("lt") Float latitude,
                                        @QueryParam("radius") Long radius) {
         final Location point = Location.of(longitude, latitude);
