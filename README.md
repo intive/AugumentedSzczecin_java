@@ -34,33 +34,13 @@ Prerequisites:
 
         curl -v http://localhost:8000/users -H "Content-Type: application/json" -d '{"email":"asd", "password":"zxc"}'
 
-* Fetch all data
-
-        curl -v http://localhost:8000/pois -u asd:zxc
-
-* Fetch point of interest by id
-
-        curl -v http://localhost:8000/pois/{id} -u asd:zxc
-
-* Add new POI
-
-        curl -v http://localhost:8000/pois \
-            -u asd:zxc \
-            -H "Content-Type: application/json" \
-            -d '{"name":"thug_621",\
-                "tag":"GYM",\
-                "location":{"latitude":966021550188765432,\
-                          "longitude":392425644375222609}\
-                }'
-
-* Fetch all users
-
-        curl -v http://localhost:8000/users -u asd:zxc
-		
 * Add new place
 
-		curl -v http://localhost:8000/places -H "Content-Type: application/json" -d '{"name":"thug_765", "location":{"longitude":56.56, "latitude":67.89}}' -u asd:zxc
+		curl -v http://localhost:8000/places \ 
+		    -H "Content-Type: application/json" \
+		    -d '{"name":"thug_765", "location":{"longitude":56.56, "latitude":67.89}}' -u asd:zxc
 		
+
 * Fetch all places 
 
 		curl -v http://localhost:8000/places
@@ -77,9 +57,11 @@ Prerequisites:
 
 		curl -XDELETE http://localhost:8000/places/{id} -u asd:zxc
 		
-* Find other places by specified radius and location of interested place 
 
-		curl -v http://localhost:8000/places/q/q?"lg=57.45&lt=87.9887&radius=8900000"
+* Find all known POI types matching search criteria: location and radius
+
+		curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=8900000" -u asd:zxc
+		
 
 [Oracle jdk download link]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [Maven download link]: http://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache
