@@ -14,7 +14,9 @@ import javax.ws.rs.core.MediaType;
 
 import com.bls.auth.basic.BasicAuthenticator;
 import com.bls.core.user.User;
+import com.bls.dao.ResetPasswordTokenDao;
 import com.bls.dao.UserDao;
+import com.bls.core.user.ResetPasswordToken;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 
@@ -28,10 +30,12 @@ import io.dropwizard.hibernate.UnitOfWork;
 public class UsersResource {
 
     private final UserDao<User<String>> userDao;
+    private final ResetPasswordTokenDao<ResetPasswordToken<String>> tokenDao;
 
     @Inject
-    public UsersResource(UserDao userDao) {
+    public UsersResource(UserDao userDao, ResetPasswordTokenDao tokenDao) {
         this.userDao = userDao;
+        this.tokenDao = tokenDao;
     }
 
     @GET

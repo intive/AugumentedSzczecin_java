@@ -62,6 +62,30 @@ Prerequisites:
 
 		curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=8900000" -u asd:zxc
 		
+## Password changing
+* Request change password token
+
+		curl -XPOST http://localhost:8000/users/{id}/resetpassword
+	Receive email with token, then:
+	
+* Change password
+
+		curl -XPUT http://localhost:8000/users/{id}/changepassword/{token} -H "Content-type: text/plain" -d "newpassword"
+		
+* [TEMP] Fetch currently valid tokens
+		
+		curl -XGET http://localhost:8000/tokens
+		
+* [TASK] Invalidate expired tokens
+
+		curl -XPOST http://localhost:8000/tasks/invalidateTokens
+		
+* Set token expiration time in server config .yml
+		
+		...
+		resetPasswordToken:
+          expiration: 1		 <--- token expiration time [min]
+		...
 
 [Oracle jdk download link]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [Maven download link]: http://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache

@@ -13,6 +13,9 @@ mongodb:
 
 openDataClientConfig:
   url: http://open-data.org.pl:52999/rest
+  
+resetPasswordToken:
+  expiration: 1
 
 server:
   type: simple
