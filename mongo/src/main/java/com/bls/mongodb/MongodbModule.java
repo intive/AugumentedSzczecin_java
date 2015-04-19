@@ -4,14 +4,8 @@ import java.net.UnknownHostException;
 
 import javax.inject.Named;
 
-import com.bls.dao.CommonDao;
-import com.bls.dao.EventDao;
-import com.bls.dao.PersonDao;
-import com.bls.dao.UserDao;
-import com.bls.mongodb.dao.EventMongodbDao;
-import com.bls.mongodb.dao.PersonMongodbDao;
-import com.bls.mongodb.dao.PoiMongodbDao;
-import com.bls.mongodb.dao.UserMongodbDao;
+import com.bls.dao.*;
+import com.bls.mongodb.dao.*;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -52,5 +46,11 @@ public class MongodbModule extends AbstractModule {
     @Provides
     public PersonDao providePersonDao(final DB mongodb) {
         return new PersonMongodbDao(mongodb);
+    }
+
+    @Singleton
+    @Provides
+    public PlaceDao providePlaceDao(final DB mongodb) {
+        return new PlaceMongodbDao(mongodb);
     }
 }

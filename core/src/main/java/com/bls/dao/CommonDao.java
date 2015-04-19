@@ -1,9 +1,10 @@
 package com.bls.dao;
 
-import java.util.Collection;
-
 import com.bls.core.Identifiable;
+import com.bls.core.geo.Location;
 import com.google.common.base.Optional;
+
+import java.util.Collection;
 
 /**
  * Common behaviour for all DAO. Entity key was set to String.
@@ -25,4 +26,6 @@ public interface CommonDao<E extends Identifiable> {
     Optional<E> findById(final String id);
 
     Collection<E> findAll();
+
+    Collection<E> findInRadius(final Location location, final Long radius);
 }

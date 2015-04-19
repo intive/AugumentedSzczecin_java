@@ -11,37 +11,40 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.bls.core.event.Event;
-import com.bls.dao.EventDao;
+import com.bls.core.place.Place;
+import com.bls.core.user.User;
+import com.bls.dao.PlaceDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
 @Singleton
-@Path("/events")
+@Path("/places")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class EventsResource {
+public class PlacesResource {
 
-    private final EventDao<Event> eventDao;
+    private final PlaceDao<Place> placeDao;
 
     @Inject
-    public EventsResource(final EventDao eventDao) {
-        this.eventDao = eventDao;
+    public PlacesResource(final PlaceDao placeDao) {
+        this.placeDao = placeDao;
     }
 
     @GET
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Collection<Event> getAll() {
-        return eventDao.findAll();
+    public Collection<Place> getAll() {
+        return placeDao.findAll();
     }
 
     @POST
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Event add(final Event event) { return eventDao.create(event); }
+    public Place add(@Auth User user, final Place place) { return placeDao.create(place); }
 }
+
