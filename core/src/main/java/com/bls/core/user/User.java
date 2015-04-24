@@ -27,7 +27,7 @@ public class User<K> extends IdentifiableEntity<K> {
     @JsonIgnore // hide
     @NotEmpty
     @Size(min = 2, max = 64)
-    private final String password;
+    private String password;
 
     @JsonCreator
     public User(@JsonProperty(value = "id", required = false) final K id,
@@ -44,6 +44,10 @@ public class User<K> extends IdentifiableEntity<K> {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
     }
 
     public User<K> createUserWithHashedPassword(final String hashedPassword) {
