@@ -2,42 +2,50 @@ package com.bls.resetpwd;
 
 import com.bls.core.user.ResetPasswordToken;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 public class TokenMail {
-    static final String from = "patronage2015resetpwd@gmail.com";
-    static final String host = "localhost";
+    static final String username = "patronage2015resetpwd@gmail.com";
+    static final String password = "9AAe3UDJdLntnK6A";
 
-    static MimeMessage message;
-    static final String subject = "Forgotten password reset";
-    private final String text;
+    Message message;
 
-    static final Properties properties = System.getProperties();
-    static final Session session = Session.getDefaultInstance(properties);
+    public TokenMail(ResetPasswordToken token) throws UnsupportedEncodingException {
 
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
 
-    public TokenMail(ResetPasswordToken token) {
-        text = "Token: " + token.getToken();
-
-        properties.setProperty("mail.smtp.host", host);
-        message = new MimeMessage(session);
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
 
         try {
-            message.setFrom(from);
-            message.setSubject(subject);
+
+            message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setSubject("Augmented password change");
+            message.setText(token.getToken());
+
+            System.out.println("Done");
+
         } catch (MessagingException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     public void to(final String email) throws MessagingException {
-        message.setRecipients(Message.RecipientType.TO, String.valueOf(new InternetAddress(email)));
+        message.setRecipients(Message.RecipientType.TO,
+                InternetAddress.parse(email));
         Transport.send(message);
     }
 }

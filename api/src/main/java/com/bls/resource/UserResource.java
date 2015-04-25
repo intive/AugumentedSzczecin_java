@@ -20,6 +20,7 @@ import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 @Singleton
@@ -73,14 +74,14 @@ public class UserResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public String resetPassword(@PathParam("id") final String id) throws MessagingException {
+    public String resetPassword(@PathParam("id") final String id) throws MessagingException, UnsupportedEncodingException {
         Optional<User<String>> user = userDao.findById(id);
         if (user == null) throw new NotFoundException();
 
         ResetPasswordToken token = new ResetPasswordToken();
         tokenDao.create(token);
         String userEmail = user.get().getEmail();
-//        new TokenMail(token).to(userEmail);
+        new TokenMail(token).to(userEmail);
         return token.getToken();
     }
 
