@@ -4,9 +4,11 @@ import com.bls.AugmentedConfiguration.DbType;
 import com.bls.auth.basic.BasicAuthenticator;
 import com.bls.client.opendata.OpenDataClientModule;
 import com.bls.core.user.User;
+import com.bls.dao.ResetPasswordTokenDao;
 import com.bls.dao.UserDao;
 import com.bls.mongodb.MongodbModule;
 import com.bls.rdbms.RdbmsModule;
+import com.bls.resetpwd.InvalidateTokenTask;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.hubspot.dropwizard.guice.GuiceBundle;
@@ -100,10 +102,12 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
 
     private void registerAuthorizationProviders(final AugmentedConfiguration augmentedConfiguration, final Environment environment) {
         final UserDao userDao = injector.getInstance(UserDao.class);
+        final ResetPasswordTokenDao tokenDao = injector.getInstance(ResetPasswordTokenDao.class);
         final BasicAuthenticator basicAuthenticator = new BasicAuthenticator(userDao);
         final CachingAuthenticator cachingAuthenticator = new CachingAuthenticator(environment.metrics(), basicAuthenticator,
                 augmentedConfiguration.getAuthCacheBuilder());
         final Binder authBinder = AuthFactory.binder(new BasicAuthFactory(cachingAuthenticator, "Basic auth", User.class));
         environment.jersey().register(authBinder);
+        environment.admin().addTask(new InvalidateTokenTask(tokenDao));
     }
 }
