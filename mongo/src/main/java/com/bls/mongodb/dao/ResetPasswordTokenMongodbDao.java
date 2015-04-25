@@ -7,6 +7,7 @@ import com.mongodb.DB;
 import org.mongojack.DBQuery;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -35,5 +36,15 @@ public class ResetPasswordTokenMongodbDao extends CommonMongodbDao<ResetPassword
     @Override
     public void expire(final ResetPasswordToken token) {
         dbCollection.removeById(String.valueOf(token.getId()));
+    }
+    
+    @Override
+    public void invalidateExpired() {
+        List<ResetPasswordToken<String>> tokens = findAll();
+        for (ResetPasswordToken token : tokens) {
+            if (token.checkExpired()) {
+                expire(token);
+            }
+        }
     }
 }

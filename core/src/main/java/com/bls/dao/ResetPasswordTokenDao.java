@@ -11,6 +11,9 @@ import java.util.Optional;
 public interface ResetPasswordTokenDao<E extends Identifiable> extends CommonDao<E> {
     
     public Optional<String> read(String token);
+    
     public void expire(ResetPasswordToken token);
+    
+    public void invalidateExpired();
 
 }

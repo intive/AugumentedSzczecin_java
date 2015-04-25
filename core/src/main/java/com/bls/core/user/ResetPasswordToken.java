@@ -3,6 +3,7 @@ package com.bls.core.user;
 import com.bls.core.IdentifiableEntity;
 import org.bson.types.ObjectId;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ public class ResetPasswordToken<K> extends IdentifiableEntity<K> {
     // TODO move to dw config file
     private static final long DURATION = 30;
     
+    @NotNull
     private final LocalDateTime expiryDate;
     private final String token;
 
@@ -35,6 +37,10 @@ public class ResetPasswordToken<K> extends IdentifiableEntity<K> {
     
     public static ResetPasswordToken generate() {
         return new ResetPasswordToken();
+    }
+    
+    public boolean checkExpired() {
+        return this.getExpiryDate().compareTo(LocalDateTime.now()) < 0;
     }
 }
 
