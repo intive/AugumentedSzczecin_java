@@ -28,9 +28,10 @@ public class ResetPasswordTokenMongodbDao extends CommonMongodbDao<ResetPassword
     }
 
     @Override
-    public Optional<String> read(final String token) {
+    public Optional<ResetPasswordToken<String>> read(final String token) {
         ResetPasswordTokenMongodb entity = dbCollection.findOne(DBQuery.is("token", token));
-        return entity != null ? Optional.of(entity.getCoreEntity().getId()) : Optional.empty();
+        if (entity == null) return Optional.empty();
+        return Optional.of(convert2coreModel(entity));
     }
 
     @Override
