@@ -2,8 +2,6 @@ package com.bls.mongodb;
 
 import java.net.UnknownHostException;
 
-import javax.inject.Named;
-
 import com.bls.core.user.ResetPasswordToken;
 import com.bls.dao.*;
 import com.bls.mongodb.dao.*;
