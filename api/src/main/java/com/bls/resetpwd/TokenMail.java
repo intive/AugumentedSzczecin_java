@@ -14,7 +14,7 @@ public class TokenMail {
 
     Message message;
 
-    public TokenMail(ResetPasswordToken token) throws UnsupportedEncodingException {
+    public TokenMail(ResetPasswordToken token) throws UnsupportedEncodingException, MessagingException {
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -29,7 +29,6 @@ public class TokenMail {
                     }
                 });
 
-        try {
 
             message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
@@ -37,10 +36,6 @@ public class TokenMail {
             message.setText(token.getToken());
 
             System.out.println("Done");
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void to(final String email) throws MessagingException {
