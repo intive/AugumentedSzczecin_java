@@ -1,11 +1,12 @@
 package com.bls;
 
-import javax.inject.Singleton;
-
 import com.bls.client.opendata.OpenDataClientConfiguration;
 import com.bls.mongodb.MongodbConfiguration;
+import com.bls.resetpwd.ResetPasswordTokenConfiguration;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+
+import javax.inject.Singleton;
 
 public class AugmentedModule extends AbstractModule {
 
@@ -23,5 +24,11 @@ public class AugmentedModule extends AbstractModule {
     @Provides
     public OpenDataClientConfiguration provideOpenDataClientConfiguration(AugmentedConfiguration config) {
         return config.getOpenDataClientConfig();
+    }
+    
+    @Singleton
+    @Provides
+    public ResetPasswordTokenConfiguration provideResetPasswordTokenConfiguration(AugmentedConfiguration config) {
+        return config.getTokenConfig();
     }
 }
