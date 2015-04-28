@@ -9,6 +9,9 @@ import com.bls.dao.UserDao;
 import com.bls.mongodb.MongodbModule;
 import com.bls.rdbms.RdbmsModule;
 import com.bls.resetpwd.InvalidateTokenTask;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.hubspot.dropwizard.guice.GuiceBundle;
@@ -19,6 +22,7 @@ import io.dropwizard.auth.CachingAuthenticator;
 import io.dropwizard.auth.basic.BasicAuthFactory;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.jersey.jackson.JacksonMessageBodyProvider;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -98,16 +102,21 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
     @Override
     public void run(final AugmentedConfiguration augmentedConfiguration, final Environment environment) throws Exception {
         registerAuthorizationProviders(augmentedConfiguration, environment);
+        registerInvalidateTokensTask(augmentedConfiguration, environment);
     }
+
 
     private void registerAuthorizationProviders(final AugmentedConfiguration augmentedConfiguration, final Environment environment) {
         final UserDao userDao = injector.getInstance(UserDao.class);
-        final ResetPasswordTokenDao tokenDao = injector.getInstance(ResetPasswordTokenDao.class);
         final BasicAuthenticator basicAuthenticator = new BasicAuthenticator(userDao);
         final CachingAuthenticator cachingAuthenticator = new CachingAuthenticator(environment.metrics(), basicAuthenticator,
                 augmentedConfiguration.getAuthCacheBuilder());
         final Binder authBinder = AuthFactory.binder(new BasicAuthFactory(cachingAuthenticator, "Basic auth", User.class));
         environment.jersey().register(authBinder);
+    }
+
+    private void registerInvalidateTokensTask(final AugmentedConfiguration augmentedConfiguration, final Environment environment) {
+        final ResetPasswordTokenDao tokenDao = injector.getInstance(ResetPasswordTokenDao.class);
         environment.admin().addTask(new InvalidateTokenTask(tokenDao));
     }
 }
