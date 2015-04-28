@@ -3,12 +3,12 @@ package com.bls.mongodb.dao;
 import com.bls.core.user.ResetPasswordToken;
 import com.bls.dao.ResetPasswordTokenDao;
 import com.bls.mongodb.core.ResetPasswordTokenMongodb;
+import com.google.common.base.Optional;
 import com.mongodb.DB;
 import org.mongojack.DBQuery;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * ResetpwdToken mongodb data provider
@@ -28,9 +28,9 @@ public class ResetPasswordTokenMongodbDao extends CommonMongodbDao<ResetPassword
     }
 
     @Override
-    public Optional<ResetPasswordToken<String>> read(final String token) {
+    public Optional<ResetPasswordToken> read(final String token) {
         ResetPasswordTokenMongodb entity = dbCollection.findOne(DBQuery.is("token", token));
-        if (entity == null) return Optional.empty();
+        if (entity == null) return Optional.absent();
         return Optional.of(convert2coreModel(entity));
     }
 

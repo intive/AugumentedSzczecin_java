@@ -10,7 +10,7 @@ import java.util.Optional;
  */
 public interface ResetPasswordTokenDao<E extends Identifiable> extends CommonDao<E> {
     
-    public Optional<ResetPasswordToken<String>> read(String token);
+    public com.google.common.base.Optional<ResetPasswordToken> read(String token);
     
     public void expire(ResetPasswordToken token);
     

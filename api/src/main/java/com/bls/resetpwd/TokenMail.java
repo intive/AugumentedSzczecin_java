@@ -35,12 +35,12 @@ public class TokenMail {
             message.setSubject("Augmented password change");
             message.setText(token.getToken());
 
-            System.out.println("Done");
     }
 
     public void to(final String email) throws MessagingException {
         message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(email));
         Transport.send(message);
+        System.out.println("Sent e-mail to: " + email);
     }
 }

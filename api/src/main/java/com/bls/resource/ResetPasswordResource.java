@@ -5,8 +5,8 @@ import com.bls.core.user.ResetPasswordToken;
 import com.bls.core.user.User;
 import com.bls.dao.ResetPasswordTokenDao;
 import com.bls.dao.UserDao;
-import com.bls.resetpwd.ResetPasswordTokenConfiguration;
 import com.bls.resetpwd.ResetPasswordTokenBuilder;
+import com.bls.resetpwd.ResetPasswordTokenConfiguration;
 import com.bls.resetpwd.TokenMail;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
@@ -20,7 +20,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
-import java.util.Collection;
 
 /**
  * Created by Marcin Podlodowski on 28.04.15.
@@ -63,28 +62,19 @@ public class ResetPasswordResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void changePassword(@PathParam("id") final String id, @PathParam("token") final String token,
+    public void changePassword(@PathParam("id") final String id, @PathParam("token") final String tokenString,
                                final String plaintextPassword)
             throws MessagingException {
 
         Optional<User<String>> user = userDao.findById(id);
         if (!user.isPresent()) throw new BadRequestException("User not found");
-        if (tokenDao.read(token) == null) throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        Optional<ResetPasswordToken> token;
+        token = tokenDao.read(tokenString);
+        if (!token.isPresent()) throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         String newHashedPassword = BasicAuthenticator.generateSafeHash(plaintextPassword);
-        System.out.println(newHashedPassword);
         user.get().setPassword(newHashedPassword);
-        System.out.println(user.get().getPassword());
         userDao.update(user.get());
-    }
-
-    // TODO I'm temp
-    @Path("/tokens")
-    @GET
-    @UnitOfWork
-    @Timed
-    @ExceptionMetered
-    public Collection<ResetPasswordToken<String>> getAllTokens() {
-        return tokenDao.findAll();
+        tokenDao.expire(token.get());
     }
     
 }
