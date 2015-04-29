@@ -13,7 +13,8 @@ public enum Category {
     
     PERSON("person"),
     EVENT("event"),
-    PLACE("place");
+    PLACE("place"),
+    PLACE_MONUMENT("place_monument");
     
     private final String name;
 
