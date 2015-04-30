@@ -1,4 +1,4 @@
-package com.bls.resetpwd;
+package com.bls.core.resetpwd;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
@@ -6,10 +6,9 @@ import io.dropwizard.Configuration;
 import javax.validation.Valid;
 
 /**
- * Created by Marcin Podlodowski on 28.04.15.
+ *  Configuration used by {@link ResetPasswordToken} 
  */
 public class ResetPasswordTokenConfiguration extends Configuration {
-    @Valid
     private final int expiration;
 
     public ResetPasswordTokenConfiguration(@JsonProperty("expiration") final int expiration) {

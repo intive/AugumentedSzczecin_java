@@ -1,4 +1,4 @@
-package com.bls.resetpwd;
+package com.bls.core.resetpwd;
 
 import com.bls.dao.ResetPasswordTokenDao;
 import com.google.common.collect.ImmutableMultimap;
@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import java.io.PrintWriter;
 
 /**
- * Created by Marcin Podlodowski on 25.04.15.
+ *  A task to check {@link ResetPasswordToken}s stored in database and invalidate the expired ones.
  */
 public class InvalidateTokenTask extends Task {
     private final ResetPasswordTokenDao tokenDao;

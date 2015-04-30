@@ -1,19 +1,17 @@
 package com.bls.dao;
 
 import com.bls.core.Identifiable;
-import com.bls.core.user.ResetPasswordToken;
-
-import java.util.Optional;
+import com.bls.core.resetpwd.ResetPasswordToken;
 
 /**
  * Created by Marcin Podlodowski on 4/24/15.
  */
 public interface ResetPasswordTokenDao<E extends Identifiable> extends CommonDao<E> {
     
-    public com.google.common.base.Optional<ResetPasswordToken> read(String token);
+    com.google.common.base.Optional<ResetPasswordToken> read(String token);
     
-    public void expire(ResetPasswordToken token);
+    void expire(ResetPasswordToken token);
     
-    public void invalidateExpired();
+    void invalidateExpired();
 
 }

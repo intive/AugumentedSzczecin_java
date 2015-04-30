@@ -6,6 +6,7 @@ import com.bls.dao.CommonDao;
 import com.bls.mongodb.core.MongodbMappableIdentifiableEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBList;
@@ -30,7 +31,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEntity, I extends Identifiable<K>, K> implements CommonDao<I> {
 
     private final static ObjectMapper MAPPER = MongoJackModule.configure(new ObjectMapper())
-            .configure(SerializationFeature.FAIL_ON_UNWRAPPED_TYPE_IDENTIFIERS, false);
+            .configure(SerializationFeature.FAIL_ON_UNWRAPPED_TYPE_IDENTIFIERS, false)
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true)
+            .registerModule(new JodaModule());
     protected final JacksonDBCollection<M, String> dbCollection;
 
     public CommonMongodbDao(final DB db) {

@@ -1,10 +1,11 @@
 package com.bls.mongodb.dao;
 
-import com.bls.core.user.ResetPasswordToken;
+import com.bls.core.resetpwd.ResetPasswordToken;
 import com.bls.dao.ResetPasswordTokenDao;
 import com.bls.mongodb.core.ResetPasswordTokenMongodb;
 import com.google.common.base.Optional;
 import com.mongodb.DB;
+import org.joda.time.DateTime;
 import org.mongojack.DBQuery;
 
 import javax.inject.Inject;
@@ -41,11 +42,15 @@ public class ResetPasswordTokenMongodbDao extends CommonMongodbDao<ResetPassword
     
     @Override
     public void invalidateExpired() {
-        List<ResetPasswordToken<String>> tokens = findAll();
-        for (ResetPasswordToken token : tokens) {
-            if (token.checkExpired()) {
-                expire(token);
+        List<ResetPasswordTokenMongodb> tokensMongodb =
+                dbCollection.find(DBQuery.lessThan("expiryDate", DateTime.now().getMillis())).toArray();
+        
+        for (ResetPasswordTokenMongodb tokenMongodb : tokensMongodb) {
+            ResetPasswordToken tokenCore = convert2coreModel(tokenMongodb);
+            if (tokenCore.checkExpired()) {
+                expire(tokenCore);
             }
         }
     }
+
 }

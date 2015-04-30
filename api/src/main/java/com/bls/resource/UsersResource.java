@@ -16,7 +16,7 @@ import com.bls.auth.basic.BasicAuthenticator;
 import com.bls.core.user.User;
 import com.bls.dao.ResetPasswordTokenDao;
 import com.bls.dao.UserDao;
-import com.bls.core.user.ResetPasswordToken;
+import com.bls.core.resetpwd.ResetPasswordToken;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 

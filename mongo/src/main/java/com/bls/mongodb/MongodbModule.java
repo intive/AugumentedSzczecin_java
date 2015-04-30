@@ -2,7 +2,6 @@ package com.bls.mongodb;
 
 import java.net.UnknownHostException;
 
-import com.bls.core.user.ResetPasswordToken;
 import com.bls.dao.*;
 import com.bls.mongodb.dao.*;
 import com.google.inject.AbstractModule;

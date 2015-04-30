@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import com.bls.client.opendata.OpenDataClientConfiguration;
 import com.bls.mongodb.MongodbConfiguration;
-import com.bls.resetpwd.ResetPasswordTokenConfiguration;
+import com.bls.core.resetpwd.ResetPasswordTokenConfiguration;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.cache.CacheBuilder;

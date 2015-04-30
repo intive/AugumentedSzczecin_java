@@ -5,11 +5,8 @@ import com.bls.core.comment.Comment;
 import com.bls.core.geo.Location;
 import com.bls.core.price.PriceList;
 import com.bls.core.user.User;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableList;
 
 import javax.validation.constraints.NotNull;
@@ -26,6 +23,7 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
     @NotNull
     protected final Boolean isPublic;
     // TODO add validation: !public = NotNull
+    @JsonIgnore
     protected final User owner;
     @NotNull
     protected final Location location;

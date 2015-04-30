@@ -2,6 +2,7 @@ package com.bls.core.user;
 
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.bls.core.IdentifiableEntity;
@@ -23,8 +24,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class User<K> extends IdentifiableEntity<K> {
 
     @NotEmpty
+    @Email
     private final String email;
-    @JsonIgnore // hide
     @NotEmpty
     @Size(min = 2, max = 64)
     private String password;
@@ -42,6 +43,7 @@ public class User<K> extends IdentifiableEntity<K> {
         return email;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

@@ -1,12 +1,12 @@
 package com.bls.resource;
 
 import com.bls.auth.basic.BasicAuthenticator;
-import com.bls.core.user.ResetPasswordToken;
+import com.bls.core.resetpwd.ResetPasswordToken;
+import com.bls.core.resetpwd.ResetPasswordTokenConfiguration;
 import com.bls.core.user.User;
 import com.bls.dao.ResetPasswordTokenDao;
 import com.bls.dao.UserDao;
-import com.bls.resetpwd.ResetPasswordTokenBuilder;
-import com.bls.resetpwd.ResetPasswordTokenConfiguration;
+import com.bls.resetpwd.TokenSendService;
 import com.bls.resetpwd.TokenMail;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Created by Marcin Podlodowski on 28.04.15.
+ *  Request password reset token and change password for User (identified by id)
  */
 @Singleton
 @Path("/users/{id}")
@@ -47,32 +47,35 @@ public class ResetPasswordResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void resetPassword(@PathParam("id") final String id) throws MessagingException, UnsupportedEncodingException {
+    public void resetPassword(@PathParam("id") final String id)
+            throws MessagingException, UnsupportedEncodingException {
         Optional<User<String>> user = userDao.findById(id);
         if (!user.isPresent()) throw new BadRequestException("User not found");
-
-        ResetPasswordToken token = new ResetPasswordTokenBuilder().forDuration(tokenConfig.getExpiration());
+        ResetPasswordToken token = new ResetPasswordToken(tokenConfig);
         tokenDao.create(token);
-        String userEmail = user.get().getEmail();
-        new TokenMail(token).to(userEmail);
+
+        TokenSendService tokenSendService = new TokenMail(token);
+        tokenSendService.sendTo(user.get());
+        
     }
 
-    @Path("/changepassword/{token}")
+    @Path("/changepassword")
     @PUT
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void changePassword(@PathParam("id") final String id, @PathParam("token") final String tokenString,
+    public void changePassword(@PathParam("id") final String id, @QueryParam("t") final String tokenString,
                                final String plaintextPassword)
             throws MessagingException {
 
         Optional<User<String>> user = userDao.findById(id);
+        Optional<ResetPasswordToken> token = tokenDao.read(tokenString);
         if (!user.isPresent()) throw new BadRequestException("User not found");
-        Optional<ResetPasswordToken> token;
-        token = tokenDao.read(tokenString);
         if (!token.isPresent()) throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        
         String newHashedPassword = BasicAuthenticator.generateSafeHash(plaintextPassword);
         user.get().setPassword(newHashedPassword);
+        
         userDao.update(user.get());
         tokenDao.expire(token.get());
     }

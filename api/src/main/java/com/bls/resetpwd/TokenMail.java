@@ -1,6 +1,7 @@
 package com.bls.resetpwd;
 
-import com.bls.core.user.ResetPasswordToken;
+import com.bls.core.resetpwd.ResetPasswordToken;
+import com.bls.core.user.User;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -8,7 +9,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
-public class TokenMail {
+public class TokenMail implements TokenSendService {
     static final String username = "patronage2015resetpwd@gmail.com";
     static final String password = "9AAe3UDJdLntnK6A";
 
@@ -37,10 +38,10 @@ public class TokenMail {
 
     }
 
-    public void to(final String email) throws MessagingException {
+    public void sendTo(final User user) throws MessagingException {
         message.setRecipients(Message.RecipientType.TO,
-                InternetAddress.parse(email));
+                InternetAddress.parse(user.getEmail()));
         Transport.send(message);
-        System.out.println("Sent e-mail to: " + email);
+        System.out.println("Sent e-mail to: " + user.getEmail());
     }
 }

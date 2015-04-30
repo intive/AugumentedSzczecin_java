@@ -2,7 +2,7 @@ package com.bls;
 
 import com.bls.client.opendata.OpenDataClientConfiguration;
 import com.bls.mongodb.MongodbConfiguration;
-import com.bls.resetpwd.ResetPasswordTokenConfiguration;
+import com.bls.core.resetpwd.ResetPasswordTokenConfiguration;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
