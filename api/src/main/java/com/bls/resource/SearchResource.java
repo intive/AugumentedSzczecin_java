@@ -1,7 +1,6 @@
 package com.bls.resource;
 
 import java.util.Collection;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -49,28 +48,38 @@ public class SearchResource {
         this.personDao = personDao;
     }
 
-    // TODO if (user == null) then it's unauthorized attempt
+    // TODO how to make this work for unauthorized users?
 
     @GET
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public SearchingResults getByRegion(@Auth(required = false) User user,
+    public SearchingResults getByRegion(@Auth User user,
             @QueryParam("lg") Float longitude,
             @QueryParam("lt") Float latitude,
-            @QueryParam("radius") Long radius,
-            @QueryParam("cat") List<Category> categories
+            @QueryParam("radius") Long radius
             // TODO add categories criteria...
             // TODO add sorting, batching results...
     ) {
 
+        // TODO remove fakeCategories
+        Collection<Category> fakeCategories = Lists.newArrayList();
+
         // TODO build SearchCriteria (create some new class) object which can be validate and will hold search parameters
 
-        SearchCriteria searchCriteria = new SearchCriteria(new Location(longitude, latitude), radius, categories);
+        final Location location = new Location(longitude, latitude);
 
         // TODO should be something like that: SearchService.of(searchCriteria.validate()).searchByCriteria();
         final SearchingResults response = new SearchingResults();
-
+        if (fakeCategories.isEmpty() || fakeCategories.contains(Category.EVENT)) {
+            response.putEvents(eventDao.findInRadius(location, radius));
+        }
+        if (fakeCategories.isEmpty() || fakeCategories.contains(Category.PERSON)) {
+            response.putPerson(personDao.findInRadius(location, radius));
+        }
+        if (fakeCategories.isEmpty() || fakeCategories.contains(Category.PLACE)) {
+            response.putPlaces(placeDao.findInRadius(location, radius));
+        }
         return response;
     }
 }
