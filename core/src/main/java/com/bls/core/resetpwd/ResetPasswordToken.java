@@ -3,7 +3,6 @@ package com.bls.core.resetpwd;
 import com.bls.core.IdentifiableEntity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 
 import javax.validation.constraints.NotNull;
@@ -32,7 +31,7 @@ public class ResetPasswordToken<K> extends IdentifiableEntity<K> {
     }
     
     public ResetPasswordToken(ResetPasswordTokenConfiguration tokenConfig) {
-        super((K) new ObjectId());
+        super(null);
         this.expiryDate = DateTime.now().plusMinutes(tokenConfig.getExpiration());
         this.token = generateTokenString();
     }
