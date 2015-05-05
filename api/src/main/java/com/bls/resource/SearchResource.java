@@ -1,23 +1,18 @@
 package com.bls.resource;
 
-import java.util.Collection;
-import java.util.List;
+import com.bls.core.user.User;
+import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Timed;
+import io.dropwizard.auth.Auth;
+import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-import com.codahale.metrics.annotation.ExceptionMetered;
-import com.codahale.metrics.annotation.Timed;
-import com.google.common.collect.Lists;
-
-import io.dropwizard.auth.Auth;
-import io.dropwizard.hibernate.UnitOfWork;
 //import javax.validation.constraints.Min;
-import javax.validation.constraints.Max;
 /**
  * Search entities by geo location for logged in user.
  */
@@ -38,8 +33,8 @@ public class SearchResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public SearchingResults getByRegion(@Auth(required = false) @BeanParam @Valid SearchCriteria searchCriteria) {
+    public SearchingResults getByRegion(@Auth(required = false)User user, @BeanParam @Valid SearchCriteria searchCriteria) {
         // TODO add sorting, batching results...
-        return searchService.searchByCriteria( searchCriteria );
+        return searchService.searchByCriteria( searchCriteria, user );
     }
 }
