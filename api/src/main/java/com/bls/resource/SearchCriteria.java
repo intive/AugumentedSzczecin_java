@@ -2,13 +2,18 @@ package com.bls.resource;
 
 import com.bls.core.geo.Location;
 import com.bls.core.poi.Category;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.google.common.collect.Lists;
 
+import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.BadRequestException;
 import java.util.Collection;
 import java.util.List;
+import javax.validation.constraints.Min;
+import javax.ws.rs.QueryParam;
 
 public class SearchCriteria {
 

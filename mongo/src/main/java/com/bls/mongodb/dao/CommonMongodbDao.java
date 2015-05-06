@@ -2,7 +2,6 @@ package com.bls.mongodb.dao;
 
 import com.bls.core.Identifiable;
 import com.bls.core.geo.Location;
-import com.bls.core.user.User;
 import com.bls.dao.CommonDao;
 import com.bls.mongodb.core.MongodbMappableIdentifiableEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -85,7 +84,7 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         return coreEntities;
     }
 
-    public List<I> find(final Location location, final Long radius, Collection<String> tags, User user){
+    public List<I> find(final Location location, final Long radius, Collection<String> tags){
         BasicDBList coordinates = new BasicDBList();
         coordinates.add(location.getLongitude());
         coordinates.add(location.getLatitude());
@@ -97,9 +96,6 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         BasicDBObject query = new BasicDBObject("location",new BasicDBObject("$geoWithin",new BasicDBObject("$center", geoParams)));
         if(!tags.isEmpty()) {
             query.append("tags", new BasicDBObject("$in", tags));
-        }
-        if (user==null){
-            query.append("owner", null);
         }
 
         final List<M> mongodbEntities = dbCollection.find(query).toArray();

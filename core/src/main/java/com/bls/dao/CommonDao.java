@@ -2,7 +2,6 @@ package com.bls.dao;
 
 import com.bls.core.Identifiable;
 import com.bls.core.geo.Location;
-import com.bls.core.user.User;
 import com.google.common.base.Optional;
 
 import java.util.Collection;
@@ -28,5 +27,5 @@ public interface CommonDao<E extends Identifiable> {
 
     Collection<E> findAll();
 
-    Collection<E> find(final Location location, final Long radius, Collection<String> tags, User user);
+    Collection<E> find(final Location location, final Long radius, Collection<String> tags);
 }

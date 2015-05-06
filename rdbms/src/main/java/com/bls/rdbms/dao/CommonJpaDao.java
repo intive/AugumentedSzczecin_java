@@ -2,7 +2,6 @@ package com.bls.rdbms.dao;
 
 import com.bls.core.IdentifiableEntity;
 import com.bls.core.geo.Location;
-import com.bls.core.user.User;
 import com.bls.dao.CommonDao;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -68,7 +67,7 @@ public abstract class CommonJpaDao<J, E extends IdentifiableEntity> extends Abst
         return result;
     }
 
-    public Collection<E> find(Location location, Long radius, Collection<String> tags, User user){
+    public Collection<E> find(Location location, Long radius, Collection<String> tags){
         return null;
     }
 

@@ -1,5 +1,7 @@
 package com.bls.mongodb;
 
+import java.net.UnknownHostException;
+
 import com.bls.dao.*;
 import com.bls.mongodb.dao.*;
 import com.google.inject.AbstractModule;
@@ -7,8 +9,6 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
-
-import java.net.UnknownHostException;
 
 public class MongodbModule extends AbstractModule {
 
@@ -56,11 +56,5 @@ public class MongodbModule extends AbstractModule {
     @Provides
     public ResetPasswordTokenDao provideTokenDao(final DB mongodb) {
         return new ResetPasswordTokenMongodbDao(mongodb);
-    }
-
-    @Singleton
-    @Provides
-    public PlaceMonumentDao providePlaceMonumentDao(final DB mongodb) {
-        return new PlaceMonumentMongodbDao(mongodb);
     }
 }
