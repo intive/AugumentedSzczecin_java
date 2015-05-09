@@ -30,7 +30,7 @@ public class SearchCriteria {
                           @QueryParam("lt") final Float latitude,
                           @QueryParam("radius") final Long radius,
                           @QueryParam("cat") final List<Category> categories,
-                          @QueryParam("tags") final List<String> tags) {
+                          @QueryParam("tag") final List<String> tags) {
         this.location = new Location(longitude, latitude);
         this.radius = radius;
         this.categories = categories;
