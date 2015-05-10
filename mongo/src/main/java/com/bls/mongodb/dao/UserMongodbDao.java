@@ -1,15 +1,13 @@
 package com.bls.mongodb.dao;
 
-import org.mongojack.DBQuery;
-
 import com.bls.core.user.User;
+import com.bls.core.user.UserDuplicateException;
 import com.bls.dao.UserDao;
 import com.bls.mongodb.core.UserMongodb;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.mongodb.DB;
-
-import static jersey.repackaged.com.google.common.base.Preconditions.checkState;
+import org.mongojack.DBQuery;
 
 public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, String> 
         implements UserDao<User<String>> {
@@ -45,7 +43,9 @@ public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, 
 
     private User<String> checkDuplicate(final User<String> user) {
         Optional<User<String>> existingUser = findByEmail(user.getEmail());
-        checkState(!existingUser.isPresent(), "User already in db: %s", user.getEmail());
+        if (existingUser.isPresent()) {
+            throw new UserDuplicateException(existingUser.get());
+        }
         return user;
     }
 }
