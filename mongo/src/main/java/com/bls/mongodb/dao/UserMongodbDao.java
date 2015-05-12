@@ -9,6 +9,10 @@ import com.google.inject.Inject;
 import com.mongodb.DB;
 import org.mongojack.DBQuery;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.Set;
+
 public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, String> 
         implements UserDao<User<String>> {
 
@@ -38,14 +42,15 @@ public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, 
 
     @Override
     public User<String> create(final User<String> user) {
-        return super.create(checkDuplicate(user));
+        return super.create(user);
     }
 
-    private User<String> checkDuplicate(final User<String> user) {
+/*    private User<String> checkDuplicate(final User<String> user) {
         Optional<User<String>> existingUser = findByEmail(user.getEmail());
+        
         if (existingUser.isPresent()) {
-            throw new UserDuplicateException(existingUser.get());
+//            throw new ConstraintViolationException();
         }
         return user;
-    }
+    }*/
 }

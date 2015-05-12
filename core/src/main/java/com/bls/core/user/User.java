@@ -1,5 +1,6 @@
 package com.bls.core.user;
 
+import javax.validation.Constraint;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @param <K> Key type for this entity
  */
 @JsonInclude(Include.NON_EMPTY)
+@UniqueUser
 public class User<K> extends IdentifiableEntity<K> {
 
     @NotEmpty
