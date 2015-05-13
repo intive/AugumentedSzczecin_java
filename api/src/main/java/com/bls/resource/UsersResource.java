@@ -38,14 +38,6 @@ public class UsersResource {
         this.tokenDao = tokenDao;
     }
 
-    @GET
-    @UnitOfWork
-    @Timed
-    @ExceptionMetered
-    public Collection<User<String>> getAll(@Auth String foo) {
-        return userDao.findAll();
-    }
-
     @POST
     @UnitOfWork
     @Timed
