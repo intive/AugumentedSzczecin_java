@@ -1,5 +1,7 @@
 package com.bls.mongodb.dao;
 
+import javax.validation.ConstraintViolationException;
+
 import org.mongojack.DBQuery;
 
 import com.bls.core.user.User;
@@ -9,10 +11,7 @@ import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.mongodb.DB;
 
-import static jersey.repackaged.com.google.common.base.Preconditions.checkState;
-
-public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, String> 
-        implements UserDao<User<String>> {
+public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, String> implements UserDao<User<String>> {
 
     @Inject
     public UserMongodbDao(final DB db) {
@@ -45,7 +44,9 @@ public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, 
 
     private User<String> checkDuplicate(final User<String> user) {
         Optional<User<String>> existingUser = findByEmail(user.getEmail());
-        checkState(!existingUser.isPresent(), "User already in db: %s", user.getEmail());
+        if (existingUser.isPresent()) {
+            throw new ConstraintViolationException(String.format("User already in db: %s", user.getEmail()), null);
+        }
         return user;
     }
 }
