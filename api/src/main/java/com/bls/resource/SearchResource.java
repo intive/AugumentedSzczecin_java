@@ -1,23 +1,26 @@
 package com.bls.resource;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.ws.rs.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.ws.rs.BeanParam;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
-import com.google.common.collect.Lists;
 
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
-//import javax.validation.constraints.Min;
-import javax.validation.constraints.Max;
+
 /**
  * Search entities by geo location for logged in user.
  */
@@ -27,6 +30,7 @@ import javax.validation.constraints.Max;
 @Consumes(MediaType.APPLICATION_JSON)
 public class SearchResource {
 
+    private static final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final SearchService searchService;
 
     @Inject
@@ -34,12 +38,20 @@ public class SearchResource {
         this.searchService = searchService;
     }
 
+    private static <T> void validateBean(final T searchCriteria) {
+        final Set<ConstraintViolation<T>> constraintViolations = validator.validate(searchCriteria);
+        if (!constraintViolations.isEmpty()) {
+            throw new ConstraintViolationException(constraintViolations);
+        }
+    }
+
     @GET
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public SearchingResults getByRegion(@Auth(required = false) @BeanParam @Valid SearchCriteria searchCriteria) {
+    public SearchingResults getByRegion(@Auth(required = false) @BeanParam SearchCriteria searchCriteria) {
+        validateBean(searchCriteria);
         // TODO add sorting, batching results...
-        return searchService.searchByCriteria( searchCriteria );
+        return searchService.searchByCriteria(searchCriteria);
     }
 }
