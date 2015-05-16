@@ -59,7 +59,7 @@ public class PersonResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void deleteById(@PathParam("id") final String id) { personDao.deleteById(id); }
+    public void deleteById(@Auth User user, @PathParam("id") final String id) { personDao.deleteById(id); }
 
     private Person getPersonSafe(final @PathParam("id") String id, final User<String> user) {
         final Optional<Person> person = personDao.findById(id);
