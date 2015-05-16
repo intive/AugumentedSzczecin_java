@@ -42,9 +42,9 @@ public class UsersResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public User<String> create(@Valid final User<String> userWithPlaintextPassword) {
+    public void create(@Valid final User<String> userWithPlaintextPassword) {
         final String hashedPassword = BasicAuthenticator.generateSafeHash(userWithPlaintextPassword.getPassword());
         final User<String> userWithHashedPassword = userWithPlaintextPassword.createUserWithHashedPassword(hashedPassword);
-        return userDao.create(userWithHashedPassword);
+        userDao.create(userWithHashedPassword);
     }
 }
