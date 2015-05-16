@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 
 /**
- *  Request password reset token and change password for User (identified by id)
+ *  Request password reset token and change password for User (identified by email)
  */
 @Singleton
 @Path("/users/")
@@ -34,8 +34,8 @@ public class ResetPasswordResource {
     private final ResetPasswordTokenConfiguration tokenConfig;
 
     @Inject
-    public ResetPasswordResource(final UserDao userDao, 
-                                 final ResetPasswordTokenDao tokenDao, 
+    public ResetPasswordResource(final UserDao userDao,
+                                 final ResetPasswordTokenDao tokenDao,
                                  final ResetPasswordTokenConfiguration tokenConfig) {
         this.userDao = userDao;
         this.tokenDao = tokenDao;
@@ -47,16 +47,16 @@ public class ResetPasswordResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void resetPassword(@PathParam("id") final String id)
+    public void resetPassword(@PathParam("email") final String email)
             throws MessagingException, UnsupportedEncodingException {
-        Optional<User<String>> user = userDao.findById(id);
+        Optional<User<String>> user = userDao.findByEmail(email);
         if (!user.isPresent()) throw new BadRequestException("User not found");
         ResetPasswordToken token = new ResetPasswordToken(tokenConfig);
         tokenDao.create(token);
 
         TokenSendService tokenSendService = new TokenMail(token);
         tokenSendService.sendTo(user.get());
-        
+
     }
 
     @Path("{id}/changepassword")
@@ -64,20 +64,20 @@ public class ResetPasswordResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void changePassword(@PathParam("id") final String id, @QueryParam("t") final String tokenString,
+    public void changePassword(@PathParam("email") final String email, @QueryParam("t") final String tokenString,
                                final String plaintextPassword)
             throws MessagingException {
 
-        Optional<User<String>> user = userDao.findById(id);
+        Optional<User<String>> user = userDao.findByEmail(email);
         Optional<ResetPasswordToken> token = tokenDao.read(tokenString);
         if (!user.isPresent()) throw new BadRequestException("User not found");
         if (!token.isPresent()) throw new WebApplicationException(Response.Status.UNAUTHORIZED);
-        
+
         String newHashedPassword = BasicAuthenticator.generateSafeHash(plaintextPassword);
         user.get().setPassword(newHashedPassword);
-        
+
         userDao.update(user.get());
         tokenDao.expire(token.get());
     }
-    
+
 }
