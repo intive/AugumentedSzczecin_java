@@ -11,6 +11,8 @@ import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.mongodb.DB;
 
+import java.util.Collections;
+
 public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, String> implements UserDao<User<String>> {
 
     @Inject
@@ -45,7 +47,9 @@ public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, 
     private User<String> checkDuplicate(final User<String> user) {
         Optional<User<String>> existingUser = findByEmail(user.getEmail());
         if (existingUser.isPresent()) {
-            throw new ConstraintViolationException(String.format("User already in db: %s", user.getEmail()), null);
+            throw new ConstraintViolationException(
+                    String.format("User already in db: %s", user.getEmail()), 
+                    Collections.emptySet());
         }
         return user;
     }
