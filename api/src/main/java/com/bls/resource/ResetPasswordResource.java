@@ -25,7 +25,7 @@ import java.io.UnsupportedEncodingException;
  *  Request password reset token and change password for User (identified by id)
  */
 @Singleton
-@Path("/users/{id}")
+@Path("/users/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.TEXT_PLAIN)
 public class ResetPasswordResource {
@@ -42,7 +42,7 @@ public class ResetPasswordResource {
         this.tokenConfig = tokenConfig;
     }
     
-    @Path("/resetpassword")
+    @Path("{id}/resetpassword")
     @POST
     @UnitOfWork
     @Timed
@@ -59,7 +59,7 @@ public class ResetPasswordResource {
         
     }
 
-    @Path("/changepassword")
+    @Path("{id}/changepassword")
     @PUT
     @UnitOfWork
     @Timed
