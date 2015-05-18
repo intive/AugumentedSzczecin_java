@@ -43,7 +43,6 @@ public class User<K> extends IdentifiableEntity<K> {
         return email;
     }
 
-    @JsonIgnore
     public String getPassword() {
         return password;
     }
