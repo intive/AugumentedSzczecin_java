@@ -22,15 +22,15 @@ import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 
 /**
- *  Request password reset token and change password for User (identified by email)
+ * Request password reset token and change password for User (identified by id or email)
  */
 @Singleton
 @Path("/users/")
 @Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.TEXT_PLAIN)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ResetPasswordResource {
-    private final UserDao<User<String>> userDao;
-    private final ResetPasswordTokenDao<ResetPasswordToken<String>> tokenDao;
+    private final UserDao userDao;
+    private final ResetPasswordTokenDao tokenDao;
     private final ResetPasswordTokenConfiguration tokenConfig;
 
     @Inject
@@ -47,10 +47,56 @@ public class ResetPasswordResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void resetPassword(@PathParam("email") final String email)
+    public void resetPassword(@PathParam("id") final String id)
+            throws MessagingException, UnsupportedEncodingException {
+        Optional<User<String>> user = userDao.findById(id);
+        if (!user.isPresent()) {
+            throw new BadRequestException("User not found");
+        }
+        ResetPasswordToken token = new ResetPasswordToken(tokenConfig);
+        tokenDao.create(token);
+
+        TokenSendService tokenSendService = new TokenMail(token);
+        tokenSendService.sendTo(user.get());
+
+    }
+
+    @Path("/{id}/changePassword")
+    @PUT
+    @UnitOfWork
+    @Timed
+    @ExceptionMetered
+    public void changePassword(@PathParam("id") final String id, @QueryParam("t") final String tokenString,
+                               final String password)
+            throws MessagingException {
+
+        Optional<User<String>> user = userDao.findById(id);
+        Optional<ResetPasswordToken> token = tokenDao.read(tokenString);
+        if (!user.isPresent()) {
+            throw new BadRequestException("User not found");
+        }
+        if (!token.isPresent()) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
+
+        String newHashedPassword = BasicAuthenticator.generateSafeHash(password);
+        user.get().setPassword(newHashedPassword);
+
+        userDao.update(user.get());
+        tokenDao.expire(token.get());
+    }
+
+    @Path("/email/{email}/resetPassword")
+    @POST
+    @UnitOfWork
+    @Timed
+    @ExceptionMetered
+    public void resetPasswordByEmail(@PathParam("email") final String email)
             throws MessagingException, UnsupportedEncodingException {
         Optional<User<String>> user = userDao.findByEmail(email);
-        if (!user.isPresent()) throw new BadRequestException("User not found");
+        if (!user.isPresent()) {
+            throw new BadRequestException("User not found");
+        }
         ResetPasswordToken token = new ResetPasswordToken(tokenConfig);
         tokenDao.create(token);
 
@@ -64,16 +110,20 @@ public class ResetPasswordResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void changePassword(@PathParam("email") final String email, @QueryParam("t") final String tokenString,
-                               final String plaintextPassword)
+    public void changePasswordByEmail(@PathParam("email") final String email, @QueryParam("t") final String tokenString,
+                                      final String password)
             throws MessagingException {
 
         Optional<User<String>> user = userDao.findByEmail(email);
         Optional<ResetPasswordToken> token = tokenDao.read(tokenString);
-        if (!user.isPresent()) throw new BadRequestException("User not found");
-        if (!token.isPresent()) throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        if (!user.isPresent()) {
+            throw new BadRequestException("User not found");
+        }
+        if (!token.isPresent()) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
 
-        String newHashedPassword = BasicAuthenticator.generateSafeHash(plaintextPassword);
+        String newHashedPassword = BasicAuthenticator.generateSafeHash(password);
         user.get().setPassword(newHashedPassword);
 
         userDao.update(user.get());
