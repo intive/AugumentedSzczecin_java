@@ -2,6 +2,7 @@ package com.bls.rdbms.dao;
 
 import com.bls.core.geo.Location;
 import com.bls.core.poi.Poi;
+import com.bls.core.user.User;
 import com.bls.rdbms.core.PoiJpa;
 import org.hibernate.SessionFactory;
 
@@ -37,7 +38,7 @@ public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
     }
 
     @Override
-    public Collection<Poi<Long>> find(Location location, Long radius, Collection<String> tags){
+    public Collection<Poi<Long>> find(Location location, Long radius, Collection<String> tags, User user){
         return null;
     }
 }

@@ -49,7 +49,7 @@ public class SearchResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public SearchingResults getByRegion(@Auth(required = false) @BeanParam SearchCriteria searchCriteria) {
+    public SearchingResults getByRegion(@BeanParam SearchCriteria searchCriteria) {
         validateBean(searchCriteria);
         // TODO add sorting, batching results...
         return searchService.searchByCriteria(searchCriteria);
