@@ -1,11 +1,14 @@
 package com.bls;
 
+import org.apache.commons.lang3.text.StrLookup;
+import org.apache.commons.lang3.text.StrSubstitutor;
+import org.glassfish.hk2.utilities.Binder;
+
 import com.bls.AugmentedConfiguration.DbType;
 import com.bls.auth.basic.BasicAuthenticator;
 import com.bls.client.opendata.OpenDataClientModule;
 import com.bls.core.resetpwd.InvalidateTokenTask;
 import com.bls.core.user.User;
-import com.bls.core.user.UserDuplicateExceptionMapper;
 import com.bls.dao.ResetPasswordTokenDao;
 import com.bls.dao.UserDao;
 import com.bls.mongodb.MongodbModule;
@@ -14,6 +17,7 @@ import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 import com.hubspot.dropwizard.guice.GuiceBundle.Builder;
+
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.auth.CachingAuthenticator;
@@ -23,9 +27,6 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.apache.commons.lang3.text.StrLookup;
-import org.apache.commons.lang3.text.StrSubstitutor;
-import org.glassfish.hk2.utilities.Binder;
 
 import static com.bls.AugmentedConfiguration.DBTYPE_PROPERTY_NAME;
 import static com.bls.AugmentedConfiguration.RDBMS_ENTITIES_PACKAGE;
@@ -100,7 +101,6 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
     public void run(final AugmentedConfiguration augmentedConfiguration, final Environment environment) throws Exception {
         registerAuthorizationProviders(augmentedConfiguration, environment);
         registerInvalidateTokensTask(augmentedConfiguration, environment);
-        environment.jersey().register(new UserDuplicateExceptionMapper());
     }
 
     private void registerAuthorizationProviders(final AugmentedConfiguration augmentedConfiguration, final Environment environment) {
