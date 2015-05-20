@@ -3,12 +3,13 @@ package com.bls;
 import com.bls.AugmentedConfiguration.DbType;
 import com.bls.auth.basic.BasicAuthenticator;
 import com.bls.client.opendata.OpenDataClientModule;
+import com.bls.core.resetpwd.InvalidateTokenTask;
 import com.bls.core.user.User;
+import com.bls.core.user.UserDuplicateExceptionMapper;
 import com.bls.dao.ResetPasswordTokenDao;
 import com.bls.dao.UserDao;
 import com.bls.mongodb.MongodbModule;
 import com.bls.rdbms.RdbmsModule;
-import com.bls.core.resetpwd.InvalidateTokenTask;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.hubspot.dropwizard.guice.GuiceBundle;
@@ -99,8 +100,8 @@ public class AugmentedApplication extends Application<AugmentedConfiguration> {
     public void run(final AugmentedConfiguration augmentedConfiguration, final Environment environment) throws Exception {
         registerAuthorizationProviders(augmentedConfiguration, environment);
         registerInvalidateTokensTask(augmentedConfiguration, environment);
+        environment.jersey().register(new UserDuplicateExceptionMapper());
     }
-
 
     private void registerAuthorizationProviders(final AugmentedConfiguration augmentedConfiguration, final Environment environment) {
         final UserDao userDao = injector.getInstance(UserDao.class);
