@@ -4,6 +4,7 @@ import com.bls.core.geo.Location;
 import com.bls.core.poi.Poi;
 import com.bls.core.user.User;
 import com.bls.rdbms.core.PoiJpa;
+import com.google.common.base.Optional;
 import org.hibernate.SessionFactory;
 
 import javax.inject.Inject;
@@ -38,7 +39,7 @@ public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
     }
 
     @Override
-    public Collection<Poi<Long>> find(Location location, Long radius, Collection<String> tags, User user){
+    public Collection<Poi<Long>> find(Location location, Long radius, Collection<String> tags, Optional<User> user){
         return null;
     }
 }

@@ -2,6 +2,7 @@ package com.bls.resource;
 
 import java.util.Collection;
 import java.util.List;
+import com.google.common.base.Optional;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -27,7 +28,7 @@ public class SearchCriteria {
 
     private final List<String> tags;
 
-    private final User user;
+    private final Optional<User> user;
 
     public SearchCriteria(@QueryParam("lg") final Float longitude,
             @QueryParam("lt") final Float latitude,
@@ -39,10 +40,10 @@ public class SearchCriteria {
         this.radius = radius;
         this.categories = categories;
         this.tags = tags;
-        this.user = user;
+        this.user = Optional.fromNullable(user);
     }
 
-    public User getUser() {
+    public Optional<User> getUser() {
         return user;
     }
     public Location getLocation() {

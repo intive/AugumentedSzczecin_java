@@ -86,7 +86,7 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         return coreEntities;
     }
 
-    public List<I> find(final Location location, final Long radius, Collection<String> tags, User user){
+    public List<I> find(final Location location, final Long radius, Collection<String> tags, Optional<User> user){
         BasicDBList coordinates = new BasicDBList();
         coordinates.add(location.getLongitude());
         coordinates.add(location.getLatitude());
@@ -101,8 +101,8 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         if(!tags.isEmpty()) {
             query.append("tags", new BasicDBObject("$in", tags));
         }
-        if(user != null) {
-          query.append("owner.email", new BasicDBObject("$eq", user.getEmail()));
+        if(user.isPresent()) {
+          query.append("owner.email", new BasicDBObject("$eq", user.get().getEmail()));
         }
         else {
             query.append("owner", new BasicDBObject("$eq", null));
