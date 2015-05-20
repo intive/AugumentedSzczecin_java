@@ -23,7 +23,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <dropwizard.version>0.8.0</dropwizard.version>
+        <dropwizard.version>0.8.1</dropwizard.version>
         <dropwizard-java8.version>0.8.0-2</dropwizard-java8.version>
     </properties>
 
@@ -79,7 +79,7 @@
         <dependency>
             <groupId>com.hubspot.dropwizard</groupId>
             <artifactId>dropwizard-guice</artifactId>
-            <version>0.8.1-SNAPSHOT</version>
+            <version>0.8.1.0</version>
             <exclusions>
                 <!-- exclude things already in jre 1.8 -->
                 <exclusion>

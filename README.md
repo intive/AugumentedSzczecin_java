@@ -6,12 +6,6 @@ Prerequisites:
 - install: GPG [GPG download link], configuration: [GPG on windows configuration help]
 - install and setup database: [mongo] TODO or any hibernate RDBMS
 
-## Install dropwizard-guice-hubspot to local maven repository (once)
-
-        git clone https://github.com/mlotysz/dropwizard-guice-hubspot.git
-        cd dropwizard-guice-hubspot
-        mvn -T4 clean install
-
 ## Building backend with maven
 
         mvn -T4 clean package
@@ -20,72 +14,52 @@ Prerequisites:
 
 * mongodb as backend db
 
-        (cd api && java -DDBTYPE=mongodb -jar target/api-1.0.0-SNAPSHOT.jar server augmented.yml)
+		(cd api && java -DDBTYPE=mongodb -jar target/augumented-api.jar server augmented.yml)
 
-* To setup H2 (and hibernate JPA implementation)
-
-        (cd api && java -DDBTYPE=rdbms -jar target/api-1.0.0-SNAPSHOT.jar db migrate augmented.yml)
-        
-* Run application with H2 in memory db - but note, needs some work
-        
-## Testing (currently available with mongodb or h2)
+## Testing (currently available with mongodb)
 
 * Create new user
 
-        curl -v http://localhost:8000/users -H "Content-Type: application/json" -d '{"email":"asd", "password":"zxc"}'
+		curl -v http://localhost:8000/users \
+			-H "Content-Type: application/json" \
+			-d '{"email":"asd@com", "password":"zxc"}'
 
 * Add new place
 
-		curl -v http://localhost:8000/places \ 
-		    -H "Content-Type: application/json" \
-		    -d '{"name":"thug_765", "location":{"longitude":56.56, "latitude":67.89}}' -u asd:zxc
-		
+		curl -v http://localhost:8000/places \
+			-H "Content-Type: application/json" \
+			-d '{"name":"thug_765", "location":{"longitude":56.56, "latitude":67.89}}' -u asd@com:zxc
 
 * Fetch all places 
 
 		curl -v http://localhost:8000/places
-	
+
 * Fetch one place 	
-		
-		curl -v http://localhost:8000/places/{id} -u asd:zxc
-		
+
+		curl -v http://localhost:8000/places/{id} -u asd@com:zxc
+
 * Update place
 
-		curl -XPUT http://localhost:8000/places/{id} -u asd:zxc
-		
+		curl -XPUT http://localhost:8000/places/{id} -u asd@com:zxc
+
 * Delete place
 
-		curl -XDELETE http://localhost:8000/places/{id} -u asd:zxc
-		
+		curl -XDELETE http://localhost:8000/places/{id} -u asd@com:zxc
 
 * Find all known POI types matching search criteria: location and radius
 
-		curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=8900000" -u asd:zxc
-		
+		curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=8900000" -u asd@com:zxc
+
 ## Password changing
 * Request change password token
 
 		curl -XPOST http://localhost:8000/users/{id}/resetpassword
 	Receive email with token, then:
-	
+
 * Change password
 
-		curl -XPUT http://localhost:8000/users/{id}/changepassword/{token} -H "Content-type: text/plain" -d "newpassword"
-		
-* [TEMP] Fetch currently valid tokens
-		
-		curl -XGET http://localhost:8000/tokens
-		
-* [TASK] Invalidate expired tokens
-
-		curl -XPOST http://localhost:8000/tasks/invalidateTokens
-		
-* Set token expiration time in server config .yml
-		
-		...
-		resetPasswordToken:
-          expiration: 1		 <--- token expiration time [min]
-		...
+		curl -XPUT http://localhost:8000/users/{id}/changepassword/{token} \
+			-d "newpassword"
 
 [Oracle jdk download link]:http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [Maven download link]: http://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache

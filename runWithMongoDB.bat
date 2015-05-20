@@ -1,2 +1,2 @@
-cd api && java -DDBTYPE=mongodb -jar target/api-1.0.0-SNAPSHOT.jar server augmented.yml
+cd api && java -DDBTYPE=mongodb -jar target/augumented-api.jar server augmented.yml
 pause

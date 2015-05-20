@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Generic mongodb dao operations and mapping to/from core model
@@ -105,7 +106,8 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         return coreEntities;
     }
 
-    public Float metersToDegrees(Long radiusInMeters){
+    public Float metersToDegrees(Long radiusInMeters) {
+        checkState(radiusInMeters != null, "Radius is required");
         return radiusInMeters.floatValue() / 111119.99965975954f;
     }
 
