@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -45,6 +46,6 @@ public class PlacesResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Place add(@Auth User user, final Place place) { return placeDao.create(place); }
+    public Place add(@Auth User user, @Valid final Place place) { return placeDao.create(place); }
 }
 

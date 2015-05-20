@@ -17,7 +17,7 @@ public class SearchCriteria {
     private final Location location;
 
     @Min(0)
-    @Max(360)
+//    @Max(360)
     @NotNull
     private final Long radius;
 

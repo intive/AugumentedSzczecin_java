@@ -9,14 +9,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
+import com.mongodb.*;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.internal.MongoJackModule;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,21 +84,39 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         return coreEntities;
     }
 
-    public List<I> find(final Location location, final Long radius, Collection<String> tags){
-        BasicDBList coordinates = new BasicDBList();
-        coordinates.add(location.getLongitude());
-        coordinates.add(location.getLatitude());
+    public List<I> find(final Location location, final Long radius, Collection<String> tags) {
+        
+        /*QueryBuilder query = new QueryBuilder();
+        query.put("location").near(location.getLongitude(), location.getLatitude(), radius);
+        dbCollection.ensureIndex(new BasicDBObject("location", "2d"));
 
-        BasicDBList geoParams = new BasicDBList();
-        geoParams.add(coordinates);
-        geoParams.add(metersToDegrees(radius));
+        //if (!tags.isEmpty()) {
+          //  qb = qb.in("tags");
+        //}
+        System.out.println(query.get().toString());*/
 
-        BasicDBObject query = new BasicDBObject("location",new BasicDBObject("$geoWithin",new BasicDBObject("$center", geoParams)));
-        if(!tags.isEmpty()) {
-            query.append("tags", new BasicDBObject("$in", tags));
-        }
 
-        final List<M> mongodbEntities = dbCollection.find(query).toArray();
+        BasicDBObject dbCmd = new BasicDBObject();
+        dbCmd.append("geoNear", getMongodbCollectionName());
+        double[] loc = {location.getLongitude(), location.getLatitude()};
+        dbCmd.append("near", loc);
+        dbCmd.append("spherical", "true");
+        dbCmd.append("maxDistance", radius);
+        dbCmd.append("distanceMultiplier", 6371009); // radius of the earth in meters
+        // TODO skip() and limit() inside $geoNear
+        // TODO CommandResult -> Map -> List
+
+        dbCollection.ensureIndex(new BasicDBObject("location", "2dsphere"));
+
+//        if (!tags.isEmpty()) {
+//            qb = qb.in("tags");
+//        }
+        System.out.println(dbCmd);
+        DBObject results = dbCollection.getDB().command(dbCmd);
+        System.out.println(results.toString());
+
+//        final List<M> mongodbEntities = dbCollection.find(query.get()).toArray();
+        final List<M> mongodbEntities = Collections.emptyList() ;
 
         final List<I> coreEntities = Lists.newArrayListWithCapacity(mongodbEntities.size());
         coreEntities.addAll(mongodbEntities.stream().map(this::convert2coreModel).collect(Collectors.toList()));

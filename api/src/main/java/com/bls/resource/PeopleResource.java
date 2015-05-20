@@ -5,6 +5,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -45,5 +46,5 @@ public class PeopleResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Person add(final Person person) { return personDao.create(person); }
+    public Person add(@Valid final Person person) { return personDao.create(person); }
 }

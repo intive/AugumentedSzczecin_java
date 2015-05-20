@@ -20,8 +20,6 @@ import java.util.Collection;
 @JsonInclude(Include.NON_EMPTY)
 public abstract class Poi<K> extends IdentifiableEntity<K> {
 
-    @NotNull
-    protected final Boolean isPublic;
     // TODO add validation: !public = NotNull
     @JsonIgnore
     protected final User owner;
@@ -48,7 +46,6 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
             @JsonProperty("openingDaysAndHours") final Collection<OpeningHours> openingDaysAndHours,
             @JsonProperty("priceList") final PriceList priceList) {
         super(id);
-        this.isPublic = isPublic;
         this.name = name;
         this.location = location;
         this.address = address;
@@ -64,10 +61,6 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
     // Use this to hide property in deserialized json
 //    @JsonIgnore
     public abstract Category getCategory();
-
-    public Boolean getIsPublic() {
-        return isPublic;
-    }
 
     public User getOwner() {
         return owner;
