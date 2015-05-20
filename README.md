@@ -28,7 +28,9 @@ Prerequisites:
 
 		curl -v http://localhost:8000/places \
 			-H "Content-Type: application/json" \
-			-d '{"name":"thug_765", "location":{"longitude":56.56, "latitude":67.89}}' -u asd@com:zxc
+			-d '{"name":"thug_765", "isPublic":false, \
+				 "location":{"longitude":56.56, "latitude":67.89}, \
+				 "owner":{"email":"asd@com", "password":"zxc"}, "tags":["restaurant", "stadium"]}' -u asd@com:zxc
 
 * Fetch all places 
 
@@ -48,8 +50,16 @@ Prerequisites:
 
 * Find all known POI types matching search criteria: location and radius
 
-		curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=8900000" -u asd@com:zxc
+		curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=150" -u asd@com:zxc
 
+* Find all known POI types matching search criteria: location, radius and categories
+		
+		curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=150&cat=PLACE&cat=EVENT" -u asd@com:zxc
+		
+* Find all known POI types matching search criteria: location, radius, categories and tags
+
+		curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=150&cat=PLACE&cat=EVENT&tag=restaurant&tag=stadium" -u asd@com:zxc
+		
 ## Password changing
 * Request change password token
 

@@ -28,13 +28,16 @@ public class SearchService {
     public SearchingResults searchByCriteria(final SearchCriteria searchCriteria) {
         final SearchingResults response = new SearchingResults();
         if (searchCriteria.getCategories().isEmpty() || searchCriteria.getCategories().contains(Category.EVENT)) {
-            response.putEvents(eventDao.find(searchCriteria.getLocation(), searchCriteria.getRadius(), searchCriteria.getTags()));
+            response.putEvents(eventDao.find(searchCriteria.getLocation(), searchCriteria.getRadius(), searchCriteria.getTags(),
+                                searchCriteria.getUser()));
         }
         if (searchCriteria.getCategories().isEmpty() || searchCriteria.getCategories().contains(Category.PERSON)) {
-            response.putPerson(personDao.find(searchCriteria.getLocation(), searchCriteria.getRadius(), searchCriteria.getTags()));
+            response.putPerson(personDao.find(searchCriteria.getLocation(), searchCriteria.getRadius(), searchCriteria.getTags(),
+                                searchCriteria.getUser()));
         }
         if (searchCriteria.getCategories().isEmpty() || searchCriteria.getCategories().contains(Category.PLACE)) {
-            response.putPlaces(placeDao.find(searchCriteria.getLocation(), searchCriteria.getRadius(), searchCriteria.getTags()));
+            response.putPlaces(placeDao.find(searchCriteria.getLocation(), searchCriteria.getRadius(), searchCriteria.getTags(),
+                                searchCriteria.getUser()));
         }
         return response;
     }

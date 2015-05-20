@@ -2,6 +2,7 @@ package com.bls.mongodb.dao;
 
 import com.bls.core.Identifiable;
 import com.bls.core.geo.Location;
+import com.bls.core.user.User;
 import com.bls.dao.CommonDao;
 import com.bls.mongodb.core.MongodbMappableIdentifiableEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -85,18 +86,26 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         return coreEntities;
     }
 
-    public List<I> find(final Location location, final Long radius, Collection<String> tags){
+    public List<I> find(final Location location, final Long radius, Collection<String> tags, Optional<User> user){
         BasicDBList coordinates = new BasicDBList();
         coordinates.add(location.getLongitude());
         coordinates.add(location.getLatitude());
 
         BasicDBList geoParams = new BasicDBList();
         geoParams.add(coordinates);
-        geoParams.add(metersToDegrees(radius));
+        /* Radius is in degrees so we dont need this:
+        geoParams.add(metersToDegrees(radius)); */
+        geoParams.add(radius);
 
         BasicDBObject query = new BasicDBObject("location",new BasicDBObject("$geoWithin",new BasicDBObject("$center", geoParams)));
         if(!tags.isEmpty()) {
             query.append("tags", new BasicDBObject("$in", tags));
+        }
+        if(user.isPresent()) {
+          query.append("owner.email", new BasicDBObject("$eq", user.get().getEmail()));
+        }
+        else {
+            query.append("owner", new BasicDBObject("$eq", null));
         }
 
         final List<M> mongodbEntities = dbCollection.find(query).toArray();
