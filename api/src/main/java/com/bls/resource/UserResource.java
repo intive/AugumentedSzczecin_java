@@ -1,9 +1,11 @@
 package com.bls.resource;
 
 import com.bls.core.user.User;
+import com.bls.core.views.Views;
 import com.bls.dao.UserDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -40,6 +42,7 @@ public class UserResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
+    @JsonView(Views.Public.class)
     public User getUser(@Auth User userCredentials) {
         final Optional<User<String>> user = userDao.findByEmail(userCredentials.getEmail());
         if (!user.isPresent()) {
