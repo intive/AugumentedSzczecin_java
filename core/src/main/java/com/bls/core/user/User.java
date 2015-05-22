@@ -2,15 +2,13 @@ package com.bls.core.user;
 
 import javax.validation.constraints.Size;
 
+import com.bls.core.views.Views;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.bls.core.IdentifiableEntity;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * User of the backend. Can be authenticated by password.
@@ -23,11 +21,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(Include.NON_EMPTY)
 public class User<K> extends IdentifiableEntity<K> {
 
+
     @NotEmpty
     @Email
+    @JsonView(Views.Public.class)
     private final String email;
     @NotEmpty
     @Size(min = 2, max = 64)
+    @JsonView(Views.Private.class)
     private String password;
 
     @JsonCreator

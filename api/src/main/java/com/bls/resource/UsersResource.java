@@ -14,12 +14,14 @@ import javax.ws.rs.core.MediaType;
 
 import com.bls.auth.basic.BasicAuthenticator;
 import com.bls.core.user.User;
+import com.bls.core.views.Views;
 import com.bls.dao.ResetPasswordTokenDao;
 import com.bls.dao.UserDao;
 import com.bls.core.resetpwd.ResetPasswordToken;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -42,6 +44,7 @@ public class UsersResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
+    @JsonView(Views.Public.class)
     public void create(@Valid final User<String> userWithPlaintextPassword) {
         final String hashedPassword = BasicAuthenticator.generateSafeHash(userWithPlaintextPassword.getPassword());
         final User<String> userWithHashedPassword = userWithPlaintextPassword.createUserWithHashedPassword(hashedPassword);
