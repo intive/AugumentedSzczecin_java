@@ -46,7 +46,7 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
     @Size(max=100)
     protected final String www;
 
-    @Pattern(regexp = "\\d{1,9}")
+    @Pattern(regexp = "\\d{1,21}")
     protected final String phone;
     
     @Size(max=100)
