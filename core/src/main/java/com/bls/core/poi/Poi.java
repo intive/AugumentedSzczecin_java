@@ -9,7 +9,8 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.common.collect.ImmutableList;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.util.Collection;
 
 /**
@@ -20,54 +21,81 @@ import java.util.Collection;
 @JsonInclude(Include.NON_EMPTY)
 public abstract class Poi<K> extends IdentifiableEntity<K> {
 
-    @NotNull
-    protected final Boolean isPublic;
-    // TODO add validation: !public = NotNull
-    @JsonIgnore
     protected final User owner;
+    
+    @NotNull
+    @Size(min=1, max=50)
+    @Pattern(regexp = "^[\\p{L}a0-9 ]+$")
+    protected final String name;
+    
+    @NotNull
+    @Size(min=1, max=500)
+    protected final String description;
+    
+    @Valid
     @NotNull
     protected final Location location;
-    protected final String name;
+    
+    @Valid
+    @NotNull
     protected final Address address;
+    
+    @Valid
     protected final Collection<String> tags;
-    protected final Collection<Media> media;
-    protected final Collection<Comment> comments;
-    protected final Collection<OpeningHours> openingDaysAndHours;
-    protected final PriceList priceList;
+    
+    @Size(max=100)
+    protected final String www;
+
+    @Pattern(regexp = "\\d{1,21}")
+    protected final String phone;
+    
+    @Size(max=100)
+    protected final String wiki;
+    
+    @Size(max=100)
+    protected final String fanpage;
+    
+    @Size(max=4)
+    protected final Collection<String> media;
+    
+    protected final Collection<OpeningHours> opening;
+    
+    @Min(0)
+    protected final Float price;
     
     @JsonCreator
     public Poi(@JsonProperty(value = "id", required = false) final K id,
-            @JsonProperty("isPublic") final Boolean isPublic,
-            @JsonProperty("name") final String name,
-            @JsonProperty("location") final Location location,
-            @JsonProperty("address") final Address address,
-            @JsonProperty("owner") final User owner,
-            @JsonProperty("tags") final Collection<String> tags,
-            @JsonProperty("comments") final Collection<Comment> comments,
-            @JsonProperty("media") final Collection<Media> media,
-            @JsonProperty("openingDaysAndHours") final Collection<OpeningHours> openingDaysAndHours,
-            @JsonProperty("priceList") final PriceList priceList) {
+               @JsonProperty("name") final String name,
+               @JsonProperty("description") final String description,
+               @JsonProperty("location") final Location location,
+               @JsonProperty("address") final Address address,
+               @JsonProperty("owner") final User owner,
+               @JsonProperty("tags") final Collection<String> tags,
+               @JsonProperty("media") final Collection<String> media,
+               @JsonProperty("opening") final Collection<OpeningHours> opening,
+               @JsonProperty("price") final Float price,
+               @JsonProperty("wiki") final String wiki,
+               @JsonProperty("fanpage") final String fanpage,
+               @JsonProperty("www") final String www,
+               @JsonProperty("phone") final String phone) {
         super(id);
-        this.isPublic = isPublic;
         this.name = name;
+        this.description = description;
         this.location = location;
         this.address = address;
         this.owner = owner;
-        this.priceList = priceList;
+        this.price = price;
+        this.wiki = wiki;
+        this.fanpage = fanpage;
+        this.www = www;
+        this.phone = phone;
 
         this.tags = tags != null ? ImmutableList.copyOf(tags) : ImmutableList.of();
-        this.comments = comments != null ? ImmutableList.copyOf(comments) : ImmutableList.of();
         this.media = media != null ? ImmutableList.copyOf(media) : ImmutableList.of();
-        this.openingDaysAndHours = openingDaysAndHours != null ? ImmutableList.copyOf(openingDaysAndHours) : ImmutableList.of();
+        this.opening = opening != null ? ImmutableList.copyOf(opening) : ImmutableList.of();
     }
 
-    // Use this to hide property in deserialized json
-//    @JsonIgnore
     public abstract Category getCategory();
-
-    public Boolean getIsPublic() {
-        return isPublic;
-    }
 
     public User getOwner() {
         return owner;
@@ -89,19 +117,15 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
         return tags;
     }
 
-    public Collection<Media> getMedia() {
+    public Collection<String> getMedia() {
         return media;
     }
 
-    public Collection<Comment> getComments() {
-        return comments;
+    public Collection<OpeningHours> getOpening() {
+        return opening;
     }
 
-    public Collection<OpeningHours> getOpeningDaysAndHours() {
-        return openingDaysAndHours;
-    }
-
-    public PriceList getPriceList() {
-        return priceList;
+    public Float getPriceList() {
+        return price;
     }
 }

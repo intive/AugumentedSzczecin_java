@@ -3,8 +3,6 @@ package com.bls.core.poi;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-// TODO add subcategory
-
 /**
  *  Categories of Points of Interest
  */

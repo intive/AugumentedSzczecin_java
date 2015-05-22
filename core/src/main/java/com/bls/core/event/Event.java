@@ -1,14 +1,11 @@
 package com.bls.core.event;
 
-import com.bls.core.comment.Comment;
-import com.bls.core.poi.*;
-import com.bls.core.price.PriceList;
-import com.bls.core.user.User;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import com.bls.core.IdentifiableEntity;
 import com.bls.core.geo.Location;
+import com.bls.core.poi.Address;
+import com.bls.core.poi.Category;
+import com.bls.core.poi.OpeningHours;
+import com.bls.core.poi.Poi;
+import com.bls.core.user.User;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -27,18 +24,21 @@ public class Event<K> extends Poi<K> {
 
     @JsonCreator
     public Event(@JsonProperty(value = "id", required = false) final K id,
-                 @JsonProperty("isPublic") final Boolean isPublic,
                  @JsonProperty("name") final String name,
+                 @JsonProperty("description") final String description,
                  @JsonProperty("location") final Location location,
                  @JsonProperty("address") final Address address,
                  @JsonProperty("owner") final User owner,
                  @JsonProperty("tags") final Collection<String> tags,
-                 @JsonProperty("comments") final Collection<Comment> comments,
-                 @JsonProperty("media") final Collection<Media> media,
+                 @JsonProperty("media") final Collection<String> media,
                  @JsonProperty("openingDaysAndHours") final Collection<OpeningHours> openingDaysAndHours,
-                 @JsonProperty("priceList") final PriceList priceList) {
-        super(id, isPublic, name, location, address, owner, tags, comments, media, openingDaysAndHours, priceList);
-
+                 @JsonProperty("price") final Float price,
+                 @JsonProperty("wiki") final String wiki,
+                 @JsonProperty("fanpage") final String fanpage,
+                 @JsonProperty("www") final String www,
+                 @JsonProperty("phone") final String phone) {
+        super(id, name, description, location, address, owner, tags, media, openingDaysAndHours, price,
+                wiki, fanpage, www, phone);
     }
 
     @Override

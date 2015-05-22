@@ -4,36 +4,46 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
-// TODO add javadoc
-// TODO add adressType, urls, twitter, facebook...
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+/**
+ *  An address of a POI
+ */
 @JsonInclude(Include.NON_EMPTY)
 public class Address {
 
-    private final String country;
-    private final String city;
+    @NotBlank
+    @Size(min=1, max=500)
+    @Pattern(regexp = "^[\\p{L}0-9 ]+$")
     private final String street;
-    private final String mobile;
-    private final String phone;
-    private final String fax;
+    @NotBlank
+    @Pattern(regexp = "[0-9]{2}-[0-9]{3}")
+    private final String zipcode;
+    @NotBlank
+    @Size(min=1, max=30)
+    @Pattern(regexp = "^[\\p{L}0-9 ]+$")
+    private final String city;
+    @NotBlank
+    @Size(min=1, max=10)
+    private final String streetNumber;
+    @Size(min=1, max=5)
+    private final String houseNumber;
 
     @JsonCreator
-    public Address(@JsonProperty("country") final String country,
-            @JsonProperty("city") final String city,
-            @JsonProperty("street") final String street,
-            @JsonProperty("mobile") final String mobile,
-            @JsonProperty("phone") final String phone,
-            @JsonProperty("fax") final String fax) {
-        this.country = country;
+    public Address(@JsonProperty("city") final String city,
+                   @JsonProperty("street") final String street,
+                   @JsonProperty("zipcode") final String zipcode, 
+                   @JsonProperty("streetNumber") final String streetNumber, 
+                   @JsonProperty("houseNumber") final String houseNumber) {
         this.city = city;
         this.street = street;
-        this.phone = phone;
-        this.fax = fax;
-        this.mobile = mobile;
-    }
-
-    public String getCountry() {
-        return country;
+        this.zipcode = zipcode;
+        this.streetNumber = streetNumber;
+        this.houseNumber = houseNumber;
     }
 
     public String getCity() {
@@ -44,15 +54,15 @@ public class Address {
         return street;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getZipcode() {
+        return zipcode;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getStreetNumber() {
+        return streetNumber;
     }
 
-    public String getFax() {
-        return fax;
+    public String getHouseNumber() {
+        return houseNumber;
     }
 }
