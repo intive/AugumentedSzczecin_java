@@ -1,6 +1,7 @@
 package com.bls.core.poi;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Range;
 import org.joda.time.DateTime;
@@ -11,48 +12,53 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.DayOfWeek;
+
 /**
  * MONDAY 10:00 - 18:00
  */
 @JsonInclude(Include.NON_EMPTY)
 public class OpeningHours {
+    private final String TIME_REGEX = "([01]?[0-9]|2[0-3]):[0-5][0-9]";
 
     @Range(min = DateTimeConstants.MONDAY, max = DateTimeConstants.SUNDAY)
-    private final int dayOfWeek;
+    private final DayOfWeek day;
     @NotNull
-    private final DateTime opening;
+    @Pattern(regexp = TIME_REGEX)
+    private final String open;
     @NotNull
-    private final DateTime closing;
+    @Pattern(regexp = TIME_REGEX)
+    private final String close;
 
     @JsonCreator
-    public OpeningHours(@JsonProperty("dayOfWeek") final int dayOfWeek,
-            @JsonProperty("opening") final DateTime opening,
-            @JsonProperty("closing") final DateTime closing) {
-        this.dayOfWeek = dayOfWeek;
-        this.opening = opening;
-        this.closing = closing;
+    public OpeningHours(@JsonProperty("day") final DayOfWeek day,
+            @JsonProperty("open") final String open,
+            @JsonProperty("close") final String close) {
+        this.day = day;
+        this.open = open;
+        this.close = close;
     }
 
-    public DateTime getOpening() {
-        return opening;
+    public String getOpen() {
+        return open;
     }
 
-    public DateTime getClosing() {
-        return closing;
+    public String getClose() {
+        return close;
     }
 
-    public int getDayOfWeek() {
-        return dayOfWeek;
+    public DayOfWeek getDay() {
+        return day;
     }
 
     @Override
     public String toString() {
         return new StringBuilder()
                 .append("OpeningHours{")
-                .append("dayOfWeek=").append(dayOfWeek).append(" (")
-                .append(opening.toString("HH:MM"))
+                .append("day=").append(day).append(" (")
+                .append(open)
                 .append(" - ")
-                .append(closing.toString("HH:MM"))
+                .append(close)
                 .append(")}").toString();
     }
 }
