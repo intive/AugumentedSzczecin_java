@@ -15,9 +15,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.bls.core.user.User;
+import com.bls.core.views.Views;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -49,6 +53,7 @@ public class SearchResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
+    @JsonView(Views.Public.class)
     public SearchingResults getByRegion(@BeanParam SearchCriteria searchCriteria) {
         validateBean(searchCriteria);
         // TODO add sorting, batching results...

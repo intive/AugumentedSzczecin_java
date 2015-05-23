@@ -39,7 +39,7 @@ public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
     }
 
     @Override
-    public Collection<Poi<Long>> find(Location location, Long radius, Collection<String> tags, Optional<User> user){
+    public Collection<Poi<Long>> find(Location location, Long radius, Collection<String> tags, Optional<User<String>> user){
         return null;
     }
 }
