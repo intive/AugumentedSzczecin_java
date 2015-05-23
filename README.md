@@ -24,6 +24,10 @@ Prerequisites:
 			-H "Content-Type: application/json" \
 			-d '{"email":"asd@com", "password":"zxc"}'
 
+* Confirm user's credentials
+
+        curl -v http://localhost:8000/users/whoami -u asd@com:zxc
+
 * Add new place
 
 		curl -v localhost:8000/places \
