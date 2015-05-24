@@ -28,7 +28,7 @@ public class SearchCriteria {
 
     private final List<String> tags;
 
-    private final Optional<User> user;
+    private final Optional<User<String>> user;
 
     public SearchCriteria(@QueryParam("lg") final Float longitude,
             @QueryParam("lt") final Float latitude,
@@ -43,7 +43,7 @@ public class SearchCriteria {
         this.user = Optional.fromNullable(user);
     }
 
-    public Optional<User> getUser() {
+    public Optional<User<String>> getUser() {
         return user;
     }
     public Location getLocation() {

@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
+import org.bson.types.ObjectId;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.internal.MongoJackModule;
@@ -86,15 +87,13 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         return coreEntities;
     }
 
-    public List<I> find(final Location location, final Long radius, Collection<String> tags, Optional<User> user){
+    public List<I> find(final Location location, final Long radius, Collection<String> tags, Optional<User<String>> user){
         BasicDBList coordinates = new BasicDBList();
         coordinates.add(location.getLongitude());
         coordinates.add(location.getLatitude());
 
         BasicDBList geoParams = new BasicDBList();
         geoParams.add(coordinates);
-        /* Radius is in degrees so we dont need this:
-        geoParams.add(metersToDegrees(radius)); */
         geoParams.add(radius);
 
         BasicDBObject query = new BasicDBObject("location",new BasicDBObject("$geoWithin",new BasicDBObject("$center", geoParams)));
@@ -102,7 +101,7 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
             query.append("tags", new BasicDBObject("$in", tags));
         }
         if(user.isPresent()) {
-          query.append("owner.email", new BasicDBObject("$eq", user.get().getEmail()));
+          query.append("owner.id", new BasicDBObject("$eq", user.get().getId()));
         }
         else {
             query.append("owner", new BasicDBObject("$eq", null));

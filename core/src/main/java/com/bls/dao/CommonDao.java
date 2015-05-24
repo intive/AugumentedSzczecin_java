@@ -28,5 +28,5 @@ public interface CommonDao<E extends Identifiable> {
 
     Collection<E> findAll();
 
-    Collection<E> find(final Location location, final Long radius, Collection<String> tags, Optional<User> user);
+    Collection<E> find(final Location location, final Long radius, Collection<String> tags, Optional<User<String>> user);
 }

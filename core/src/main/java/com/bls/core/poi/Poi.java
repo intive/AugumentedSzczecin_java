@@ -5,6 +5,7 @@ import com.bls.core.comment.Comment;
 import com.bls.core.geo.Location;
 import com.bls.core.price.PriceList;
 import com.bls.core.user.User;
+import com.bls.core.views.Views;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.common.collect.ImmutableList;
@@ -21,6 +22,7 @@ import java.util.Collection;
 @JsonInclude(Include.NON_EMPTY)
 public abstract class Poi<K> extends IdentifiableEntity<K> {
 
+    @JsonView(Views.Private.class)
     protected final User owner;
     
     @NotNull
