@@ -62,8 +62,7 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
     
     protected final Collection<OpeningHours> opening;
     
-    @Min(0)
-    protected final Float price;
+    protected final Boolean paid;
     
     @JsonCreator
     public Poi(@JsonProperty(value = "id", required = false) final K id,
@@ -75,7 +74,7 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
                @JsonProperty("tags") final Collection<String> tags,
                @JsonProperty("media") final Collection<String> media,
                @JsonProperty("opening") final Collection<OpeningHours> opening,
-               @JsonProperty("price") final Float price,
+               @JsonProperty("paid") final Boolean paid,
                @JsonProperty("wiki") final String wiki,
                @JsonProperty("fanpage") final String fanpage,
                @JsonProperty("www") final String www,
@@ -86,7 +85,7 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
         this.location = location;
         this.address = address;
         this.owner = owner;
-        this.price = price;
+        this.paid = paid;
         this.wiki = wiki;
         this.fanpage = fanpage;
         this.www = www;
@@ -127,7 +126,27 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
         return opening;
     }
 
-    public Float getPriceList() {
-        return price;
+    public Boolean getPaid() {
+        return paid;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getWww() {
+        return www;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getWiki() {
+        return wiki;
+    }
+
+    public String getFanpage() {
+        return fanpage;
     }
 }

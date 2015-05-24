@@ -32,12 +32,12 @@ public class Person<K> extends Poi<K> {
                  @JsonProperty("tags") final Collection<String> tags,
                  @JsonProperty("media") final Collection<String> media,
                  @JsonProperty("openingDaysAndHours") final Collection<OpeningHours> openingDaysAndHours,
-                 @JsonProperty("price") final Float price,
+                 @JsonProperty("paid") final Boolean paid,
                  @JsonProperty("wiki") final String wiki,
                  @JsonProperty("fanpage") final String fanpage,
                  @JsonProperty("www") final String www,
                  @JsonProperty("phone") final String phone) {
-        super(id, name, description, location, address, owner, tags, media, openingDaysAndHours, price,
+        super(id, name, description, location, address, owner, tags, media, openingDaysAndHours, paid,
                 wiki, fanpage, www, phone);
     }
 
