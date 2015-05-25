@@ -2,7 +2,6 @@ package com.bls.resource;
 
 import java.util.Collection;
 import java.util.List;
-import com.google.common.base.Optional;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -12,6 +11,8 @@ import javax.ws.rs.QueryParam;
 import com.bls.core.geo.Location;
 import com.bls.core.poi.Category;
 import com.bls.core.user.User;
+import com.google.common.base.Optional;
+
 import io.dropwizard.auth.Auth;
 
 public class SearchCriteria {
@@ -20,7 +21,8 @@ public class SearchCriteria {
     private final Location location;
 
     @Min(0)
-    @Max(360)
+    // FIXME temporary hack to let Windows client get some points
+    @Max(1000)
     @NotNull
     private final Long radius;
 
