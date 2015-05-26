@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -20,7 +21,6 @@ import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -39,10 +39,11 @@ public class SearchResource {
     private final SearchService searchService;
 
     private final Client openDataClient;
+
     private final String openDataUrl;
 
     @Inject
-    public SearchResource(final SearchService searchService, final Client openDataClient, final String openDataUrl) {
+    public SearchResource(final SearchService searchService, @Named("openDataUrl") final Client openDataClient, final String openDataUrl) {
         this.searchService = searchService;
         this.openDataClient = openDataClient;
         this.openDataUrl = openDataUrl;
@@ -60,7 +61,7 @@ public class SearchResource {
     @Timed
     @ExceptionMetered
     @JsonView(Views.Public.class)
-    public Response getByRegion(@BeanParam SearchCriteria searchCriteria) throws IOException {
+    public SearchingResults getByRegion(@BeanParam SearchCriteria searchCriteria) throws IOException {
         if (!searchCriteria.getUser().isPresent()){
             OpenData openData = openDataClient
                     .target(openDataUrl + "/patronat2015?$format=json")
@@ -71,16 +72,14 @@ public class SearchResource {
             List<OpenDataPoint> openDataPointList = openData.getOpenDataResults().getOpenDataPointList();
 
             List<Place> places = Arrays.asList(objectMapper.readValue(objectMapper.writeValueAsString(openDataPointList), Place[].class));
-            return Response.status(Response.Status.OK)
-                    .entity(places)
-                    .build();
+            SearchingResults searchingResults = new SearchingResults();
+            searchingResults.putPlaces(places);
+            return searchingResults;
         }
         else {
             validateBean(searchCriteria);
             // TODO add sorting, batching results...
-            return Response.status(Response.Status.OK)
-                    .entity(searchService.searchByCriteria(searchCriteria))
-                    .build();
+            return searchService.searchByCriteria(searchCriteria);
         }
     }
 }

@@ -2,21 +2,16 @@ package com.bls.core.opendata;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Cat {
-    private final Metadata metadata;
     private final String c0;
 
     @JsonCreator
-    public Cat(@JsonProperty("__metadata") final Metadata metadata,
-               @JsonProperty("c0") final String c0){
-        this.metadata = metadata;
+    public Cat(@JsonProperty("c0") final String c0){
         this.c0 = c0;
-    }
-
-    public Metadata getMetadata(){
-        return metadata;
     }
 
     public String getc0(){

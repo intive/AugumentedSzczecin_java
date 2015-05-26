@@ -5,12 +5,12 @@ import com.bls.core.geo.Location;
 import com.bls.core.place.Place;
 import com.bls.core.poi.Address;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenDataPoint {
-    private final Metadata metadata;
-    private final String _id;
-    private final String id;
+
     private final String coll;
     private final String name;
     private final String description;
@@ -20,18 +20,12 @@ public class OpenDataPoint {
     private final Place.Subcategory subcategory;
 
     @JsonCreator
-    public OpenDataPoint(@JsonProperty("__metadata") final Metadata metadata,
-                         @JsonProperty("_id") final String _id,
-                         @JsonProperty("id") final String id,
-                         @JsonProperty("coll") final String coll,
+    public OpenDataPoint(@JsonProperty("coll") final String coll,
                          @JsonProperty("name") final String name,
                          @JsonProperty("descr") final String description,
                          @JsonProperty("Loc") final Loc loc,
                          @JsonProperty("Cat") final Cat cat,
                          @JsonProperty("Addr") final Addr addr){
-        this.metadata = metadata;
-        this._id = _id;
-        this.id = id;
         this.coll = coll;
         this.name = name;
         this.description = description;
@@ -39,18 +33,6 @@ public class OpenDataPoint {
         this.cat = cat;
         this.address = new Address(addr.getCity(), addr.getStreet(), addr.getPostcode(), null, null);
         this.subcategory = Place.Subcategory.MONUMENT;
-    }
-
-    public Metadata getMetadata(){
-        return metadata;
-    }
-
-    public String get_id(){
-        return _id;
-    }
-
-    public String getId(){
-        return id;
     }
 
     public String getColl(){
