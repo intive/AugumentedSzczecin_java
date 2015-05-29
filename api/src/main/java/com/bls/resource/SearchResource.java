@@ -1,5 +1,25 @@
 package com.bls.resource;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.ws.rs.BeanParam;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.core.MediaType;
+
 import com.bls.core.opendata.OpenData;
 import com.bls.core.opendata.OpenDataPoint;
 import com.bls.core.place.Place;
@@ -9,22 +29,8 @@ import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.dropwizard.hibernate.UnitOfWork;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.ws.rs.*;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.MediaType;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import io.dropwizard.hibernate.UnitOfWork;
 
 /**
  * Search entities by geo location for logged in user.
@@ -37,16 +43,16 @@ public class SearchResource {
 
     private static final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final SearchService searchService;
-
     private final Client openDataClient;
-
     private final String openDataUrl;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Inject
-    public SearchResource(final SearchService searchService, @Named("openDataUrl") final Client openDataClient, final String openDataUrl) {
+    public SearchResource(final SearchService searchService, final Client openDataClient, @Named("openDataUrl") final String openDataUrl) {
         this.searchService = searchService;
         this.openDataClient = openDataClient;
-        this.openDataUrl = openDataUrl;
+        this.openDataUrl = openDataUrl + "/patronat2015?$format=json";
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     private static <T> void validateBean(final T searchCriteria) {
@@ -62,24 +68,25 @@ public class SearchResource {
     @ExceptionMetered
     @JsonView(Views.Public.class)
     public SearchingResults getByRegion(@BeanParam SearchCriteria searchCriteria) throws IOException {
-        if (!searchCriteria.getUser().isPresent()){
-            OpenData openData = openDataClient
-                    .target(openDataUrl + "/patronat2015?$format=json")
-                    .request(MediaType.APPLICATION_JSON).get().readEntity(OpenData.class);
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            List<OpenDataPoint> openDataPointList = openData.getOpenDataResults().getOpenDataPointList();
-
-            List<Place> places = Arrays.asList(objectMapper.readValue(objectMapper.writeValueAsString(openDataPointList), Place[].class));
-            SearchingResults searchingResults = new SearchingResults();
-            searchingResults.putPlaces(places);
-            return searchingResults;
+        boolean shouldGetDataFromOpendataServer = !searchCriteria.getUser().isPresent();
+        if (shouldGetDataFromOpendataServer) {
+            return getFromOpendata(searchCriteria);
         }
-        else {
-            validateBean(searchCriteria);
-            // TODO add sorting, batching results...
-            return searchService.searchByCriteria(searchCriteria);
-        }
+
+        validateBean(searchCriteria);
+        // TODO add sorting, batching results...
+        return searchService.searchByCriteria(searchCriteria);
+    }
+
+    // FIXME search criteria is not used
+    private SearchingResults getFromOpendata(final SearchCriteria searchCriteria) throws IOException {
+        OpenData openData = openDataClient.target(openDataUrl).request(MediaType.APPLICATION_JSON).get().readEntity(OpenData.class);
+
+        List<OpenDataPoint> openDataPointList = openData.getOpenDataResults().getOpenDataPointList();
+
+        List<Place> places = Arrays.asList(objectMapper.readValue(objectMapper.writeValueAsString(openDataPointList), Place[].class));
+        SearchingResults searchingResults = new SearchingResults();
+        searchingResults.putPlaces(places);
+        return searchingResults;
     }
 }
