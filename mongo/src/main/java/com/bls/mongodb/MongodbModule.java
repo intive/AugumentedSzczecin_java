@@ -51,6 +51,12 @@ public class MongodbModule extends AbstractModule {
     public PlaceDao providePlaceDao(final DB mongodb) {
         return new PlaceMongodbDao(mongodb);
     }
+
+    @Singleton
+    @Provides
+    public CommercialDao provideCommercialDao(final DB mongodb) {
+        return new CommercialMongodbDao(mongodb);
+    }
     
     @Singleton
     @Provides

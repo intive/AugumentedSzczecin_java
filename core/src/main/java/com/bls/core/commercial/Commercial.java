@@ -1,4 +1,4 @@
-package com.bls.core.place;
+package com.bls.core.commercial;
 
 
 import com.bls.core.geo.Location;
@@ -12,37 +12,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
-/**
- * An place with some specific location
- *
- * @param <K> Key type for Place entity
- */
+
 @JsonInclude(Include.NON_EMPTY)
-public class Place <K> extends Poi<K> {
-    
-    public enum Subcategory {
-        SCHOOL,
-        HOSPITAL,
-        PARK,
-        MONUMENT,
-        MUSEUM,
-        OFFICE,
-        BUS_STATION,
-        TRAIN_STATION,
-        POST_OFFICE,
-        CHURCH
-    }
+public class Commercial <K> extends Poi<K> {
 
-    private static final Category category = Category.PLACE;
-
-    @NotNull
-    private final Subcategory subcategory;
+    private static final Category category = Category.COMMERCIAL;
 
     @JsonCreator
-    public Place(@JsonProperty(value = "id", required = false) final K id,
+    public Commercial(@JsonProperty(value = "id", required = false) final K id,
                  @JsonProperty("name") final String name,
                  @JsonProperty("description") final String description,
                  @JsonProperty("location") final Location location,
@@ -55,20 +34,14 @@ public class Place <K> extends Poi<K> {
                  @JsonProperty("wiki") final String wiki,
                  @JsonProperty("fanpage") final String fanpage,
                  @JsonProperty("www") final String www,
-                 @JsonProperty("phone") final String phone,
-                 @JsonProperty("subcategory") final Subcategory subcategory) {
-        super(id, name, description, location, address, owner, tags, media, openingDaysAndHours, paid, 
+                 @JsonProperty("phone") final String phone) {
+        super(id, name, description, location, address, owner, tags, media, openingDaysAndHours, paid,
                 wiki, fanpage, www, phone);
-        this.subcategory = subcategory;
     }
 
     @Override
     public Category getCategory() {
         return category;
-    }
-
-    public Subcategory getSubcategory() {
-        return subcategory;
     }
 
 }
