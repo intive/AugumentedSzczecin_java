@@ -30,19 +30,7 @@ Prerequisites:
 
 * Add new place
 
-		curl -v localhost:8000/places \
-		-H "Content-type: application/json" \
-		-d '{"name": "BLStream", "description":"BLStream Szczecin", \
-		"location"{"latitude":53.428624, "longitude": 14.556482}, \
-		"address":{"city": "Szczecin", "street": "Plac Hołdu Pruskiego", "streetNumber": "9", "zipcode": "70-550"}, \
-		"tags": ["it","thug"], "www": "http://blstream.com/en/", "phone": "914325680", \
-		"fanpage": "https://www.facebook.com/blstream", \
-		"media": ["http://www.netcamp.pl/wp-content/uploads/2013/02/blstream-logo.png", \
-		"https://pbs.twimg.com/profile_images/378800000665275518/550d61b582adb462f664c8f33d9cde82_400x400.png"], \
-		"opening": [{"day": "MONDAY", "open": "08:00", "close": "00:00"}], \
-		"subcategory": "COMMERCIAL"}' \
-		-u asd@com:zxc
-
+		curl -v localhost:8000/places -H "Content-type: application/json" -d '{"name":"BLStream","description":"BLStream Szczecin","location":{"latitude":53.428624,"longitude":14.556482},"address":{"city":"Szczecin","street":"Plac Hołdu Pruskiego","streetNumber":"9","zipcode":"70-550"},"tags":["it","thug"],"www":"http://blstream.com/en/","phone":"914325680","fanpage":"https://www.facebook.com/blstream","media":["http://www.netcamp.pl/wp-content/uploads/2013/02/blstream-logo.png","https://pbs.twimg.com/profile_images/378800000665275518/550d61b582adb462f664c8f33d9cde82_400x400.png"],"opening":[{"day":"MONDAY","open":"08:00","close":"00:00"}],"subcategory":"COMMERCIAL"}' -u asd@com:zxc
 
 * Fetch all places 
 
