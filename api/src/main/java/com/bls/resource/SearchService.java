@@ -1,14 +1,12 @@
 package com.bls.resource;
 
+import com.bls.core.commercial.Commercial;
 import com.bls.core.event.Event;
 import com.bls.core.person.Person;
 import com.bls.core.place.Place;
 import com.bls.core.poi.Category;
 import com.bls.core.user.User;
-import com.bls.dao.EventDao;
-import com.bls.dao.PersonDao;
-import com.bls.dao.PlaceDao;
-import com.bls.dao.UserDao;
+import com.bls.dao.*;
 import com.google.common.base.Optional;
 
 import javax.inject.Inject;
@@ -20,13 +18,15 @@ public class SearchService {
     private final EventDao<Event> eventDao;
     private final PlaceDao<Place> placeDao;
     private final PersonDao<Person> personDao;
+    private final CommercialDao<Commercial> commercialDao;
     private final UserDao<User<String>> userDao;
 
     @Inject
-    public SearchService(final EventDao eventDao, final PlaceDao placeDao, final PersonDao personDao, final UserDao userDao) {
+    public SearchService(final EventDao eventDao, final PlaceDao placeDao, final PersonDao personDao, final CommercialDao commercialDao, final UserDao userDao) {
         this.eventDao = eventDao;
         this.placeDao = placeDao;
         this.personDao = personDao;
+        this.commercialDao = commercialDao;
         this.userDao = userDao;
     }
 
@@ -45,6 +45,9 @@ public class SearchService {
         }
         if (searchCriteria.getCategories().isEmpty() || searchCriteria.getCategories().contains(Category.PLACE)) {
             response.putPlaces(placeDao.find(searchCriteria.getLocation(), searchCriteria.getRadius(), searchCriteria.getTags(), user));
+        }
+        if (searchCriteria.getCategories().isEmpty() || searchCriteria.getCategories().contains(Category.COMMERCIAL)) {
+            response.putCommercials(commercialDao.find(searchCriteria.getLocation(), searchCriteria.getRadius(), searchCriteria.getTags(), user));
         }
         return response;
     }

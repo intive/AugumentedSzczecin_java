@@ -11,7 +11,8 @@ public enum Category {
     
     PERSON("person"),
     EVENT("event"),
-    PLACE("place");
+    PLACE("place"),
+    COMMERCIAL("commercial");
     
     private final String name;
 
