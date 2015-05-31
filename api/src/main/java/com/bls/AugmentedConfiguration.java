@@ -4,6 +4,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.bls.client.opendata.OpenDataClientConfiguration;
+import com.bls.core.PagingConfiguration;
 import com.bls.mongodb.MongodbConfiguration;
 import com.bls.core.resetpwd.ResetPasswordTokenConfiguration;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -37,18 +38,23 @@ public class AugmentedConfiguration extends Configuration {
     @Valid
     @NotNull
     private final ResetPasswordTokenConfiguration tokenConfig;
+    @Valid
+    @NotNull
+    private final PagingConfiguration pagingConfig;
 
     @JsonCreator
     public AugmentedConfiguration(@JsonProperty(value = "dbtype") final DbType dbtype,
-            @JsonProperty(value = "mongodb", required = false) final MongodbConfiguration mongodbConfig,
-            @JsonProperty(value = "rdbms", required = false) final DataSourceFactory rdbmsConfig,
-            @JsonProperty(value = "authCacheSpec", required = false) final String authCacheSpec,
-            @JsonProperty(value = "openDataClient", required = true) final OpenDataClientConfiguration openDataClientConfig, 
-            @JsonProperty(value = "resetPasswordToken", required = false) final ResetPasswordTokenConfiguration tokenConfig) {
+                                  @JsonProperty(value = "mongodb", required = false) final MongodbConfiguration mongodbConfig,
+                                  @JsonProperty(value = "rdbms", required = false) final DataSourceFactory rdbmsConfig,
+                                  @JsonProperty(value = "authCacheSpec", required = false) final String authCacheSpec,
+                                  @JsonProperty(value = "openDataClient", required = true) final OpenDataClientConfiguration openDataClientConfig,
+                                  @JsonProperty(value = "resetPasswordToken", required = false) final ResetPasswordTokenConfiguration tokenConfig, 
+                                  @JsonProperty(value = "paging", required = true) final PagingConfiguration pagingConfig) {
         this.dbtype = dbtype;
         this.mongoConfig = mongodbConfig;
         this.rdbmsConfig = rdbmsConfig;
         this.openDataClientConfig = openDataClientConfig;
+        this.pagingConfig = pagingConfig;
         this.authCacheSpec = CacheBuilder.from(authCacheSpec != null ? authCacheSpec : DEFAULT_AUTH_CACHE_SPEC);
         this.tokenConfig = tokenConfig != null ? tokenConfig : new ResetPasswordTokenConfiguration(DEFAULT_TOKEN_TIME);
     }
@@ -75,6 +81,10 @@ public class AugmentedConfiguration extends Configuration {
 
     public ResetPasswordTokenConfiguration getTokenConfig() {
         return tokenConfig;
+    }
+    
+    public PagingConfiguration getPagingConfig() {
+        return pagingConfig;
     }
 
     enum DbType {

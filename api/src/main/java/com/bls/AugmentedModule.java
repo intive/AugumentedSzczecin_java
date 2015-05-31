@@ -1,6 +1,7 @@
 package com.bls;
 
 import com.bls.client.opendata.OpenDataClientConfiguration;
+import com.bls.core.PagingConfiguration;
 import com.bls.mongodb.MongodbConfiguration;
 import com.bls.core.resetpwd.ResetPasswordTokenConfiguration;
 import com.google.inject.AbstractModule;
@@ -30,5 +31,11 @@ public class AugmentedModule extends AbstractModule {
     @Provides
     public ResetPasswordTokenConfiguration provideResetPasswordTokenConfiguration(AugmentedConfiguration config) {
         return config.getTokenConfig();
+    }
+
+    @Singleton
+    @Provides
+    public PagingConfiguration providePagingConfiguration(AugmentedConfiguration config) {
+        return config.getPagingConfig();
     }
 }
