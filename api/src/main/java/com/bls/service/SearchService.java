@@ -1,25 +1,20 @@
 package com.bls.service;
 
-import java.util.Collection;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import com.bls.core.commercial.Commercial;
 import com.bls.core.event.Event;
 import com.bls.core.geo.Location;
 import com.bls.core.person.Person;
 import com.bls.core.place.Place;
 import com.bls.core.poi.Category;
-import com.bls.core.user.User;
-import com.bls.dao.CommercialDao;
-import com.bls.dao.EventDao;
-import com.bls.dao.PersonDao;
-import com.bls.dao.PlaceDao;
-import com.bls.dao.UserDao;
 import com.bls.core.search.SearchCriteria;
 import com.bls.core.search.SearchResults;
+import com.bls.core.user.User;
+import com.bls.dao.*;
 import com.google.common.base.Optional;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.Collection;
 
 @Singleton
 public class SearchService {
@@ -54,20 +49,25 @@ public class SearchService {
         final Location location = searchCriteria.getLocation();
         final Long radius = searchCriteria.getRadius();
         final Collection<String> tags = searchCriteria.getTags();
+        final Optional<String> name = searchCriteria.getName();
+        final Optional<String> street = searchCriteria.getStreet();
+        final Collection<Place.Subcategory> subcat = searchCriteria.getSubcat();
+        final Optional<Boolean> paid = searchCriteria.getPaid();
+        final Optional<Boolean> open = searchCriteria.getOpen();
         final Optional<Integer> page = searchCriteria.getPage();
         final Integer pageSize = searchCriteria.getPageSize();
 
         if (searchCriteria.getCategories().isEmpty() || searchCriteria.getCategories().contains(Category.EVENT)) {
-            response.putEvents(eventDao.find(location, radius, tags, user, page, pageSize));
+            response.putEvents(eventDao.find(location, radius, tags, name, street, subcat, paid, open, user, page, pageSize));
         }
         if (searchCriteria.getCategories().isEmpty() || searchCriteria.getCategories().contains(Category.PERSON)) {
-            response.putPerson(personDao.find(location, radius, tags, user, page, pageSize));
+            response.putPerson(personDao.find(location, radius, tags, name, street, subcat, paid, open, user, page, pageSize));
         }
         if (searchCriteria.getCategories().isEmpty() || searchCriteria.getCategories().contains(Category.PLACE)) {
-            response.putPlaces(placeDao.find(location, radius, tags, user, page, pageSize));
+            response.putPlaces(placeDao.find(location, radius, tags, name, street, subcat, paid, open, user, page, pageSize));
         }
         if (searchCriteria.getCategories().isEmpty() || searchCriteria.getCategories().contains(Category.COMMERCIAL)) {
-            response.putCommercials(commercialDao.find(location, radius, tags, user, page, pageSize));
+            response.putCommercials(commercialDao.find(location, radius, tags, name, street, subcat, paid, open, user, page, pageSize));
         }
         return response;
     }

@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.hibernate.SessionFactory;
 
 import com.bls.core.geo.Location;
+import com.bls.core.place.Place;
 import com.bls.core.poi.Poi;
 import com.bls.core.user.User;
 import com.bls.rdbms.core.PoiJpa;
@@ -34,6 +35,11 @@ public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
     public Collection<Poi<Long>> find(Location location,
             Long radius,
             Collection<String> tags,
+            Optional<String> name,
+            Optional<String> street,
+            Collection<Place.Subcategory> subcat,
+            Optional<Boolean> paid,
+            Optional<Boolean> open,
             Optional<User> user,
             Optional<Integer> page,
             Integer pageSize) {

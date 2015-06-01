@@ -60,6 +60,7 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
     @Size(max=4)
     protected final Collection<String> media;
     
+    @Valid
     protected final Collection<OpeningHours> opening;
     
     protected final Boolean paid;
