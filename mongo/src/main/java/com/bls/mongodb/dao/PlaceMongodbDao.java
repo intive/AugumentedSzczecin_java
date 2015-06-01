@@ -3,6 +3,7 @@ package com.bls.mongodb.dao;
 import com.bls.core.place.Place;
 import com.bls.dao.PlaceDao;
 import com.bls.mongodb.core.PlaceMongodb;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 
 import javax.inject.Inject;
@@ -12,6 +13,7 @@ public class PlaceMongodbDao extends CommonMongodbDao<PlaceMongodb, Place<String
     @Inject
     public PlaceMongodbDao(final DB db) {
         super(db);
+        dbCollection.ensureIndex(new BasicDBObject("location", "2dsphere"));
     }
 
     @Override

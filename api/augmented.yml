@@ -16,6 +16,10 @@ openDataClientConfig:
   
 resetPasswordToken:
   expiration: 1
+  
+pageSize: 1
+
+defaultPageSize: 10
 
 server:
   type: simple

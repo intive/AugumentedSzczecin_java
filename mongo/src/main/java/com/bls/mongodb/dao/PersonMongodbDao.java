@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import com.mongodb.BasicDBObject;
 import org.mongojack.DBQuery;
 
 import com.bls.core.person.Person;
@@ -19,6 +20,7 @@ public class PersonMongodbDao extends CommonMongodbDao<PersonMongodb, Person<Str
     @Inject
     public PersonMongodbDao(final DB db) {
         super(db);
+        dbCollection.ensureIndex(new BasicDBObject("location", "2dsphere"));
     }
 
     @Override
