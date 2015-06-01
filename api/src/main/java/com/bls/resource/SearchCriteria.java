@@ -3,6 +3,7 @@ package com.bls.resource;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.Max;
@@ -43,15 +44,16 @@ public class SearchCriteria {
             @QueryParam("cat") final List<Category> categories,
             @QueryParam("tag") final List<String> tags,
             @QueryParam("page") final Integer page,
+            @QueryParam("pageSize") final Integer queriedPageSize,
             @Auth(required = false) final User user,
-            @Named("pageSize") final Integer pageSize) {
+            @Named("defaultPageSize") final Integer defaultPageSize) {
         this.location = new Location(longitude, latitude);
         this.radius = radius;
         this.categories = categories;
         this.tags = tags;
         this.user = Optional.fromNullable(user);
         this.page = Optional.fromNullable(page);
-        this.pageSize = Optional.of(pageSize);
+        this.pageSize = Optional.fromNullable(queriedPageSize).or(Optional.of(defaultPageSize));
     }
 
     public Optional<User<String>> getUser() {

@@ -95,32 +95,29 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
      * Returns collection of POIs around {@param location}, within {@param radius} range.
      * Results may be optionally limited by tags if it's not empty.
      * Optional {@param user} indicates if the user is logged in or not.
-     * Optional {@param page} enables pagination when it's greater than 0. Otherwise all matching POIs are returned.
+     * Optional {@param page} enables pagination. Otherwise all matching POIs are returned.
+     * Optional {@param pageSize} specifies number of results per page. (by default set in configuration file) 
      *
      * @param location  {@link Location}
      * @param radius    meters
      * @param tags      collection of tags, may be empty
      * @param user      optional {@link User} used to determine POI owner
      * @param page      optional - specifies a page to return
+     * @param pageSize  optional - specifies page size                  
      *
      * @return          List of POIs matching criteria.
      */
     public List<I> find(final Location location, final Long radius, final Collection<String> tags, final Optional<User<String>> user, final Optional<Integer> page, final Optional<Integer> pageSize) {
 
         BasicDBObject q = createGeoNearQuery(location, radius, tags, user, page, pageSize);
-        System.out.println("q = " + q.toString());
 
         final Aggregation<M> aggregation = new Aggregation<>(getMongodbModelType(),
                 new BasicDBObject("$geoNear", q),
-                new BasicDBObject("$skip", (page.isPresent() && pageSize.isPresent()) ? page.get() * pageSize.get() : 0)
+                new BasicDBObject("$skip", (page.isPresent()) ? page.get() * pageSize.get() : 0)
         );
 
         final List<M> mongodbEntities = dbCollection.aggregate(aggregation).results();
         
-        System.out.println("mongodbEntities.size() = " + mongodbEntities.size());
-        System.out.println("pageSize = " + pageSize.orNull());
-        System.out.println("page = " + page.orNull());
-
         final List<I> coreEntities = Lists.newArrayListWithCapacity(mongodbEntities.size());
         coreEntities.addAll(mongodbEntities.stream().map(this::convert2coreModel).collect(Collectors.toList()));
         return coreEntities;
@@ -153,11 +150,11 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         double[] loc = {location.getLongitude(), location.getLatitude()};
         geoNearParams.append("near", loc);
         geoNearParams.append("spherical", "true");
-        geoNearParams.append("maxDistance", radius);
+        geoNearParams.append("maxDistance", Math.toRadians(metersToDegrees(radius)));
         geoNearParams.append("distanceField", "dist");
         geoNearParams.append("distanceMultiplier", 6371009); // radius of the earth in meters
         geoNearParams.append("query", additionalQuery);
-        if (page.isPresent() && pageSize.isPresent()) {
+        if (page.isPresent()) {
             geoNearParams.append("limit", (page.get() + 1) * pageSize.get());
         }
 

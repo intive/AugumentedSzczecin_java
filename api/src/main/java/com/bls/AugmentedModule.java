@@ -8,7 +8,6 @@ import com.google.inject.Provides;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
-import java.util.Optional;
 
 public class AugmentedModule extends AbstractModule {
 
@@ -36,8 +35,8 @@ public class AugmentedModule extends AbstractModule {
     
     @Singleton
     @Provides
-    @Named("pageSize")
+    @Named("defaultPageSize")
     public Integer providePageSize(AugmentedConfiguration config) {
-        return config.getPageSize();
+        return config.getDefaultPageSize();
     }
 }
