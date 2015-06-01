@@ -10,14 +10,17 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
-import com.mongodb.BasicDBList;
+import com.google.inject.Inject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
-import org.bson.types.ObjectId;
+import com.mongodb.DBObject;
+import com.mongodb.QueryBuilder;
+import org.mongojack.Aggregation;
 import org.mongojack.DBQuery;
 import org.mongojack.JacksonDBCollection;
 import org.mongojack.internal.MongoJackModule;
 
+import javax.inject.Named;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +36,7 @@ import static com.google.common.base.Preconditions.checkState;
  * @param <K> Key type for used inside core entity type
  */
 public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEntity, I extends Identifiable<K>, K> implements CommonDao<I> {
-
+    
     private final static ObjectMapper MAPPER = MongoJackModule.configure(new ObjectMapper())
             .configure(SerializationFeature.FAIL_ON_UNWRAPPED_TYPE_IDENTIFIERS, false)
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true)
@@ -87,27 +90,36 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         return coreEntities;
     }
 
-    public List<I> find(final Location location, final Long radius, Collection<String> tags, Optional<User<String>> user){
-        BasicDBList coordinates = new BasicDBList();
-        coordinates.add(location.getLongitude());
-        coordinates.add(location.getLatitude());
 
-        BasicDBList geoParams = new BasicDBList();
-        geoParams.add(coordinates);
-        geoParams.add(radius);
+    /**
+     * Returns collection of POIs around {@param location}, within {@param radius} range.
+     * Results may be optionally limited by tags if it's not empty.
+     * Optional {@param user} indicates if the user is logged in or not.
+     * Optional {@param page} enables pagination when it's greater than 0. Otherwise all matching POIs are returned.
+     *
+     * @param location  {@link Location}
+     * @param radius    meters
+     * @param tags      collection of tags, may be empty
+     * @param user      optional {@link User} used to determine POI owner
+     * @param page      optional - specifies a page to return
+     *
+     * @return          List of POIs matching criteria.
+     */
+    public List<I> find(final Location location, final Long radius, final Collection<String> tags, final Optional<User<String>> user, final Optional<Integer> page, final Optional<Integer> pageSize) {
 
-        BasicDBObject query = new BasicDBObject("location",new BasicDBObject("$geoWithin",new BasicDBObject("$center", geoParams)));
-        if(!tags.isEmpty()) {
-            query.append("tags", new BasicDBObject("$in", tags));
-        }
-        if(user.isPresent()) {
-          query.append("owner.id", new BasicDBObject("$eq", user.get().getId()));
-        }
-        else {
-            query.append("owner", new BasicDBObject("$eq", null));
-        }
+        BasicDBObject q = createGeoNearQuery(location, radius, tags, user, page, pageSize);
+        System.out.println("q = " + q.toString());
 
-        final List<M> mongodbEntities = dbCollection.find(query).toArray();
+        final Aggregation<M> aggregation = new Aggregation<>(getMongodbModelType(),
+                new BasicDBObject("$geoNear", q),
+                new BasicDBObject("$skip", (page.isPresent() && pageSize.isPresent()) ? page.get() * pageSize.get() : 0)
+        );
+
+        final List<M> mongodbEntities = dbCollection.aggregate(aggregation).results();
+        
+        System.out.println("mongodbEntities.size() = " + mongodbEntities.size());
+        System.out.println("pageSize = " + pageSize.orNull());
+        System.out.println("page = " + page.orNull());
 
         final List<I> coreEntities = Lists.newArrayListWithCapacity(mongodbEntities.size());
         coreEntities.addAll(mongodbEntities.stream().map(this::convert2coreModel).collect(Collectors.toList()));
@@ -117,6 +129,39 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
     public Float metersToDegrees(Long radiusInMeters) {
         checkState(radiusInMeters != null, "Radius is required");
         return radiusInMeters.floatValue() / 111119.99965975954f;
+    }
+
+    private BasicDBObject createGeoNearQuery(final Location location,
+                                               final Long radius, 
+                                               final Collection<String> tags, 
+                                               final Optional<User<String>> user,
+                                               final Optional<Integer> page,
+                                               final Optional<Integer> pageSize) {
+
+        BasicDBObject additionalQuery = new BasicDBObject();
+        if(!tags.isEmpty()) {
+            additionalQuery.append("tags", new BasicDBObject("$in", tags));
+        }
+        if(user.isPresent()) {
+            additionalQuery.append("owner.id", new BasicDBObject("$eq", user.get().getId()));
+        }
+        else {
+            additionalQuery.append("owner", new BasicDBObject("$eq", null));
+        }
+        
+        BasicDBObject geoNearParams = new BasicDBObject();
+        double[] loc = {location.getLongitude(), location.getLatitude()};
+        geoNearParams.append("near", loc);
+        geoNearParams.append("spherical", "true");
+        geoNearParams.append("maxDistance", radius);
+        geoNearParams.append("distanceField", "dist");
+        geoNearParams.append("distanceMultiplier", 6371009); // radius of the earth in meters
+        geoNearParams.append("query", additionalQuery);
+        if (page.isPresent() && pageSize.isPresent()) {
+            geoNearParams.append("limit", (page.get() + 1) * pageSize.get());
+        }
+
+        return geoNearParams;
     }
 
     @Override

@@ -13,6 +13,8 @@ import com.google.common.cache.CacheBuilder;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 
+import java.util.Optional;
+
 public class AugmentedConfiguration extends Configuration {
 
     public static final int PW_HASH_SECURITY_LEVEL = 12;
@@ -37,18 +39,23 @@ public class AugmentedConfiguration extends Configuration {
     @Valid
     @NotNull
     private final ResetPasswordTokenConfiguration tokenConfig;
+    @Valid
+    @NotNull
+    private final Integer pageSize;
 
     @JsonCreator
     public AugmentedConfiguration(@JsonProperty(value = "dbtype") final DbType dbtype,
-            @JsonProperty(value = "mongodb", required = false) final MongodbConfiguration mongodbConfig,
-            @JsonProperty(value = "rdbms", required = false) final DataSourceFactory rdbmsConfig,
-            @JsonProperty(value = "authCacheSpec", required = false) final String authCacheSpec,
-            @JsonProperty(value = "openDataClient", required = true) final OpenDataClientConfiguration openDataClientConfig, 
-            @JsonProperty(value = "resetPasswordToken", required = false) final ResetPasswordTokenConfiguration tokenConfig) {
+                                  @JsonProperty(value = "mongodb", required = false) final MongodbConfiguration mongodbConfig,
+                                  @JsonProperty(value = "rdbms", required = false) final DataSourceFactory rdbmsConfig,
+                                  @JsonProperty(value = "authCacheSpec", required = false) final String authCacheSpec,
+                                  @JsonProperty(value = "openDataClient", required = true) final OpenDataClientConfiguration openDataClientConfig,
+                                  @JsonProperty(value = "resetPasswordToken", required = false) final ResetPasswordTokenConfiguration tokenConfig, 
+                                  @JsonProperty(value = "pageSize", required = false) final Integer pageSize) {
         this.dbtype = dbtype;
         this.mongoConfig = mongodbConfig;
         this.rdbmsConfig = rdbmsConfig;
         this.openDataClientConfig = openDataClientConfig;
+        this.pageSize = pageSize;
         this.authCacheSpec = CacheBuilder.from(authCacheSpec != null ? authCacheSpec : DEFAULT_AUTH_CACHE_SPEC);
         this.tokenConfig = tokenConfig != null ? tokenConfig : new ResetPasswordTokenConfiguration(DEFAULT_TOKEN_TIME);
     }
@@ -75,6 +82,10 @@ public class AugmentedConfiguration extends Configuration {
 
     public ResetPasswordTokenConfiguration getTokenConfig() {
         return tokenConfig;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
     }
 
     enum DbType {
