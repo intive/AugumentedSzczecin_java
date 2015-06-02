@@ -1,8 +1,6 @@
 package com.bls.mongodb.dao;
 
-import java.util.Collections;
-
-import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 
 import org.mongojack.DBQuery;
 
@@ -42,7 +40,7 @@ public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, 
     private User<String> checkDuplicate(final User<String> user) {
         Optional<User<String>> existingUser = findByEmail(user.getEmail());
         if (existingUser.isPresent()) {
-            throw new ConstraintViolationException(String.format("User already in db: %s", user.getEmail()), Collections.emptySet());
+            throw new ValidationException(String.format("User with email: %s already exist", user.getEmail()));
         }
         return user;
     }

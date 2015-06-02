@@ -1,11 +1,10 @@
 package com.bls.dao;
 
+import javax.validation.ValidationException;
+
 import com.bls.core.poi.Poi;
 import com.bls.core.user.User;
 import com.google.common.base.Optional;
-
-import javax.validation.ConstraintViolationException;
-import java.util.Collections;
 
 public interface PoiDao<P extends Poi> extends CommonDao<P> {
 
@@ -16,11 +15,14 @@ public interface PoiDao<P extends Poi> extends CommonDao<P> {
 
     default P findByIdSafe(final User user, final String id) {
         final Optional<P> entity = findById(id);
+
         if (!entity.isPresent()) {
-            throw new ConstraintViolationException(String.format("Poi with id: %s not found", id), Collections.emptySet());
+            throw new ValidationException(String.format("Poi with id: %s not found", id));
         }
-        if (!entity.get().getOwner().getId().equals(user.getId())) {
-            throw new ConstraintViolationException("Access denied", Collections.emptySet());
+
+        final boolean userIsPoiOwner = entity.get().getOwner().getId().equals(user.getId());
+        if (!userIsPoiOwner) {
+            throw new ValidationException(String.format("Poi with id: %s not found", id));
         }
         return entity.get();
     }

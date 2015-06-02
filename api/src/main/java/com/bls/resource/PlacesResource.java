@@ -39,7 +39,7 @@ public class PlacesResource {
     @Timed
     @ExceptionMetered
     public Collection<Place> getAll(@Auth User user) {
-        return placeDao.findAll();
+        return placeDao.findAll(user);
     }
 
     @POST

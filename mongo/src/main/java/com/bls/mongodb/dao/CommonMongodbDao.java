@@ -79,8 +79,9 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
     }
 
     @Override
-    public List<I> findAll() {
-        final List<M> mongodbEntities = dbCollection.find().toArray();
+    public List<I> findAll(final User owner) {
+        final BasicDBObject owning = new BasicDBObject("owner.id", new BasicDBObject("$eq", owner.getId()));
+        final List<M> mongodbEntities = dbCollection.find(owning).toArray();
         final List<I> coreEntities = Lists.newArrayListWithCapacity(mongodbEntities.size());
         coreEntities.addAll(mongodbEntities.stream().map(this::convert2coreModel).collect(Collectors.toList()));
         return coreEntities;
@@ -143,7 +144,7 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         geoNearParams.append("spherical", "true");
         geoNearParams.append("maxDistance", Math.toRadians(metersToDegrees(radius)));
         geoNearParams.append("distanceField", "dist");
-//        geoNearParams.append("distanceMultiplier", 6371009); // radius of the earth in meters
+        //        geoNearParams.append("distanceMultiplier", 6371009); // radius of the earth in meters
         geoNearParams.append("query", additionalQuery);
         if (page.isPresent()) {
             geoNearParams.append("limit", (page.get() + 1) * pageSize);
