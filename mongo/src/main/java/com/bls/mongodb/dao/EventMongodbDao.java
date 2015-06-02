@@ -23,10 +23,4 @@ public class EventMongodbDao extends CommonMongodbDao<EventMongodb, Event<String
     protected Class<EventMongodb> getMongodbModelType() {
         return EventMongodb.class;
     }
-
-    @Override
-    public Event<String> createWithOwner(Event<String> entity, User user) {
-        entity.setOwner(user);
-        return super.create(entity);
-    }
 }

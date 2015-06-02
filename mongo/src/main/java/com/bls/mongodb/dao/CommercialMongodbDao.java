@@ -20,10 +20,4 @@ public class CommercialMongodbDao extends CommonMongodbDao<CommercialMongodb, Co
     protected Class<CommercialMongodb> getMongodbModelType() {
         return CommercialMongodb.class;
     }
-
-    @Override
-    public Commercial<String> createWithOwner(Commercial<String> entity, User user) {
-        entity.setOwner(user);
-        return super.create(entity);
-    }
 }

@@ -1,11 +1,8 @@
 package com.bls.dao;
 
-import com.bls.core.Identifiable;
 import com.bls.core.person.Person;
-import com.bls.core.user.User;
-import com.google.common.base.Optional;
+import com.bls.core.poi.Poi;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -13,7 +10,7 @@ import java.util.List;
  *
  * @param <E> Entity type
  */
-public interface PersonDao<E extends Identifiable> extends PoiDao<E> {
+public interface PersonDao<E extends Poi> extends PoiDao<E> {
 
     List<Person<String>> findByUserId(final String id);
     

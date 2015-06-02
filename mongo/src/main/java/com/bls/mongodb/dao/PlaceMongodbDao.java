@@ -19,10 +19,4 @@ public class PlaceMongodbDao extends CommonMongodbDao<PlaceMongodb, Place<String
     protected Class<PlaceMongodb> getMongodbModelType() {
         return PlaceMongodb.class;
     }
-
-    @Override
-    public Place<String> createWithOwner(Place<String> entity, User user) {
-        entity.setOwner(user);
-        return super.create(entity);
-    }
 }
