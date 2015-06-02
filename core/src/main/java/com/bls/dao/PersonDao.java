@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @param <E> Entity type
  */
-public interface PersonDao<E extends Identifiable> extends CommonDao<E> {
+public interface PersonDao<E extends Identifiable> extends PoiDao<E> {
 
     List<Person<String>> findByUserId(final String id);
     

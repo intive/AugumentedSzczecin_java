@@ -3,6 +3,7 @@ package com.bls.mongodb.dao;
 import javax.inject.Inject;
 
 import com.bls.core.event.Event;
+import com.bls.core.user.User;
 import com.bls.dao.EventDao;
 import com.bls.mongodb.core.EventMongodb;
 import com.mongodb.DB;
@@ -21,5 +22,11 @@ public class EventMongodbDao extends CommonMongodbDao<EventMongodb, Event<String
     @Override
     protected Class<EventMongodb> getMongodbModelType() {
         return EventMongodb.class;
+    }
+
+    @Override
+    public Event<String> createWithOwner(Event<String> entity, User user) {
+        entity.setOwner(user);
+        return super.create(entity);
     }
 }

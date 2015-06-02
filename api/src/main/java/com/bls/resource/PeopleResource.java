@@ -48,5 +48,5 @@ public class PeopleResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Person add(@Auth User user, @Valid final Person person) { return personDao.create(person); }
+    public Person add(@Auth User user, @Valid final Person person) { return personDao.createWithOwner(person, user); }
 }

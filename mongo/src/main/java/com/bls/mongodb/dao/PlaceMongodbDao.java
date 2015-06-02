@@ -1,6 +1,7 @@
 package com.bls.mongodb.dao;
 
 import com.bls.core.place.Place;
+import com.bls.core.user.User;
 import com.bls.dao.PlaceDao;
 import com.bls.mongodb.core.PlaceMongodb;
 import com.mongodb.DB;
@@ -19,4 +20,9 @@ public class PlaceMongodbDao extends CommonMongodbDao<PlaceMongodb, Place<String
         return PlaceMongodb.class;
     }
 
+    @Override
+    public Place<String> createWithOwner(Place<String> entity, User user) {
+        entity.setOwner(user);
+        return super.create(entity);
+    }
 }

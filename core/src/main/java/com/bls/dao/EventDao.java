@@ -8,7 +8,7 @@ import com.google.common.base.Optional;
  *
  * @param <E> Entity type
  */
-public interface EventDao<E extends Identifiable> extends CommonDao<E> {
+public interface EventDao<E extends Identifiable> extends PoiDao<E> {
 
     // TODO
     

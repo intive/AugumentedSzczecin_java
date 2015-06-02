@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import com.bls.core.user.User;
 import org.mongojack.DBQuery;
 
 import com.bls.core.person.Person;
@@ -32,5 +33,11 @@ public class PersonMongodbDao extends CommonMongodbDao<PersonMongodb, Person<Str
         final List<Person<String>> coreEntities = Lists.newArrayListWithCapacity(mongodbEntities.size());
         coreEntities.addAll(mongodbEntities.stream().map(this::convert2coreModel).collect(Collectors.toList()));
         return coreEntities;
+    }
+
+    @Override
+    public Person<String> createWithOwner(Person<String> entity, User user) {
+        entity.setOwner(user);
+        return super.create(entity);
     }
 }

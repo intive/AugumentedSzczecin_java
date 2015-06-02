@@ -15,7 +15,7 @@ import java.util.Collection;
 public interface CommonDao<E extends Identifiable> {
 
     E create(final E entity);
-
+    
     E update(final E entity);
 
     void delete(final E entity);

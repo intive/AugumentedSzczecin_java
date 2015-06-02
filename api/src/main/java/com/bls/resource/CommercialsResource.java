@@ -41,5 +41,7 @@ public class CommercialsResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Commercial add(@Auth User user, @Valid final Commercial commercial) { return commercialDao.create(commercial); }
+    public Commercial add(@Auth User user, @Valid final Commercial commercial) {
+        return commercialDao.createWithOwner(commercial, user);
+    }
 }
