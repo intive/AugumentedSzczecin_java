@@ -35,11 +35,6 @@ public class UserMongodbDao extends CommonMongodbDao<UserMongodb, User<String>, 
     }
 
     @Override
-    public void deleteByEmail(String email) {
-        dbCollection.findAndRemove(DBQuery.is("email", email));
-    }
-
-    @Override
     public User<String> create(final User<String> user) {
         return super.create(checkDuplicate(user));
     }

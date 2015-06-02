@@ -1,6 +1,5 @@
 package com.bls.dao;
 
-import com.bls.core.Identifiable;
 import com.bls.core.poi.Poi;
 
 /**
