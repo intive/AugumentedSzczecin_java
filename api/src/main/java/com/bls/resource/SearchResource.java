@@ -23,7 +23,10 @@ import javax.ws.rs.core.MediaType;
 import com.bls.core.opendata.OpenData;
 import com.bls.core.opendata.OpenDataPoint;
 import com.bls.core.place.Place;
+import com.bls.core.search.SearchCriteria;
+import com.bls.core.search.SearchResults;
 import com.bls.core.views.Views;
+import com.bls.service.SearchService;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -67,26 +70,27 @@ public class SearchResource {
     @Timed
     @ExceptionMetered
     @JsonView(Views.Public.class)
-    public SearchingResults getByRegion(@BeanParam SearchCriteria searchCriteria) throws IOException {
+    public SearchResults getByRegion(@BeanParam SearchCriteria searchCriteria) throws IOException {
         boolean shouldGetDataFromOpendataServer = !searchCriteria.getUser().isPresent();
         if (shouldGetDataFromOpendataServer) {
             return getFromOpendata(searchCriteria);
         }
 
         validateBean(searchCriteria);
-        // TODO add sorting, batching results...
+
+        // TODO add sorting
         return searchService.searchByCriteria(searchCriteria);
     }
 
     // FIXME search criteria is not used
-    private SearchingResults getFromOpendata(final SearchCriteria searchCriteria) throws IOException {
+    private SearchResults getFromOpendata(final SearchCriteria searchCriteria) throws IOException {
         OpenData openData = openDataClient.target(openDataUrl).request(MediaType.APPLICATION_JSON).get().readEntity(OpenData.class);
 
         List<OpenDataPoint> openDataPointList = openData.getOpenDataResults().getOpenDataPointList();
 
         List<Place> places = Arrays.asList(objectMapper.readValue(objectMapper.writeValueAsString(openDataPointList), Place[].class));
-        SearchingResults searchingResults = new SearchingResults();
-        searchingResults.putPlaces(places);
-        return searchingResults;
+        SearchResults searchResults = new SearchResults();
+        searchResults.putPlaces(places);
+        return searchResults;
     }
 }

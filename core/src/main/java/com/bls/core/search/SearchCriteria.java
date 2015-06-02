@@ -1,9 +1,10 @@
-package com.bls.resource;
+package com.bls.core.search;
 
 import java.util.Collection;
 import java.util.List;
 
-import javax.validation.constraints.Max;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.QueryParam;
@@ -19,35 +20,42 @@ public class SearchCriteria {
 
     @NotNull
     private final Location location;
-
     @Min(0)
-    // FIXME temporary hack to let Windows client get some points
-    @Max(1000)
     @NotNull
     private final Long radius;
+    private final Collection<Category> categories;
+    private final Collection<String> tags;
+    private final Optional<User> user;
+    private final Optional<Integer> page;
+    private final Integer pageSize;
 
-    private final List<Category> categories;
-
-    private final List<String> tags;
-
-    private final Optional<User<String>> user;
-
-    public SearchCriteria(@QueryParam("lg") final Float longitude,
+    @Inject
+    public SearchCriteria(
+            // authorization
+            @Auth(required = false) final User user,
+            // configuration
+            @Named("defaultPageSize") final Integer defaultPageSize,
+            // request parameters
+            @QueryParam("lg") final Float longitude,
             @QueryParam("lt") final Float latitude,
             @QueryParam("radius") final Long radius,
             @QueryParam("cat") final List<Category> categories,
             @QueryParam("tag") final List<String> tags,
-            @Auth(required = false) final User user) {
+            @QueryParam("page") final Integer page,
+            @QueryParam("pageSize") final Integer queriedPageSize) {
         this.location = new Location(longitude, latitude);
         this.radius = radius;
         this.categories = categories;
         this.tags = tags;
         this.user = Optional.fromNullable(user);
+        this.page = Optional.fromNullable(page);
+        this.pageSize = queriedPageSize != null ? queriedPageSize : defaultPageSize;
     }
 
-    public Optional<User<String>> getUser() {
+    public Optional<User> getUser() {
         return user;
     }
+
     public Location getLocation() {
         return location;
     }
@@ -62,5 +70,13 @@ public class SearchCriteria {
 
     public Collection<String> getTags() {
         return tags;
+    }
+
+    public Optional<Integer> getPage() {
+        return page;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
     }
 }

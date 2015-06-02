@@ -6,6 +6,7 @@ import com.bls.core.event.Event;
 import com.bls.core.user.User;
 import com.bls.dao.EventDao;
 import com.bls.mongodb.core.EventMongodb;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 
 /**
@@ -17,6 +18,7 @@ public class EventMongodbDao extends CommonMongodbDao<EventMongodb, Event<String
     @Inject
     public EventMongodbDao(final DB db) {
         super(db);
+        dbCollection.ensureIndex(new BasicDBObject("location", "2dsphere"));
     }
 
     @Override

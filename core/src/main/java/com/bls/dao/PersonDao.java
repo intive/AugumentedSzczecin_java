@@ -13,5 +13,5 @@ import java.util.List;
 public interface PersonDao<E extends Poi> extends PoiDao<E> {
 
     List<Person<String>> findByUserId(final String id);
-    
+
 }
