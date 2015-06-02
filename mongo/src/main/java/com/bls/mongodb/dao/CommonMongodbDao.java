@@ -181,12 +181,10 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         geoNearParams.append("spherical", "true");
         geoNearParams.append("maxDistance", Math.toRadians(metersToDegrees(radius)));
         geoNearParams.append("distanceField", "dist");
-        //        geoNearParams.append("distanceMultiplier", 6371009); // radius of the earth in meters
         geoNearParams.append("query", additionalQuery);
         if (page.isPresent()) {
             geoNearParams.append("limit", (page.get() + 1) * pageSize);
         }
-        System.out.println("geoNearParams = " + geoNearParams);
         return new BasicDBObject("$geoNear", geoNearParams);
     }
 
