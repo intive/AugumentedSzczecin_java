@@ -1,6 +1,7 @@
 package com.bls.mongodb.dao;
 
 import com.bls.core.place.Place;
+import com.bls.core.user.User;
 import com.bls.dao.PlaceDao;
 import com.bls.mongodb.core.PlaceMongodb;
 import com.mongodb.DB;
@@ -18,5 +19,4 @@ public class PlaceMongodbDao extends CommonMongodbDao<PlaceMongodb, Place<String
     protected Class<PlaceMongodb> getMongodbModelType() {
         return PlaceMongodb.class;
     }
-
 }

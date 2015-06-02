@@ -3,6 +3,7 @@ package com.bls.mongodb.dao;
 import javax.inject.Inject;
 
 import com.bls.core.event.Event;
+import com.bls.core.user.User;
 import com.bls.dao.EventDao;
 import com.bls.mongodb.core.EventMongodb;
 import com.mongodb.DB;

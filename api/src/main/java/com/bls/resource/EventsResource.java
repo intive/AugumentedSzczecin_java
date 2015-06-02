@@ -46,5 +46,5 @@ public class EventsResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Event add(@Auth User user, @Valid final Event event) { return eventDao.create(event); }
+    public Event add(@Auth User user, @Valid final Event event) { return eventDao.createWithOwner(event, user); }
 }

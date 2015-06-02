@@ -23,7 +23,7 @@ import java.util.Collection;
 public abstract class Poi<K> extends IdentifiableEntity<K> {
 
     @JsonView(Views.Private.class)
-    protected final User owner;
+    protected User owner;
     
     @NotNull
     @Size(min=1, max=50)
@@ -148,5 +148,9 @@ public abstract class Poi<K> extends IdentifiableEntity<K> {
 
     public String getFanpage() {
         return fanpage;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }

@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import com.bls.core.poi.Poi;
+import com.bls.core.user.User;
 import org.mongojack.DBQuery;
 
 import com.bls.core.person.Person;

@@ -2,6 +2,7 @@ package com.bls.mongodb.dao;
 
 
 import com.bls.core.commercial.Commercial;
+import com.bls.core.user.User;
 import com.bls.dao.CommercialDao;
 import com.bls.mongodb.core.CommercialMongodb;
 import com.mongodb.DB;
@@ -19,5 +20,4 @@ public class CommercialMongodbDao extends CommonMongodbDao<CommercialMongodb, Co
     protected Class<CommercialMongodb> getMongodbModelType() {
         return CommercialMongodb.class;
     }
-
 }

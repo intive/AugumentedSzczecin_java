@@ -46,6 +46,6 @@ public class PlacesResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Place add(@Auth User user, @Valid final Place place) { return placeDao.create(place); }
+    public Place add(@Auth User user, @Valid final Place place) { return placeDao.createWithOwner(place, user); }
 }
 
