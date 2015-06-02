@@ -6,6 +6,7 @@ import com.bls.core.resetpwd.ResetPasswordTokenConfiguration;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 public class AugmentedModule extends AbstractModule {
@@ -30,5 +31,12 @@ public class AugmentedModule extends AbstractModule {
     @Provides
     public ResetPasswordTokenConfiguration provideResetPasswordTokenConfiguration(AugmentedConfiguration config) {
         return config.getTokenConfig();
+    }
+    
+    @Singleton
+    @Provides
+    @Named("defaultPageSize")
+    public Integer providePageSize(AugmentedConfiguration config) {
+        return config.getDefaultPageSize();
     }
 }

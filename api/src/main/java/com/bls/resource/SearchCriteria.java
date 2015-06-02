@@ -3,6 +3,9 @@ package com.bls.resource;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -21,8 +24,6 @@ public class SearchCriteria {
     private final Location location;
 
     @Min(0)
-    // FIXME temporary hack to let Windows client get some points
-    @Max(1000)
     @NotNull
     private final Long radius;
 
@@ -31,18 +32,28 @@ public class SearchCriteria {
     private final List<String> tags;
 
     private final Optional<User<String>> user;
+    
+    private final Optional<Integer> page;
+    
+    private final Optional<Integer> pageSize;
 
+    @Inject
     public SearchCriteria(@QueryParam("lg") final Float longitude,
             @QueryParam("lt") final Float latitude,
             @QueryParam("radius") final Long radius,
             @QueryParam("cat") final List<Category> categories,
             @QueryParam("tag") final List<String> tags,
-            @Auth(required = false) final User user) {
+            @QueryParam("page") final Integer page,
+            @QueryParam("pageSize") final Integer queriedPageSize,
+            @Auth(required = false) final User user,
+            @Named("defaultPageSize") final Integer defaultPageSize) {
         this.location = new Location(longitude, latitude);
         this.radius = radius;
         this.categories = categories;
         this.tags = tags;
         this.user = Optional.fromNullable(user);
+        this.page = Optional.fromNullable(page);
+        this.pageSize = Optional.fromNullable(queriedPageSize).or(Optional.of(defaultPageSize));
     }
 
     public Optional<User<String>> getUser() {
@@ -62,5 +73,13 @@ public class SearchCriteria {
 
     public Collection<String> getTags() {
         return tags;
+    }
+
+    public Optional<Integer> getPage() {
+        return page;
+    }
+
+    public Optional<Integer> getPageSize() {
+        return pageSize;
     }
 }

@@ -51,6 +51,10 @@ Prerequisites:
 * Find all known POI types matching search criteria: location and radius
 
 		curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=150" -u asd@com:zxc
+		
+* Find all known POI types matching search criteria: location and radius with results paging (return 7 nearest POIs)
+
+		curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=150&page=0&pageSize=7" -u asd@com:zxc
 
 * Find all known POI types matching search criteria: location, radius and categories
 		
