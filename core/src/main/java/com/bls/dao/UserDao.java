@@ -15,6 +15,4 @@ public interface UserDao<E extends Identifiable> extends CommonDao<E> {
      * @return User found or Optional#empty() if not found
      */
     Optional<E> findByEmail(final String email);
-
-    void deleteByEmail(final String email);
 }

@@ -8,5 +8,4 @@ import com.bls.core.poi.Poi;
  * @param <E> Entity type
  */
 public interface EventDao<E extends Poi> extends PoiDao<E> {
-
 }

@@ -1,18 +1,20 @@
 package com.bls.rdbms.dao;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
+
 import com.bls.core.IdentifiableEntity;
 import com.bls.core.geo.Location;
 import com.bls.core.user.User;
 import com.bls.dao.CommonDao;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+
 import io.dropwizard.hibernate.AbstractDAO;
 import io.dropwizard.util.Generics;
-import org.hibernate.Criteria;
-import org.hibernate.SessionFactory;
-
-import java.util.Collection;
-import java.util.List;
 
 public abstract class CommonJpaDao<J, E extends IdentifiableEntity> extends AbstractDAO<J> implements CommonDao<E> {
 
@@ -68,8 +70,13 @@ public abstract class CommonJpaDao<J, E extends IdentifiableEntity> extends Abst
         return result;
     }
 
-    public Collection<E> find(Location location, Long radius, Collection<String> tags, Optional<User<String>> user){
-        return null;
+    public Collection<E> find(Location location,
+            Long radius,
+            Collection<String> tags,
+            Optional<User> user,
+            Optional<Integer> page,
+            Integer pageSize) {
+        throw new IllegalStateException("Unimplemented");
     }
 
     protected Criteria currentCriteria() {return currentSession().createCriteria(entityClass);}

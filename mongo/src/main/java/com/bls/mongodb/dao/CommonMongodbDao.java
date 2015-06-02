@@ -1,5 +1,14 @@
 package com.bls.mongodb.dao;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.mongojack.Aggregation;
+import org.mongojack.DBQuery;
+import org.mongojack.JacksonDBCollection;
+import org.mongojack.internal.MongoJackModule;
+
 import com.bls.core.Identifiable;
 import com.bls.core.geo.Location;
 import com.bls.core.user.User;
@@ -10,20 +19,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
-import org.bson.types.ObjectId;
-import org.mongojack.DBQuery;
-import org.mongojack.JacksonDBCollection;
-import org.mongojack.internal.MongoJackModule;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Generic mongodb dao operations and mapping to/from core model
@@ -36,8 +36,7 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
 
     private final static ObjectMapper MAPPER = MongoJackModule.configure(new ObjectMapper())
             .configure(SerializationFeature.FAIL_ON_UNWRAPPED_TYPE_IDENTIFIERS, false)
-            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true)
-            .registerModule(new JodaModule());
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true).registerModule(new JodaModule());
     protected final JacksonDBCollection<M, String> dbCollection;
 
     public CommonMongodbDao(final DB db) {
@@ -87,36 +86,87 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         return coreEntities;
     }
 
-    public List<I> find(final Location location, final Long radius, Collection<String> tags, Optional<User<String>> user){
-        BasicDBList coordinates = new BasicDBList();
-        coordinates.add(location.getLongitude());
-        coordinates.add(location.getLatitude());
+    /**
+     * Returns collection of POIs around {@param location}, within {@param radius} range.
+     * Results may be optionally limited by tags if it's not empty.
+     * Optional {@param user} indicates if the user is logged in or not.
+     * Optional {@param page} enables pagination. Otherwise all matching POIs are returned.
+     * Optional {@param pageSize} specifies number of results per page. (by default set in configuration file)
+     *
+     * @param location {@link Location}
+     * @param radius   meters
+     * @param tags     collection of tags, may be empty
+     * @param user     optional {@link User} used to determine POI owner
+     * @param page     optional - specifies a page to return
+     * @param pageSize specifies page size
+     * @return List of POIs matching criteria.
+     */
+    public List<I> find(final Location location,
+            final Long radius,
+            final Collection<String> tags,
+            final Optional<User> user,
+            final Optional<Integer> page,
+            final Integer pageSize) {
 
-        BasicDBList geoParams = new BasicDBList();
-        geoParams.add(coordinates);
-        geoParams.add(radius);
+        final BasicDBObject query = createQuery(location, radius, tags, user, page, pageSize);
 
-        BasicDBObject query = new BasicDBObject("location",new BasicDBObject("$geoWithin",new BasicDBObject("$center", geoParams)));
-        if(!tags.isEmpty()) {
-            query.append("tags", new BasicDBObject("$in", tags));
-        }
-        if(user.isPresent()) {
-          query.append("owner.id", new BasicDBObject("$eq", user.get().getId()));
-        }
-        else {
-            query.append("owner", new BasicDBObject("$eq", null));
-        }
+        final Aggregation<M> queryWithPaging = addPagingAggregation(query, page, pageSize);
 
-        final List<M> mongodbEntities = dbCollection.find(query).toArray();
+        final List<M> mongodbEntities = dbCollection.aggregate(queryWithPaging).results();
 
         final List<I> coreEntities = Lists.newArrayListWithCapacity(mongodbEntities.size());
         coreEntities.addAll(mongodbEntities.stream().map(this::convert2coreModel).collect(Collectors.toList()));
+
         return coreEntities;
     }
 
+    private BasicDBObject createQuery(final Location location,
+            final Long radius,
+            final Collection<String> tags,
+            final Optional<User> user,
+            final Optional<Integer> page,
+            final Integer pageSize) {
+
+        BasicDBObject additionalQuery = new BasicDBObject();
+        if (!tags.isEmpty()) {
+            additionalQuery.append("tags", new BasicDBObject("$in", tags));
+        }
+        if (user.isPresent()) {
+            additionalQuery.append("owner.id", new BasicDBObject("$eq", user.get().getId()));
+        } else {
+            additionalQuery.append("owner", new BasicDBObject("$eq", null));
+        }
+
+        BasicDBObject geoNearParams = new BasicDBObject();
+        double[] near = {location.getLongitude(), location.getLatitude()};
+        geoNearParams.append("near", near);
+        geoNearParams.append("spherical", "true");
+        geoNearParams.append("maxDistance", Math.toRadians(metersToDegrees(radius)));
+        geoNearParams.append("distanceField", "dist");
+//        geoNearParams.append("distanceMultiplier", 6371009); // radius of the earth in meters
+        geoNearParams.append("query", additionalQuery);
+        if (page.isPresent()) {
+            geoNearParams.append("limit", (page.get() + 1) * pageSize);
+        }
+        System.out.println("geoNearParams = " + geoNearParams);
+        return new BasicDBObject("$geoNear", geoNearParams);
+    }
+
     public Float metersToDegrees(Long radiusInMeters) {
-        checkState(radiusInMeters != null, "Radius is required");
+        checkArgument(radiusInMeters != null, "Radius is required");
         return radiusInMeters.floatValue() / 111119.99965975954f;
+    }
+
+    private Aggregation<M> addPagingAggregation(final BasicDBObject query, final Optional<Integer> page, final int pageSize) {
+        final Aggregation<M> aggregation;
+        final int countToSkip = page.isPresent() ? page.get() * pageSize : 0;
+        if (countToSkip > 0) {
+            final BasicDBObject skip = new BasicDBObject("$skip", countToSkip);
+            aggregation = new Aggregation<>(getMongodbModelType(), query, skip);
+        } else {
+            aggregation = new Aggregation<>(getMongodbModelType(), query);
+        }
+        return aggregation;
     }
 
     @Override

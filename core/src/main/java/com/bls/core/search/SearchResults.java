@@ -1,4 +1,6 @@
-package com.bls.resource;
+package com.bls.core.search;
+
+import java.util.Collection;
 
 import com.bls.core.commercial.Commercial;
 import com.bls.core.event.Event;
@@ -9,12 +11,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
 
-import java.util.Collection;
-
 @JsonInclude(Include.NON_EMPTY)
-public class SearchingResults {
+public class SearchResults {
 
-    // TODO add some pag11ing, compute some ratios...
     @JsonProperty
     private Collection<Event> events = Lists.newArrayList();
     @JsonProperty
