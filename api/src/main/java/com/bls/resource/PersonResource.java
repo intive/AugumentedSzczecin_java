@@ -3,8 +3,8 @@ package com.bls.resource;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -43,32 +43,24 @@ public class PersonResource {
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public List<Person<String>> get(@Auth final User user, @PathParam("id") final String id) {
-        return personDao.findByUserId((String) user.getId());
+    public Person get(@Auth final User user, @PathParam("id") final String id) {
+        return personDao.findByIdSafe(user, id);
     }
 
     @PUT
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Person update(@Auth final User user, @PathParam("id") final String id) {
-        return personDao.update(getPersonSafe(id, user));
+    public Person update(@Auth final User user, @PathParam("id") final String id, @Valid final Person person) {
+        return personDao.updateSafe(user, id, person);
     }
 
     @DELETE
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void deleteById(@Auth User user, @PathParam("id") final String id) { personDao.deleteById(id); }
-
-    private Person getPersonSafe(final @PathParam("id") String id, final User<String> user) {
-        final Optional<Person> person = personDao.findById(id);
-        if (!person.isPresent()) {
-            throw new NotFoundException(String.format("Person with id: %s not found", id));
-        }
-        if (!person.get().getOwner().getId().equals(user.getId())) {
-            throw new NotAuthorizedException("Access denied.");
-        }
-        return person.get();
+    public void deleteById(@Auth User user, @PathParam("id") final String id) {
+        personDao.deleteById((String)personDao.findByIdSafe(user, id).getId());
     }
+
 }
