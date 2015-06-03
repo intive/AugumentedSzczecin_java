@@ -46,7 +46,7 @@
     </dependencies>
 
     <build>
-        <finalName>augumented-api</finalName>
+        <finalName>augmented-api</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
