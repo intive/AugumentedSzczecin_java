@@ -34,7 +34,7 @@ public class CommercialsResource {
     @Timed
     @ExceptionMetered
     public Collection<Commercial> getAll(@Auth User user) {
-        return commercialDao.findAll();
+        return commercialDao.findAll(user);
     }
 
     @POST

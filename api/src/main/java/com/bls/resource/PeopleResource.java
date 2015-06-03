@@ -3,7 +3,6 @@ package com.bls.resource;
 import java.util.Collection;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -15,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.bls.core.person.Person;
 import com.bls.core.user.User;
-import com.bls.dao.CommonDao;
 import com.bls.dao.PersonDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
@@ -41,7 +39,7 @@ public class PeopleResource {
     @Timed
     @ExceptionMetered
     public Collection<Person> getAll(@Auth User user) {
-        return personDao.findAll();
+        return personDao.findAll(user);
     }
 
     @POST

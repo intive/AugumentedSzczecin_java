@@ -1,8 +1,8 @@
 package com.bls.resource;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 
 import com.bls.core.event.Event;
 import com.bls.core.user.User;
-import com.bls.dao.CommonDao;
 import com.bls.dao.EventDao;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
@@ -42,28 +41,23 @@ public class EventResource {
     @Timed
     @ExceptionMetered
     public Event get(@Auth User user, @PathParam("id") final String id) {
-        return getEventSafe(id);
+        return eventDao.findByIdSafe(user, id);
     }
 
     @PUT
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Event update(@Auth User user, @PathParam("id") final String id) {
-        return eventDao.update(getEventSafe(id));
+    public Event update(@Auth User user, @PathParam("id") final String id, @Valid final Event event) {
+        return eventDao.updateSafe(user, id, event);
     }
 
     @DELETE
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void deleteById(@Auth User user, @PathParam("id") final String id) { eventDao.deleteById(id); }
-
-    private Event getEventSafe(final String id) {
-        final Optional<Event> event = eventDao.findById(id);
-        if (!event.isPresent()) {
-            throw new NotFoundException(String.format("Event with id: %s not found", id));
-        }
-        return event.get();
+    public void deleteById(@Auth User user, @PathParam("id") final String id) {
+        eventDao.deleteById((String)eventDao.findByIdSafe(user, id).getId());
     }
+
 }

@@ -12,6 +12,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -33,28 +34,23 @@ public class CommercialResource {
     @Timed
     @ExceptionMetered
     public Commercial get(@Auth User user, @PathParam("id") final String id) {
-        return getCommercialSafe(id);
+        return commercialDao.findByIdSafe(user, id);
     }
 
     @PUT
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Commercial update(@Auth User user, @PathParam("id") final String id) {
-        return commercialDao.update(getCommercialSafe(id));
+    public Commercial update(@Auth User user, @PathParam("id") final String id, @Valid final Commercial commercial) {
+        return commercialDao.updateSafe(user, id, commercial);
     }
 
     @DELETE
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void deleteById(@Auth User user, @PathParam("id") final String id) { commercialDao.deleteById(id); }
-
-    private Commercial getCommercialSafe(final String id) {
-        final Optional<Commercial> commercial = commercialDao.findById(id);
-        if (!commercial.isPresent()) {
-            throw new NotFoundException(String.format("Commercial with id: %s not found", id));
-        }
-        return commercial.get();
+    public void deleteById(@Auth User user, @PathParam("id") final String id) {
+        commercialDao.deleteById((String)commercialDao.findByIdSafe(user, id).getId());
     }
+
 }

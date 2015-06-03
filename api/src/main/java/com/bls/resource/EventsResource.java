@@ -39,7 +39,7 @@ public class EventsResource {
     @Timed
     @ExceptionMetered
     public Collection<Event> getAll(@Auth User user) {
-        return eventDao.findAll();
+        return eventDao.findAll(user);
     }
 
     @POST

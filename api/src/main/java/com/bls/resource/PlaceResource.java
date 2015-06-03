@@ -5,12 +5,12 @@ import com.bls.dao.PlaceDao;
 import com.bls.core.place.Place;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Timed;
-import com.google.common.base.Optional;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -32,28 +32,22 @@ public class PlaceResource {
     @Timed
     @ExceptionMetered
     public Place get(@Auth User user, @PathParam("id") final String id) {
-        return getPlaceSafe(id);
+        return placeDao.findByIdSafe(user, id);
     }
 
     @PUT
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public Place update(@Auth User user, @PathParam("id") final String id) {
-        return placeDao.update(getPlaceSafe(id));
+    public Place update(@Auth final User user, @PathParam("id") final String id, @Valid final Place place) {
+        return placeDao.updateSafe(user, id, place);
     }
 
     @DELETE
     @UnitOfWork
     @Timed
     @ExceptionMetered
-    public void deleteById(@Auth User user, @PathParam("id") final String id) { placeDao.deleteById(id); }
-
-    private Place getPlaceSafe(final String id) {
-        final Optional<Place> place = placeDao.findById(id);
-        if (!place.isPresent()) {
-            throw new NotFoundException(String.format("Place with id: %s not found", id));
-        }
-        return place.get();
+    public void deleteById(@Auth User user, @PathParam("id") final String id) {
+        placeDao.deleteById((String)placeDao.findByIdSafe(user, id).getId());
     }
 }

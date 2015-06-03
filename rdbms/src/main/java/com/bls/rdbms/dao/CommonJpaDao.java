@@ -61,7 +61,7 @@ public abstract class CommonJpaDao<J, E extends IdentifiableEntity> extends Abst
     }
 
     @Override
-    public Collection<E> findAll() {
+    public Collection<E> findAll(final User owner) {
         final List<J> list = currentCriteria().list();
         final List<E> result = Lists.newArrayListWithCapacity(list.size());
         for (J entity : list) {

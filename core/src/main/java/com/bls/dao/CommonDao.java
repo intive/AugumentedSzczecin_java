@@ -15,7 +15,7 @@ import com.google.common.base.Optional;
 public interface CommonDao<E extends Identifiable> {
 
     E create(final E entity);
-    
+
     E update(final E entity);
 
     void delete(final E entity);
@@ -26,7 +26,7 @@ public interface CommonDao<E extends Identifiable> {
 
     Optional<E> findById(final String id);
 
-    Collection<E> findAll();
+    Collection<E> findAll(final User owner);
 
     Collection<E> find(final Location location,
             final Long radius,
