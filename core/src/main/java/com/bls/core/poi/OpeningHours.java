@@ -1,17 +1,12 @@
 package com.bls.core.poi;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
-import org.hibernate.validator.constraints.Range;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.DayOfWeek;
 
 /**
@@ -19,9 +14,8 @@ import java.time.DayOfWeek;
  */
 @JsonInclude(Include.NON_EMPTY)
 public class OpeningHours {
-    private final String TIME_REGEX = "([01]?[0-9]|2[0-3]):[0-5][0-9]";
+    private final String TIME_REGEX = "(([01][0-9])|(2[0-3])):[0-5][0-9]";
 
-    @Range(min = DateTimeConstants.MONDAY, max = DateTimeConstants.SUNDAY)
     private final DayOfWeek day;
     @NotNull
     @Pattern(regexp = TIME_REGEX)

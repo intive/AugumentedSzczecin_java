@@ -63,7 +63,19 @@ Prerequisites:
 * Find all known POI types matching search criteria: location, radius, categories and tags
 
 		curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=150&cat=PLACE&cat=EVENT&tag=restaurant&tag=stadium" -u asd@com:zxc
-		
+
+* Find all known POI types matching search criteria: location, radius, name and street
+
+        curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=150&name=BLStream&street=Plac%20Hołdu%20Pruskiego" -u asd@com:zxc
+
+* Find all known POI types matching search criteria: location, radius, category Place and subcategories
+
+        curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=150&cat=PLACE&subcat=OFFICE&subcat=PARK" -u asd@com:zxc
+
+* Find all known POI types matching search criteria: location, radius, paid and now open
+
+        curl -v "http://localhost:8000/q?lg=57.45&lt=87.9887&radius=150&paid=true&open=true" -u asd@com:zxc
+
 ## Password changing
 * Request change password token
 

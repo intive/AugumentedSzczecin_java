@@ -1,16 +1,8 @@
 package com.bls.mongodb.dao;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.mongojack.Aggregation;
-import org.mongojack.DBQuery;
-import org.mongojack.JacksonDBCollection;
-import org.mongojack.internal.MongoJackModule;
-
 import com.bls.core.Identifiable;
 import com.bls.core.geo.Location;
+import com.bls.core.place.Place;
 import com.bls.core.user.User;
 import com.bls.dao.CommonDao;
 import com.bls.mongodb.core.MongodbMappableIdentifiableEntity;
@@ -21,6 +13,17 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
+import org.mongojack.Aggregation;
+import org.mongojack.DBQuery;
+import org.mongojack.JacksonDBCollection;
+import org.mongojack.internal.MongoJackModule;
+
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -97,6 +100,11 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
      * @param location {@link Location}
      * @param radius   meters
      * @param tags     collection of tags, may be empty
+     * @param name     optional
+     * @param street   optional
+     * @param subcat   optional
+     * @param paid     optional
+     * @param open     optional
      * @param user     optional {@link User} used to determine POI owner
      * @param page     optional - specifies a page to return
      * @param pageSize specifies page size
@@ -105,11 +113,16 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
     public List<I> find(final Location location,
             final Long radius,
             final Collection<String> tags,
+            final Optional<String> name,
+            final Optional<String> street,
+            final Collection<Place.Subcategory> subcat,
+            final Optional<Boolean> paid,
+            final Optional<Boolean> open,
             final Optional<User> user,
             final Optional<Integer> page,
             final Integer pageSize) {
 
-        final BasicDBObject query = createQuery(location, radius, tags, user, page, pageSize);
+        final BasicDBObject query = createQuery(location, radius, tags, name, street, subcat, paid, open, user, page, pageSize);
 
         final Aggregation<M> queryWithPaging = addPagingAggregation(query, page, pageSize);
 
@@ -124,6 +137,11 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
     private BasicDBObject createQuery(final Location location,
             final Long radius,
             final Collection<String> tags,
+            final Optional<String> name,
+            final Optional<String> street,
+            final Collection<Place.Subcategory> subcat,
+            final Optional<Boolean> paid,
+            final Optional<Boolean> open,
             final Optional<User> user,
             final Optional<Integer> page,
             final Integer pageSize) {
@@ -131,6 +149,25 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
         BasicDBObject additionalQuery = new BasicDBObject();
         if (!tags.isEmpty()) {
             additionalQuery.append("tags", new BasicDBObject("$in", tags));
+        }
+        if(name.isPresent()){
+            additionalQuery.append("name", new BasicDBObject("$eq", name.get()));
+        }
+        if(street.isPresent()){
+            additionalQuery.append("address.street", new BasicDBObject("$eq", street.get()));
+        }
+        if(!subcat.isEmpty()){
+            additionalQuery.append("subcategory", new BasicDBObject("$in", subcat));
+        }
+        if(paid.isPresent()){
+            additionalQuery.append("paid", new BasicDBObject("$eq", paid.get()));
+        }
+        if(open.isPresent() && open.get().equals(true)){
+            DayOfWeek currentDay = LocalDateTime.now().getDayOfWeek();
+            String currentTime = LocalTime.now().toString();
+            additionalQuery.append("opening.day", new BasicDBObject("$eq", currentDay));
+            additionalQuery.append("opening.open", new BasicDBObject("$lt", currentTime));
+            additionalQuery.append("opening.close", new BasicDBObject("$gt", currentTime));
         }
         if (user.isPresent()) {
             additionalQuery.append("owner.id", new BasicDBObject("$eq", user.get().getId()));
