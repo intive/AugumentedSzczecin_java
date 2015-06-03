@@ -17,12 +17,20 @@ public interface PoiDao<P extends Poi> extends CommonDao<P> {
         final Optional<P> entity = findById(id);
 
         if (!entity.isPresent()) {
-            throw new ValidationException(String.format("Poi with id: %s not found", id));
+            // TODO security: hide core problem
+            throw new ValidationException(String.format("Poi with id: %s not found - missing entity", id));
         }
 
-        final boolean userIsPoiOwner = entity.get().getOwner().getId().equals(user.getId());
+        final User owner = entity.get().getOwner();
+        if (owner == null) {
+            // TODO security: hide core problem
+            throw new ValidationException(String.format("Poi with id: %s not found - missing owner for entity", id));
+        }
+
+        final boolean userIsPoiOwner = owner.getId().equals(user.getId());
         if (!userIsPoiOwner) {
-            throw new ValidationException(String.format("Poi with id: %s not found", id));
+            // TODO security: hide core problem
+            throw new ValidationException(String.format("Poi with id: %s not found - user is not an owner", id));
         }
         return entity.get();
     }
