@@ -12,6 +12,7 @@ import io.dropwizard.auth.basic.BasicCredentials;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import static com.bls.AugmentedConfiguration.PW_HASH_SECURITY_LEVEL;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Basic Authenticator class using plaintext credentials
@@ -40,8 +41,14 @@ public class BasicAuthenticator implements Authenticator<BasicCredentials, User>
         String plaintextPassword = basicCredentials.getPassword();
 
         final Optional<User> user = userDao.findByEmail(email);
-        if (user.isPresent() && isMatched(plaintextPassword, user.get().getPassword())) {
-            return user;
+        if (user.isPresent()) {
+            final User existingUser = user.get();
+            checkState(existingUser.getPassword() != null, "Cannot authenticate: user with id: %s (email: %s) without password",
+                    existingUser.getId(), existingUser.getEmail());
+
+            if (isMatched(plaintextPassword, existingUser.getPassword())) {
+                return user;
+            }
         }
         return Optional.absent();
     }
