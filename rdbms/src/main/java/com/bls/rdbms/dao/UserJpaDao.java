@@ -41,5 +41,10 @@ public class UserJpaDao extends CommonJpaDao<UserJpa, User<Long>> implements Use
         final UserJpa result = (UserJpa) currentCriteria().add(Restrictions.eq("email", email)).uniqueResult();
         return result == null ? Optional.absent() : Optional.of(convert2core(result));
     }
+
+    @Override
+    public Optional<User<Long>> findOneByField(String field, String value) {
+        return null;
+    }
 }
 

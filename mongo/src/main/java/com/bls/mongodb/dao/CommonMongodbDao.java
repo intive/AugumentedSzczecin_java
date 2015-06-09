@@ -212,6 +212,13 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
     }
 
     @Override
+    public Optional<I> findOneByField(String field, String value) {
+        final BasicDBObject fieldVal = new BasicDBObject(field, new BasicDBObject("$eq", value));
+        final M mongodbEntity = dbCollection.findOne(fieldVal);
+        return mongodbEntity != null ? Optional.of(convert2coreModel(mongodbEntity)) : Optional.absent();
+    }
+
+    @Override
     public I create(final I coreEntity) {
         return convert2coreModel(dbCollection.insert(convert2mongodbModel(coreEntity)).getSavedObject());
     }
@@ -235,4 +242,5 @@ public abstract class CommonMongodbDao<M extends MongodbMappableIdentifiableEnti
     public void deleteAll() {
         dbCollection.remove(DBQuery.empty());
     }
+    
 }
