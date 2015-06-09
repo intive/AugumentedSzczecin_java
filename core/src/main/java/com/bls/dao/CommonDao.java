@@ -40,4 +40,6 @@ public interface CommonDao<E extends Identifiable> {
             final Optional<User> user,
             final Optional<Integer> page,
             final Integer pageSize);
+
+    Optional<E> findOneByField(final String field, final String value);
 }

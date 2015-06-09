@@ -42,6 +42,6 @@ public class CommercialsResource {
     @Timed
     @ExceptionMetered
     public Commercial add(@Auth User user, @Valid final Commercial commercial) {
-        return commercialDao.createWithOwner(commercial, user);
+        return commercialDao.checkDuplicateAndCreate(commercial, user);
     }
 }

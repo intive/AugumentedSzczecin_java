@@ -45,5 +45,10 @@ public class PoiJpaDao extends CommonJpaDao<PoiJpa, Poi<Long>> {
             Integer pageSize) {
         throw new IllegalStateException("Unimplemented");
     }
+
+    @Override
+    public Optional<Poi<Long>> findOneByField(String field, String value) {
+        throw new IllegalStateException("Unimplemented");
+    }
 }
 
